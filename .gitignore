@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual env
+venv/
+env/
+.env/
+*.env
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Logs
+*.log
+
+# Docker
+docker-compose.yml
+fly.toml
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Project-specific
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+
+# Backup / temp
+*.tmp
+*.bak
+*.swp

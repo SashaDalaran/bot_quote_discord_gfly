@@ -1,0 +1,78 @@
+# ------------------------
+# Python cache
+# ------------------------
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info
+
+# ------------------------
+# Virtual environments
+# ------------------------
+venv/
+env/
+.env/
+
+# ------------------------
+# Test artifacts
+# ------------------------
+*.coverage
+.coverage
+htmlcov/
+pytest_cache/
+
+# ------------------------
+# Logs and databases
+# ------------------------
+*.log
+*.sqlite3
+
+# ------------------------
+# Git / VCS
+# ------------------------
+.git/
+.gitignore
+
+# ------------------------
+# Editors and IDEs
+# ------------------------
+.vscode/
+.idea/
+*.iml
+
+# ------------------------
+# macOS trash files
+# ------------------------
+.DS_Store
+**/.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+.Spotlight-V100
+.Trashes
+
+# ------------------------
+# Docker / infra not needed inside the image
+# ------------------------
+docker-compose.yml
+fly.toml
+
+# ------------------------
+# Documentation & temp
+# ------------------------
+*.md
+*.txt~
+*.bak
+*.swp
+*.tmp
+*.cache
+
+# ------------------------
+# Images (logos, banners) — important for your project
+# ------------------------
+*.png
+*.jpg
+*.jpeg
+*.gif
