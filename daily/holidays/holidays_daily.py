@@ -26,8 +26,9 @@ async def send_holidays_daily(bot):
 
     holidays = load_all_holidays()
     today = datetime.now(TZ).date()
+    today_str = today.strftime("%m-%d")
 
-    todays = [h for h in holidays if h["date"] == str(today)]
+    todays = [h for h in holidays if h["date"] == today_str]
 
     if not todays:
         logger.info("No holidays today.")
@@ -46,8 +47,8 @@ async def send_holidays_daily(bot):
 
         for h in todays:
             embed.add_field(
-                name=f"{h['flag']} {h['name']}",
-                value=f"Category: **{h['category']}**",
+                name=f"{h.get('flag', '')} {h['name']}",
+                value=f"Category: **{h.get('category', 'unknown')}**",
                 inline=False,
             )
 
@@ -67,8 +68,9 @@ async def send_once_if_missed_holidays(bot):
         logger.info("Missed daily holidays time — sending once now...")
         holidays = load_all_holidays()
         today = now.date()
+        today_str = today.strftime("%m-%d")
 
-        todays = [h for h in holidays if h["date"] == str(today)]
+        todays = [h for h in holidays if h["date"] == today_str]
 
         if not todays:
             logger.info("No holidays today.")
@@ -87,8 +89,8 @@ async def send_once_if_missed_holidays(bot):
 
             for h in todays:
                 embed.add_field(
-                    name=f"{h['flag']} {h['name']}",
-                    value=f"Category: **{h['category']}**",
+                    name=f"{h.get('flag', '')} {h['name']}",
+                    value=f"Category: **{h.get('category', 'unknown')}**",
                     inline=False,
                 )
 
