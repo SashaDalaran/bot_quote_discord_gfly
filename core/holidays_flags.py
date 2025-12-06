@@ -1,4 +1,4 @@
-# core/holiday_flags.py
+# core/holidays_flags.py
 
 COUNTRY_FLAGS = {
     "world": "🌍",
@@ -18,6 +18,8 @@ COUNTRY_FLAGS = {
     "uae": "🇦🇪",
     "israel": "🇮🇱",
     "eu": "🇪🇺",
+    "china": "🇨🇳",
+    "india": "🇮🇳",
 }
 
 RELIGION_FLAGS = {

@@ -1,0 +1,62 @@
+[
+  {
+    "date": "01-01",
+    "name": "New Year's Day",
+    "countries": ["world"]
+  },
+  {
+    "date": "03-08",
+    "name": "International Women's Day",
+    "countries": ["world"]
+  },
+  {
+    "date": "02-14",
+    "name": "Valentine's Day",
+    "countries": ["world"]
+  },
+  {
+    "date": "04-22",
+    "name": "Earth Day",
+    "countries": ["world"]
+  },
+  {
+    "date": "05-01",
+    "name": "International Workers' Day",
+    "countries": ["world"]
+  },
+  {
+    "date": "06-01",
+    "name": "International Children's Day",
+    "countries": ["world"]
+  },
+  {
+    "date": "07-30",
+    "name": "International Day of Friendship",
+    "countries": ["world"]
+  },
+  {
+    "date": "09-21",
+    "name": "International Day of Peace",
+    "countries": ["world"]
+  },
+  {
+    "date": "10-31",
+    "name": "Halloween",
+    "countries": ["world"]
+  },
+  {
+    "date": "12-24",
+    "name": "Christmas Eve",
+    "countries": ["world"]
+  },
+  {
+    "date": "12-25",
+    "name": "Christmas Day",
+    "countries": ["world"]
+  },
+  {
+    "date": "12-31",
+    "name": "New Year's Eve",
+    "countries": ["world"]
+  }
+]

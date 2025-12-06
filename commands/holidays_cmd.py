@@ -1,3 +1,5 @@
+# commands/holidays_cmd.py
+
 import os
 import json
 import discord
@@ -8,10 +10,10 @@ from core.holiday_flags import COUNTRY_FLAGS, RELIGION_FLAGS
 
 
 def load_all_holidays():
-    """Loads all holidays from every JSON file inside data/holidays/ folder."""
+    """Load all holidays from every JSON file inside data/holidays/."""
     holidays = []
 
-    base_path = "data/holidays/"   # FIXED: correct folder name
+    base_path = "data/holidays/"
     for filename in os.listdir(base_path):
         if filename.endswith(".json"):
             full_path = os.path.join(base_path, filename)
@@ -19,7 +21,7 @@ def load_all_holidays():
             with open(full_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
 
-            # supports {"holidays": [...]} or a raw list
+            # supports {"holidays": [...]} or raw list
             if isinstance(data, dict) and "holidays" in data:
                 holidays.extend(data["holidays"])
             elif isinstance(data, list):
@@ -29,7 +31,7 @@ def load_all_holidays():
 
 
 def get_next_holiday():
-    """Returns the closest upcoming holiday."""
+    """Return the closest upcoming holiday from JSON files."""
     today = datetime.now()
     year = today.year
 
@@ -38,50 +40,43 @@ def get_next_holiday():
 
     for h in holidays:
         mm, dd = h["date"].split("-")
-        holiday_date = datetime(year, int(mm), int(dd))
+        date = datetime(year, int(mm), int(dd))
 
-        # if date already passed this year → take next year
-        if holiday_date < today:
-            holiday_date = holiday_date.replace(year=year + 1)
+        # If this year's date already passed, move to next year
+        if date < today:
+            date = date.replace(year=year + 1)
 
-        upcoming.append((holiday_date, h))
+        upcoming.append((date, h))
 
-    # sort by date
+    # sort by actual date
     upcoming.sort(key=lambda x: x[0])
 
     return upcoming[0]
 
 
 def build_embed(holiday_date, holiday):
-    """Formats embed message for Discord."""
+    """Formats one holiday into a Discord embed."""
     mmdd = holiday["date"]
     name = holiday["name"]
 
-    # country or religion flag
+    # pick flag
     flag = ""
-
-    if "countries" in holiday and holiday["countries"]:
-        c = holiday["countries"][0]
-        flag = COUNTRY_FLAGS.get(c, "")
-    elif "religion" in holiday and holiday["religion"]:
+    if "countries" in holiday:
+        flag = COUNTRY_FLAGS.get(holiday["countries"][0], "")
+    elif "religion" in holiday:
         flag = RELIGION_FLAGS.get(holiday["religion"], "")
 
     embed = discord.Embed(
         title="🎉 Next Holiday",
-        description=f"{flag} **{name}**\n📅 Date: `{mmdd}`\n(closest occurrence)",
+        description=f"{flag} **{name}**\n📅 Date: `{mmdd}`",
         color=0x00ff99
     )
-
     return embed
 
 
 def setup(bot):
-    @bot.command(
-        name="holidays",
-        aliases=["holiday", "holyday", "holydays"]  # FIXED + added all variants
-    )
+    @bot.command(name="holidays")
     async def holidays_cmd(ctx):
-        """Shows the closest upcoming holiday."""
         holiday_date, holiday = get_next_holiday()
         embed = build_embed(holiday_date, holiday)
         await ctx.send(embed=embed)

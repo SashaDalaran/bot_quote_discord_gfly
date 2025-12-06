@@ -6,6 +6,11 @@ from discord.ext import commands
 
 from core.timer_engine import update_timers_loop
 from daily.banlu.banlu_daily import send_banlu_daily, send_once_if_missed
+from daily.holidays.holidays_daily import (
+    send_holidays_daily,
+    send_once_if_missed_holidays
+)
+
 
 logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -19,8 +24,9 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents, help_command=None)
 
-# передаём бота в daily task
+# attach bot to scheduled daily tasks
 send_banlu_daily.bot = bot
+send_holidays_daily.bot = bot
 update_timers_loop.bot = bot
 
 
@@ -31,7 +37,7 @@ def load_all_commands():
     from commands.date_timer import setup as setup_date_timer
     from commands.cancel import setup as setup_cancel
     from commands.help_cmd import setup as setup_help
-    from commands.holydays_cmd import setup as setup_holydays
+    from commands.holidays_cmd import setup as setup_holidays
 
     setup_quotes(bot)
     setup_murloc(bot)
@@ -39,7 +45,7 @@ def load_all_commands():
     setup_date_timer(bot)
     setup_cancel(bot)
     setup_help(bot)
-    setup_holydays(bot)
+    setup_holidays(bot)
 
 
 load_all_commands()
@@ -49,20 +55,28 @@ load_all_commands()
 async def on_ready():
     logger.info("Bot started!")
 
+    # BAN'LU DAILY TASK — 10:00 GMT+3
     if not send_banlu_daily.is_running():
         send_banlu_daily.start()
 
     await send_once_if_missed(bot)
 
+    # REMINDERS & TIMERS ENGINE
     if not update_timers_loop.is_running():
         update_timers_loop.start()
+
+    # HOLIDAYS DAILY TASK — 10:01 GMT+3
+    if not send_holidays_daily.is_running():
+        send_holidays_daily.start()
+
+    await send_once_if_missed_holidays(bot)
 
     logger.info("Background tasks started.")
 
 
 def main():
     if not DISCORD_TOKEN:
-        raise RuntimeError("DISCORD_BOT_TOKEN missing")
+        raise RuntimeError("DISCORD_BOT_TOKEN is missing.")
     bot.run(DISCORD_TOKEN)
 
 
