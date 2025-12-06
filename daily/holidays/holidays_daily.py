@@ -1,14 +1,17 @@
-# daily/holidays/holidays_daily.py
-
 import os
-from datetime import datetime, timezone, timedelta, time
-
-import discord
+import json
+from datetime import datetime
 from discord.ext import tasks
 
 from commands.holidays_cmd import load_all_holidays
 from core.holidays_flags import COUNTRY_FLAGS, RELIGION_FLAGS
-from core.dynamic_holidays import get_dynamic_holidays   # ← added
+from core.dynamic_holidays import get_dynamic_holidays
+
+# Load multiple Discord channels from secrets
+HOLIDAYS_CHANNEL_IDS = os.getenv("HOLIDAYS_CHANNEL_IDS", "")
+HOLIDAYS_CHANNELS = [
+    int(x) for x in HOLIDAYS_CHANNEL_IDS.split(",") if x.strip().isdigit()
+]
 
 TZ = timezone(timedelta(hours=3))
 
@@ -70,12 +73,10 @@ async def send_holidays_daily():
     bot = send_holidays_daily.bot
     embeds = build_embeds(holidays_today)
 
-    for ch in channels:
-        channel = bot.get_channel(ch)
+    for channel_id in HOLIDAYS_CHANNELS:
+        channel = bot.get_channel(channel_id)
         if channel:
-            for embed in embeds:
-                await channel.send(embed=embed)
-
+            await channel.send(embed=embed)
 
 async def send_once_if_missed_holidays(bot):
     now = datetime.now(TZ)

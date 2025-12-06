@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 from datetime import datetime
 
-from core.holiday_flags import COUNTRY_FLAGS, RELIGION_FLAGS
+from core.holidays_flags import COUNTRY_FLAGS, RELIGION_FLAGS
 
 
 def load_all_holidays():
