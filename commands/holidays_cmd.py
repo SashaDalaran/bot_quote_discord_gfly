@@ -6,7 +6,7 @@ from datetime import datetime
 import discord
 from discord.ext import commands
 
-from core.holiday_flags import COUNTRY_FLAGS, RELIGION_FLAGS
+from core.holidays_flags import COUNTRY_FLAGS, RELIGION_FLAGS
 
 logger = logging.getLogger("holidays_cmd")
 
