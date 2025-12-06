@@ -20,7 +20,6 @@ env/
 
 # Docker
 docker-compose.yml
-fly.toml
 
 # IDE
 .vscode/
