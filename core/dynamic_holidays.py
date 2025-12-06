@@ -1,3 +1,11 @@
+from datetime import datetime
+from .orthodox import orthodox_easter, orthodox_pentecost
+from .catholic import catholic_easter, catholic_pentecost
+from .islamic import ramadan_start, eid_al_fitr, eid_al_adha
+from .jewish import rosh_hashanah, yom_kippur, hanukkah_start
+from .asian import chinese_new_year, diwali
+
+
 def get_dynamic_holidays():
     year = datetime.now().year
 
