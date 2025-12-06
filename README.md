@@ -22,27 +22,16 @@
 
 ## ✨ Features
 
-* 🎮 **Game Quotes** — random quotes with source attribution
-* 🧠 **Murloc AI** — generates Murloc wisdom on demand
-* ⏱ **Timers** — simple timers and date-based GMT timers
-* 📌 **Pin Support** — optional auto-pin for date timers
-* 🔁 **Daily Scheduler** — Ban’Lu quotes sent every morning
-* 🐳 **Optimized Docker Image** (~35–40 MB)
-* ☁️ **Fully Deployable on Fly.io**
+* 🎮 **Game Quotes** — random quotes with source attribution  
+* 🧠 **Murloc AI** — generates Murloc wisdom  
+* 📅 **Holidays System** — static + dynamic holidays from all countries  
+* 🎉 **Daily Holiday Broadcast** — auto-posting today's holidays to chosen channels  
+* ⏱ **Timers** — simple timers and GMT date-timers  
+* 📌 **Pin Support** — optional auto-pin for date timers  
+* 🔁 **Daily Scheduler** — Ban’Lu quotes every morning  
+* 🐳 **Optimized Docker Image** (~40 MB)  
+* ☁️ **Fly.io Ready** — fully automated deploy  
 * 🔐 **Secure Secret Handling**
-* ⚙️ **CI/CD Ready**
-
----
-
-## 🏗 Tech Stack
-
-| Component          | Choice             | Reason                              |
-| ------------------ | ------------------ | ----------------------------------- |
-| **Language**       | Python 3.11        | Modern, efficient, widely supported |
-| **Library**        | discord.py 2.x     | Reliable, async-ready Discord API   |
-| **Infrastructure** | Fly.io Machines    | Perfect for 24/7 bots               |
-| **Runtime**        | Docker multi-stage | Small, reproducible builds          |
-| **CI/CD**          | GitHub Actions     | Automated deploy pipeline           |
 
 ---
 
@@ -51,101 +40,58 @@
 ```
 bot_quote_discord/
 │
-├── bot.py                 # Main entry point
-├── Dockerfile             # Multi-stage Docker build
-├── fly.toml               # Fly.io configuration
-├── requirements.txt       # Dependencies
-├── .dockerignore          # Docker context ignore rules
+├── bot.py
+├── Dockerfile
+├── fly.toml
+├── requirements.txt
 │
-├── core/                  # Core logic (timers, helpers)
-├── commands/              # Slash-like prefix commands
-├── daily/                 # Scheduled tasks (Ban'Lu)
-├── data/                  # Static text files
+├── core/
+│     ├── holidays_flags.py     # Country + religion flags
+│     ├── timer_engine.py
+│     └── helpers.py
+│
+├── commands/
+│     ├── quotes.py
+│     ├── murloc_ai.py
+│     ├── simple_timer.py
+│     ├── date_timer.py
+│     └── holidays_cmd.py       # Holiday lookup command
+│
+├── daily/
+│     ├── banlu/
+│     │     └── banlu_daily.py
+│     └── holidays/
+│           └── holidays_daily.py   # Daily holiday poster
+│
+├── data/
+│     └── holidays/              # All JSON holiday files
+│           ├── world.json
+│           ├── usa.json
+│           ├── eu.json
+│           ├── georgia.json
+│           └── ... etc
 │
 └── .github/workflows/
-       └── fly-deploy.yml  # CI/CD pipeline
+       └── fly-deploy.yml
 ```
-
----
-
-## 🔐 Environment Variables
-
-| Variable            | Description                 |
-| ------------------- | --------------------------- |
-| `DISCORD_BOT_TOKEN` | Your Discord bot token      |
-| `BANLU_CHANNEL_ID`  | Channel ID for daily quotes |
-| `BANLU_QUOTES_FILE` | Path to Ban’Lu quotes file  |
-
-Set secrets on Fly.io:
-
-```sh
-fly secrets set DISCORD_BOT_TOKEN="YOUR_TOKEN"
-```
-
----
-
-## 🧪 Local Development
-
-### Run directly:
-
-```sh
-export DISCORD_BOT_TOKEN="YOUR_TOKEN"
-python bot.py
-```
-
-### Run via Docker:
-
-```sh
-docker build -t bot_local .
-docker run --rm -it \
-  -e DISCORD_BOT_TOKEN="YOUR_TOKEN" \
-  bot_local
-```
-
----
-
-## ☁️ Deployment (Fly.io)
-
-### 1. Deploy
-
-```sh
-fly deploy
-```
-
-### 2. Set secrets
-
-```sh
-fly secrets set DISCORD_BOT_TOKEN="YOUR_TOKEN"
-```
-
-### 3. View logs
-
-```sh
-fly logs
-```
-
-> The bot will stay online 24/7 on Fly.io Machines.
 
 ---
 
 ## 🎮 Commands Overview
 
 ### Quotes
-
 ```
-!quote          — random game quote
+!quote          — random game quote  
 !murloc_ai      — Murloc AI wisdom
 ```
 
 ### Simple Timer
-
 ```
-!timer 10m text
+!timer 10m text  
 Supports: 10s, 5m, 1h, 1h20m, 90
 ```
 
 ### Date Timer
-
 ```
 !timerdate DD.MM.YYYY HH:MM +TZ text --pin
 Example:
@@ -153,43 +99,79 @@ Example:
 ```
 
 ### Timer Management
-
 ```
-!timers         — list active timers
-!cancel <ID>    — cancel one timer
+!timers         — list active timers  
+!cancel <ID>    — cancel one timer  
 !cancelall      — clear all timers in channel
 ```
 
 ---
 
-## 🔁 Daily Ban’Lu Quotes
+## 🎉 Holidays System
 
-Automatically posts a themed quote every day at **10:00 MSK**.
+### Command
+```
+!holidays — shows the closest upcoming holiday (from all JSON files)
+```
 
-Triggered via:
+### How it works
+✔ Loads **all holidays** from `data/holidays/*.json`  
+✔ Supports **static** (e.g. 01-05) and **dynamic** (Easter etc.) holidays  
+✔ Automatically detects **flag** (country or religion)  
+✔ Returns the **nearest** future holiday
 
-* automated scheduler
-* fallback: sends once if bot missed the scheduled time
+### Example response
+```
+🎉 Next Holiday
+🇺🇸 Independence Day
+📅 Date: 07-04
+```
 
 ---
 
-## 🧭 Roadmap
+## 🔁 Daily Holiday Broadcast
 
-* Slash commands version
-* Quote categories & packs
-* Optional database backend
-* Webhooks for external integrations
-* Dashboard UI (planned)
+The bot automatically:
+
+🕙 Posts every day at **10:01 GMT+3**  
+📌 Sends all holidays matching **today's date**  
+📡 Sends to all channels listed in env-variable:
+
+```
+HOLIDAYS_CHANNEL_IDS="123,456,789"
+```
+
+Fallback:  
+If the bot was offline — sends once on startup.
 
 ---
 
-## 📝 License
+## 🔐 Environment Variables
 
-MIT
-Feel free to use, modify, and contribute!
+| Variable                  | Description                          |
+|--------------------------|--------------------------------------|
+| `DISCORD_BOT_TOKEN`      | Bot token                            |
+| `BANLU_CHANNEL_ID`       | Ban’Lu quote channel                 |
+| `HOLIDAYS_CHANNEL_IDS`   | Comma-separated list of target IDs   |
+
+Set using Fly:
+
+```sh
+fly secrets set HOLIDAYS_CHANNEL_IDS="123,456,789"
+```
+
+---
+
+## ☁️ Deployment (Fly.io)
+
+```
+fly deploy
+fly logs
+fly secrets set DISCORD_BOT_TOKEN=...
+```
 
 ---
 
 <p align="center">
-  <b>Murloc Edition 🐸 Mrrglglglgl! </b>
+  <b>Murloc Edition 🐸 Mrrglglglgl!</b>
 </p>
