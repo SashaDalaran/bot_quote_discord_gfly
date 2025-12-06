@@ -1,7 +1,7 @@
 import os
 import json
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, time
 
 import discord
 from discord.ext import tasks
@@ -19,7 +19,7 @@ HOLIDAYS_CHANNEL_IDS = [
 ]
 
 
-@tasks.loop(time=datetime.time(hour=10, minute=1, tzinfo=TZ))
+@tasks.loop(time=time(hour=10, minute=1, tzinfo=TZ))
 async def send_holidays_daily(bot):
     """Runs daily at 10:01 GMT+3 and posts holidays to all configured channels."""
     logger.info("Running daily holidays task...")
