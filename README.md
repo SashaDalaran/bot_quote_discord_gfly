@@ -191,5 +191,5 @@ Feel free to use, modify, and contribute!
 ---
 
 <p align="center">
-  <b>Murloc Edition 🐸 Mrrglglglgl! 🐸</b>
+  <b>Murloc Edition 🐸 Mrrglglglgl! </b>
 </p>
