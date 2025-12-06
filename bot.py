@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 
 from core.timer_engine import update_timers_loop
-from daily.banlu_daily import send_banlu_daily, send_once_if_missed
+from daily.banlu.banlu_daily import send_banlu_daily, send_once_if_missed
 
 logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -31,6 +31,7 @@ def load_all_commands():
     from commands.date_timer import setup as setup_date_timer
     from commands.cancel import setup as setup_cancel
     from commands.help_cmd import setup as setup_help
+    from commands.holidays_cmd import setup as setup_holidays
 
     setup_quotes(bot)
     setup_murloc(bot)
@@ -38,6 +39,7 @@ def load_all_commands():
     setup_date_timer(bot)
     setup_cancel(bot)
     setup_help(bot)
+    setup_holidays(bot)
 
 
 load_all_commands()
