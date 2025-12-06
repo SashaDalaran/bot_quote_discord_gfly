@@ -1,82 +1,96 @@
-# commands/holidays_cmd.py
-
 import os
 import json
-import discord
-from discord.ext import commands
+import logging
 from datetime import datetime
 
-from core.holidays_flags import COUNTRY_FLAGS, RELIGION_FLAGS
+import discord
+from discord.ext import commands
+
+from core.holiday_flags import COUNTRY_FLAGS, RELIGION_FLAGS
+
+logger = logging.getLogger("holidays_cmd")
+
+HOLIDAYS_PATH = "daily/holidays/data"
 
 
 def load_all_holidays():
-    """Load all holidays from every JSON file inside data/holidays/."""
-    holidays = []
+    """Loads holidays from ALL json files in the holidays folder."""
+    all_holidays = []
 
-    base_path = "data/holidays/"
-    for filename in os.listdir(base_path):
-        if filename.endswith(".json"):
-            full_path = os.path.join(base_path, filename)
+    for filename in os.listdir(HOLIDAYS_PATH):
+        if not filename.endswith(".json"):
+            continue
 
-            with open(full_path, "r", encoding="utf-8") as f:
+        filepath = os.path.join(HOLIDAYS_PATH, filename)
+
+        try:
+            with open(filepath, "r", encoding="utf-8") as f:
                 data = json.load(f)
 
-            # supports {"holidays": [...]} or raw list
-            if isinstance(data, dict) and "holidays" in data:
-                holidays.extend(data["holidays"])
-            elif isinstance(data, list):
-                holidays.extend(data)
+            for h in data:
+                # Normalize: add flag from countries OR default 🌍
+                countries = h.get("countries", ["world"])
+                country = countries[0]
 
-    return holidays
+                flag = COUNTRY_FLAGS.get(country, "🌍")
+
+                all_holidays.append({
+                    "date": h["date"],
+                    "name": h["name"],
+                    "flag": flag,
+                    "raw": h,
+                })
+
+        except Exception as e:
+            logger.error(f"Error reading {filename}: {e}")
+
+    return all_holidays
 
 
-def get_next_holiday():
-    """Return the closest upcoming holiday from JSON files."""
-    today = datetime.now()
-    year = today.year
+def next_upcoming_holidays(limit=3):
+    """Returns the next N upcoming holidays across all files."""
+    today = datetime.now().date()
 
     holidays = load_all_holidays()
-    upcoming = []
+    results = []
 
     for h in holidays:
-        mm, dd = h["date"].split("-")
-        date = datetime(year, int(mm), int(dd))
+        try:
+            month, day = map(int, h["date"].split("-"))
+            holiday_date = datetime(today.year, month, day).date()
 
-        # If this year's date already passed, move to next year
-        if date < today:
-            date = date.replace(year=year + 1)
+            # If date already passed → move to next year
+            if holiday_date < today:
+                holiday_date = datetime(today.year + 1, month, day).date()
 
-        upcoming.append((date, h))
+            results.append((holiday_date, h))
 
-    # sort by actual date
-    upcoming.sort(key=lambda x: x[0])
+        except Exception as e:
+            logger.warning(f"Bad date in {h}: {e}")
 
-    return upcoming[0]
+    results.sort(key=lambda x: x[0])
 
-
-def build_embed(holiday_date, holiday):
-    """Formats one holiday into a Discord embed."""
-    mmdd = holiday["date"]
-    name = holiday["name"]
-
-    # pick flag
-    flag = ""
-    if "countries" in holiday:
-        flag = COUNTRY_FLAGS.get(holiday["countries"][0], "")
-    elif "religion" in holiday:
-        flag = RELIGION_FLAGS.get(holiday["religion"], "")
-
-    embed = discord.Embed(
-        title="🎉 Next Holiday",
-        description=f"{flag} **{name}**\n📅 Date: `{mmdd}`",
-        color=0x00ff99
-    )
-    return embed
+    return results[:limit]
 
 
-def setup(bot):
+def setup(bot: commands.Bot):
     @bot.command(name="holidays")
-    async def holidays_cmd(ctx):
-        holiday_date, holiday = get_next_holiday()
-        embed = build_embed(holiday_date, holiday)
+    async def cmd_holidays(ctx: commands.Context):
+        upcoming = next_upcoming_holidays(3)
+
+        if not upcoming:
+            return await ctx.send("No upcoming holidays found.")
+
+        embed = discord.Embed(
+            title="🎉 Next Holidays",
+            color=discord.Color.green()
+        )
+
+        for date, h in upcoming:
+            embed.add_field(
+                name=f"{h['flag']} {h['name']}",
+                value=f"📅 Date: **{h['date']}**",
+                inline=False
+            )
+
         await ctx.send(embed=embed)
