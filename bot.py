@@ -31,7 +31,7 @@ def load_all_commands():
     from commands.date_timer import setup as setup_date_timer
     from commands.cancel import setup as setup_cancel
     from commands.help_cmd import setup as setup_help
-    from commands.holidays_cmd import setup as setup_holidays
+    from commands.holydays_cmd import setup as setup_holydays
 
     setup_quotes(bot)
     setup_murloc(bot)
@@ -39,7 +39,7 @@ def load_all_commands():
     setup_date_timer(bot)
     setup_cancel(bot)
     setup_help(bot)
-    setup_holidays(bot)
+    setup_holydays(bot)
 
 
 load_all_commands()
