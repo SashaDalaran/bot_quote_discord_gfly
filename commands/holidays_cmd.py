@@ -1,35 +1,25 @@
-# commands/holidays_cmd.py
-
 import os
 import json
+from datetime import datetime
 import discord
 from discord.ext import commands
-from datetime import datetime
 
-from core.holidays_flags import COUNTRY_FLAGS, RELIGION_FLAGS
 from core.dynamic_holidays import get_dynamic_holidays
+from core.holidays_flags import COUNTRY_FLAGS, RELIGION_FLAGS
 
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+HOLIDAYS_PATH = os.path.join(BASE_DIR, "data", "holidays")
 
 def load_all_holidays():
-    """Loads all holidays from every JSON file inside data/holidays/ folder."""
     holidays = []
 
-    # динамические праздники (Пасха, Рамадан и т.п.)
+    for file in os.listdir(HOLIDAYS_PATH):
+        if not file.endswith(".json"):
+            continue
+        with open(os.path.join(HOLIDAYS_PATH, file), "r", encoding="utf-8") as f:
+            holidays.extend(json.load(f))
+
     holidays.extend(get_dynamic_holidays())
-
-    base_path = "data/holidays/"
-    for filename in os.listdir(base_path):
-        if filename.endswith(".json"):
-            full_path = os.path.join(base_path, filename)
-
-            with open(full_path, "r", encoding="utf-8") as f:
-                data = json.load(f)
-
-            # поддерживаем {"holidays": [...]} или просто список
-            if isinstance(data, dict) and "holidays" in data:
-                holidays.extend(data["holidays"])
-            elif isinstance(data, list):
-                holidays.extend(data)
 
     return holidays
 
