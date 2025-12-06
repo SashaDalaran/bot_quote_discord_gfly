@@ -3,19 +3,21 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'bot-quote-discord-gfly'
-primary_region = 'ams'
+app = "bot-quote-discord-gfly"
+primary_region = "ams"
 
 [build]
-  dockerfile = 'Dockerfile'
+  dockerfile = "Dockerfile"
 
 [deploy]
-  strategy = 'rolling'
+  strategy = "rolling"
 
 [env]
-  PYTHONUNBUFFERED = '1'
+  PYTHONUNBUFFERED = "1"
+  DISCORD_BOT_TOKEN = "${DISCORD_BOT_TOKEN}"
+  BANLU_CHANNEL_ID = "${BANLU_CHANNEL_ID}"
 
 [[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
+  memory = "1gb"
+  cpu_kind = "shared"
   cpus = 1
