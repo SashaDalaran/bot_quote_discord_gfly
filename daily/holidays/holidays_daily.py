@@ -48,6 +48,27 @@ def build_category_line(h):
     else:
         return f"`{main_cat}`"
 
+def get_flag_for_holiday(h):
+    country = ""
+    if h.get("country"):
+        country = h["country"]
+    elif h.get("countries"):
+        country = h["countries"][0]
+    return COUNTRY_FLAGS.get(country, "🌍")
+
+
+def get_category_line(h):
+    categories = h.get("categories") or []
+    if not categories:
+        return ""
+
+    main = categories[0]
+    emoji = CATEGORY_EMOJIS.get(main)
+    if not emoji:
+        return main  # просто текст категории, если эмодзи нет
+
+    return f"{emoji} {main}"
+
 
 @tasks.loop(time=time(hour=10, minute=1, tzinfo=TZ))
 async def send_holidays_daily(bot):

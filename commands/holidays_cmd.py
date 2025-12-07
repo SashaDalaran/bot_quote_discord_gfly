@@ -25,20 +25,26 @@ def load_all_holidays():
         with open(full_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
+        # важно: этот цикл ДОЛЖЕН быть внутри цикла по файлам
         for entry in data:
             mmdd = entry["date"]
             parsed = datetime.strptime(f"{today.year}-{mmdd}", "%Y-%m-%d").date()
 
-            # Если праздник уже прошёл — перенос на следующий год
+            # если в этом году дата уже прошла — переносим на следующий
             if parsed < today:
                 parsed = parsed.replace(year=today.year + 1)
+
+            # category в JSON у нас массив, но на всякий случай нормализуем
+            categories = entry.get("category") or entry.get("categories") or []
+            if isinstance(categories, str):
+                categories = [categories]
 
             holidays.append(
                 {
                     "date": mmdd,
                     "name": entry["name"],
                     "countries": entry.get("countries", []),
-                    "categories": entry.get("category", []),  # <- ВАЖНО
+                    "categories": categories,
                     "source": filename,
                     "parsed_date": parsed,
                 }

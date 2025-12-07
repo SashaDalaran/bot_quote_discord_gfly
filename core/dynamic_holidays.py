@@ -34,7 +34,6 @@ def _easter_orthodox(year: int) -> date:
     western = _easter_western(year)
     return western + timedelta(days=13)
 
-
 def get_dynamic_holidays():
     """
     Возвращает список из двух ближайших праздников:
@@ -46,30 +45,27 @@ def get_dynamic_holidays():
     today = datetime.now().date()
     year = today.year
 
-    # Начально считаем Пасху на этот год
     catholic = _easter_western(year)
     orthodox = _easter_orthodox(year)
 
-    # Если обе Пасхи уже прошли — берём следующий год
     if max(catholic, orthodox) < today:
         year += 1
         catholic = _easter_western(year)
         orthodox = _easter_orthodox(year)
 
-    # Возвращаем в формате, удобном для holidays_cmd:
-    # - full_date: YYYY-MM-DD (для точной сортировки)
-    # - date: MM-DD (как у JSON-файлов, для отображения)
     return [
         {
             "full_date": catholic.strftime("%Y-%m-%d"),
             "date": catholic.strftime("%m-%d"),
             "name": "Catholic Easter",
             "countries": ["catholic"],
+            "categories": ["Religious"],  # 👈 добавили категорию
         },
         {
             "full_date": orthodox.strftime("%Y-%m-%d"),
             "date": orthodox.strftime("%m-%d"),
             "name": "Orthodox Easter",
             "countries": ["orthodox"],
+            "categories": ["Religious"],  # 👈 и тут
         },
     ]
