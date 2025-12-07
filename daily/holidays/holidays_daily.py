@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, timezone, time
 import discord
 from discord.ext import tasks
 
-from core.holidays_loader import load_all_holidays
+from commands.holidays_cmd import load_all_holidays
 
 logger = logging.getLogger("holidays_daily")
 
