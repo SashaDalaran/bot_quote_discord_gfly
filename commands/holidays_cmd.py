@@ -13,38 +13,56 @@ HOLIDAYS_PATH = "data/holidays"
 
 
 def load_all_holidays():
-    """Loads all holidays from JSON files + dynamic holidays."""
+    today = datetime.now().date()
     holidays = []
 
-    # Load static JSON files
-    if os.path.isdir(HOLIDAYS_PATH):
-        for filename in sorted(os.listdir(HOLIDAYS_PATH), key=lambda x: x.lower()):
-            if filename.endswith(".json"):
-                path = os.path.join(HOLIDAYS_PATH, filename)
-                try:
-                    with open(path, "r", encoding="utf-8") as f:
-                        data = json.load(f)
-                        for h in data:
-                            h["source"] = filename
-                        holidays.extend(data)
-                except Exception as e:
-                    print(f"Failed to load {filename}: {e}")
+    # ===== 1. JSON-файлы =====
+    for filename in sorted(os.listdir(HOLIDAYS_PATH)):
+        if not filename.endswith(".json"):
+            continue
 
-    # Dynamic holidays
-    dynamic = get_dynamic_holidays()
-    for h in dynamic:
-        h["source"] = "dynamic_holidays.py"
-    holidays.extend(dynamic)
+        full_path = os.path.join(HOLIDAYS_PATH, filename)
+        source = filename
 
-    # Convert date MM-DD → full datetime for sorting
-    for h in holidays:
-        try:
-            h["parsed_date"] = datetime.strptime(h["date"], "%m-%d").replace(year=datetime.now().year)
-        except:
-            # fallback for YYYY-MM-DD if needed
-            h["parsed_date"] = datetime.strptime(h["date"], "%Y-%m-%d")
+        with open(full_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
 
+        for entry in data:
+            mmdd = entry["date"]  # формат "MM-DD"
+            parsed = datetime.strptime(f"{today.year}-{mmdd}", "%Y-%m-%d").date()
+
+            # Если праздник уже прошёл в этом году — двигаем на следующий
+            if parsed < today:
+                parsed = parsed.replace(year=today.year + 1)
+
+            holidays.append(
+                {
+                    "date": mmdd,  # "MM-DD"
+                    "name": entry["name"],
+                    "countries": entry.get("countries", []),
+                    "source": source,
+                    "parsed_date": parsed,
+                }
+            )
+
+    # ===== 2. dynamic_holidays.py =====
+    dyn_list = get_dynamic_holidays()
+    for d in dyn_list:
+        full_date = datetime.strptime(d["full_date"], "%Y-%m-%d").date()
+
+        holidays.append(
+            {
+                "date": d["date"],  # "MM-DD"
+                "name": d["name"],
+                "countries": d.get("countries", []),
+                "source": "dynamic_holidays.py",
+                "parsed_date": full_date,
+            }
+        )
+
+    # ===== 3. Общая сортировка по parsed_date =====
     holidays.sort(key=lambda h: h["parsed_date"])
+
     return holidays
 
 
@@ -71,23 +89,24 @@ async def holidays_cmd(ctx):
         color=0x00AEEF
     )
 
-    # --- 1) DYNAMIC FIRST ---
-    dyn = get_next_for_source("dynamic_holidays.py", holidays)
-    if dyn:
-        country = dyn.get("country", dyn.get("countries", [""])[0])
-        flag = COUNTRY_FLAGS.get(country, "🌍")
+# --- 1) Dynamic ALWAYS first ---
+dyn = get_next_for_source("dynamic_holidays.py", holidays)
 
-        embed.add_field(
-            name="📁 dynamic_holidays.py",
-            value=f"{flag} **{dyn['name']}**\n📅 {dyn['parsed_date'].strftime('%m-%d')}",
-            inline=False,
-        )
-    else:
-        embed.add_field(
-            name="📁 dynamic_holidays.py",
-            value="❌ No upcoming holidays",
-            inline=False,
-        )
+if dyn:
+    embed.add_field(
+        name="📁 dynamic_holidays.py",
+        value=(
+            f"🌍 **{dyn['name']}**\n"
+            f"📅 {dyn['date']}"
+        ),
+        inline=False,
+    )
+else:
+    embed.add_field(
+        name="📁 dynamic_holidays.py",
+        value="❌ No upcoming holidays",
+        inline=False,
+    )
 
     # --- 2) JSON FILES ---
     try:
