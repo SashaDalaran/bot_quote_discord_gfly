@@ -8,7 +8,6 @@ from discord.ext import commands
 from core.dynamic_holidays import get_dynamic_holidays
 from core.holidays_flags import COUNTRY_FLAGS
 
-# ✔ ПРАВИЛЬНЫЙ ПУТЬ!
 HOLIDAYS_PATH = "data/holidays"
 
 
@@ -22,37 +21,36 @@ def load_all_holidays():
             continue
 
         full_path = os.path.join(HOLIDAYS_PATH, filename)
-        source = filename
 
         with open(full_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         for entry in data:
-            mmdd = entry["date"]  # формат "MM-DD"
+            mmdd = entry["date"]
             parsed = datetime.strptime(f"{today.year}-{mmdd}", "%Y-%m-%d").date()
 
-            # Если праздник уже прошёл в этом году — двигаем на следующий
+            # Если праздник уже прошёл — перенос на следующий год
             if parsed < today:
                 parsed = parsed.replace(year=today.year + 1)
 
             holidays.append(
                 {
-                    "date": mmdd,  # "MM-DD"
+                    "date": mmdd,
                     "name": entry["name"],
                     "countries": entry.get("countries", []),
-                    "source": source,
+                    "source": filename,
                     "parsed_date": parsed,
                 }
             )
 
-    # ===== 2. dynamic_holidays.py =====
+    # ===== 2. Dynamic holidays =====
     dyn_list = get_dynamic_holidays()
     for d in dyn_list:
         full_date = datetime.strptime(d["full_date"], "%Y-%m-%d").date()
 
         holidays.append(
             {
-                "date": d["date"],  # "MM-DD"
+                "date": d["date"],
                 "name": d["name"],
                 "countries": d.get("countries", []),
                 "source": "dynamic_holidays.py",
@@ -60,16 +58,12 @@ def load_all_holidays():
             }
         )
 
-    # ===== 3. Общая сортировка по parsed_date =====
     holidays.sort(key=lambda h: h["parsed_date"])
-
     return holidays
 
 
 def get_next_for_source(source_name, holidays):
-    """Returns the nearest upcoming holiday for a given source."""
-    today = datetime.now()
-
+    today = datetime.now().date()
     relevant = [h for h in holidays if h["source"] == source_name]
     upcoming = [h for h in relevant if h["parsed_date"] >= today]
 
@@ -89,40 +83,38 @@ async def holidays_cmd(ctx):
         color=0x00AEEF
     )
 
-# --- 1) Dynamic ALWAYS first ---
-dyn = get_next_for_source("dynamic_holidays.py", holidays)
+    # ===== 1. Dynamic ALWAYS first =====
+    dyn = get_next_for_source("dynamic_holidays.py", holidays)
 
-if dyn:
-    embed.add_field(
-        name="📁 dynamic_holidays.py",
-        value=(
-            f"🌍 **{dyn['name']}**\n"
-            f"📅 {dyn['date']}"
-        ),
-        inline=False,
-    )
-else:
-    embed.add_field(
-        name="📁 dynamic_holidays.py",
-        value="❌ No upcoming holidays",
-        inline=False,
-    )
+    if dyn:
+        embed.add_field(
+            name="📁 dynamic_holidays.py",
+            value=f"🌍 **{dyn['name']}**\n📅 {dyn['date']}",
+            inline=False,
+        )
+    else:
+        embed.add_field(
+            name="📁 dynamic_holidays.py",
+            value="❌ No upcoming holidays",
+            inline=False,
+        )
 
-    # --- 2) JSON FILES ---
+    # ===== 2. JSON files =====
     try:
-        files = [
-            f for f in os.listdir(HOLIDAYS_PATH)
-            if f.endswith(".json")
-        ]
+        files = [f for f in os.listdir(HOLIDAYS_PATH) if f.endswith(".json")]
     except FileNotFoundError:
-        await ctx.send("❌ Error: holidays folder not found on server.")
-        return
+        return await ctx.send("❌ Error: holidays folder not found on server.")
 
     for filename in sorted(files, key=lambda x: x.lower()):
         next_h = get_next_for_source(filename, holidays)
 
         if next_h:
-            country = next_h.get("country", next_h.get("countries", [""])[0])
+            # выберем страну
+            country = (
+                next_h.get("country")
+                or (next_h.get("countries")[0] if next_h.get("countries") else "")
+            )
+
             flag = COUNTRY_FLAGS.get(country, "🌍")
 
             embed.add_field(
