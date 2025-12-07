@@ -19,26 +19,19 @@ HOLIDAYS_CHANNEL_IDS = [
 ]
 
 
-def is_today(holiday_date: str) -> bool:
-    """
-    holiday_date — string YYYY-MM-DD
-    returns True if this is today's holiday (in GMT+3)
-    """
+def is_today(h):
+    """Check via parsed_date from load_all_holidays()"""
     today = datetime.now(TZ).date()
-    try:
-        h_date = datetime.strptime(holiday_date, "%Y-%m-%d").date()
-        return h_date == today
-    except Exception:
-        return False
+    return h["parsed_date"] == today
 
 
 @tasks.loop(time=time(hour=10, minute=1, tzinfo=TZ))
 async def send_holidays_daily(bot):
-    """Runs daily at 10:01 GMT+3 and posts holidays to all configured channels."""
+    """Runs daily at 10:01 GMT+3."""
     logger.info("Running daily holidays task...")
 
     holidays = load_all_holidays()
-    todays = [h for h in holidays if is_today(h["date"])]
+    todays = [h for h in holidays if is_today(h)]
 
     if not todays:
         logger.info("No holidays today.")
@@ -56,10 +49,18 @@ async def send_holidays_daily(bot):
         )
 
         for h in todays:
-            flag = h.get("flag", "🌍")
+            # Determine flag
+            country = ""
+            if "country" in h:
+                country = h["country"]
+            elif "countries" in h and h["countries"]:
+                country = h["countries"][0]
+
+            flag = h.get("flag") or "🌍"
+
             embed.add_field(
                 name=f"{flag} {h['name']}",
-                value="",  # NO CATEGORY ANYMORE
+                value="",   # No category
                 inline=False,
             )
 
@@ -71,15 +72,16 @@ async def send_holidays_daily(bot):
 
 
 async def send_once_if_missed_holidays(bot):
-    """If bot was offline at 10:01, send holidays once on startup."""
+    """If bot was offline at 10:01, send once on startup."""
     now = datetime.now(TZ)
     target_time = now.replace(hour=10, minute=1, second=0, microsecond=0)
 
+    # If time already passed today -> send once now
     if now > target_time:
         logger.info("Missed daily holidays time — sending once now...")
 
         holidays = load_all_holidays()
-        todays = [h for h in holidays if is_today(h["date"])]
+        todays = [h for h in holidays if is_today(h)]
 
         if not todays:
             logger.info("No holidays today.")
@@ -97,7 +99,7 @@ async def send_once_if_missed_holidays(bot):
             )
 
             for h in todays:
-                flag = h.get("flag", "🌍")
+                flag = h.get("flag") or "🌍"
                 embed.add_field(
                     name=f"{flag} {h['name']}",
                     value="",
@@ -106,6 +108,6 @@ async def send_once_if_missed_holidays(bot):
 
             try:
                 await channel.send(embed=embed)
-                logger.info(f"Sent holidays (missed) to {channel_id}")
+                logger.info(f"Sent missed holidays to {channel_id}")
             except Exception as e:
-                logger.exception(f"Failed to send to {channel_id}: {e}")
+                logger.exception(f"Failed to send missed holidays to {channel_id}: {e}")
