@@ -20,9 +20,16 @@ COUNTRY_FLAGS = {
     "eu": "🇪🇺",
     "china": "🇨🇳",
     "india": "🇮🇳",
-}
-
-RELIGION_FLAGS = {
+    "central_african_republic": "🇨🇫",
+    "new_zealand": "🇳🇿",
+    "chad": "🇹🇩",
+    "romania": "🇷🇴",
+    "philippines": "🇵🇭",
+    "uk": "🇬🇧",
+    "laos": "🇱🇦",
+    "tonga": "🇹🇴",
+    "nepal": "🇳🇵",
+    "sri_lanka": "🇱🇰",
     "orthodox": "✝️",
     "catholic": "✝️",
     "muslim": "☪️",
