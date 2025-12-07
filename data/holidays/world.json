@@ -1,3 +1,4 @@
+[
 { "date": "01-01", "name": "New Year's Day", "countries": ["world"] },
 { "date": "01-04", "name": "World Braille Day", "countries": ["world"] },
 { "date": "01-24", "name": "International Day of Education", "countries": ["world"] },
@@ -141,3 +142,4 @@
 { "date": "12-24", "name": "Christmas Eve", "countries": ["world"] },
 { "date": "12-25", "name": "Christmas Day", "countries": ["world"] },
 { "date": "12-31", "name": "New Year's Eve", "countries": ["world"] }
+]
