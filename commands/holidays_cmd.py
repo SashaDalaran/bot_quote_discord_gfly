@@ -116,3 +116,6 @@ async def holidays_cmd(ctx):
             )
 
     await ctx.send(embed=embed)
+
+def setup(bot):
+    bot.add_command(holidays_cmd)
