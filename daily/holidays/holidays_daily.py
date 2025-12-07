@@ -19,16 +19,26 @@ HOLIDAYS_CHANNEL_IDS = [
 ]
 
 
+def is_today(holiday_date: str) -> bool:
+    """
+    holiday_date — string YYYY-MM-DD
+    returns True if this is today's holiday (in GMT+3)
+    """
+    today = datetime.now(TZ).date()
+    try:
+        h_date = datetime.strptime(holiday_date, "%Y-%m-%d").date()
+        return h_date == today
+    except Exception:
+        return False
+
+
 @tasks.loop(time=time(hour=10, minute=1, tzinfo=TZ))
 async def send_holidays_daily(bot):
     """Runs daily at 10:01 GMT+3 and posts holidays to all configured channels."""
     logger.info("Running daily holidays task...")
 
     holidays = load_all_holidays()
-    today = datetime.now(TZ).date()
-    today_str = today.strftime("%m-%d")
-
-    todays = [h for h in holidays if h["date"] == today_str]
+    todays = [h for h in holidays if is_today(h["date"])]
 
     if not todays:
         logger.info("No holidays today.")
@@ -46,9 +56,10 @@ async def send_holidays_daily(bot):
         )
 
         for h in todays:
+            flag = h.get("flag", "🌍")
             embed.add_field(
-                name=f"{h.get('flag', '')} {h['name']}",
-                value=f"Category: **{h.get('category', 'unknown')}**",
+                name=f"{flag} {h['name']}",
+                value="",  # NO CATEGORY ANYMORE
                 inline=False,
             )
 
@@ -66,11 +77,9 @@ async def send_once_if_missed_holidays(bot):
 
     if now > target_time:
         logger.info("Missed daily holidays time — sending once now...")
-        holidays = load_all_holidays()
-        today = now.date()
-        today_str = today.strftime("%m-%d")
 
-        todays = [h for h in holidays if h["date"] == today_str]
+        holidays = load_all_holidays()
+        todays = [h for h in holidays if is_today(h["date"])]
 
         if not todays:
             logger.info("No holidays today.")
@@ -88,9 +97,10 @@ async def send_once_if_missed_holidays(bot):
             )
 
             for h in todays:
+                flag = h.get("flag", "🌍")
                 embed.add_field(
-                    name=f"{h.get('flag', '')} {h['name']}",
-                    value=f"Category: **{h.get('category', 'unknown')}**",
+                    name=f"{flag} {h['name']}",
+                    value="",
                     inline=False,
                 )
 
