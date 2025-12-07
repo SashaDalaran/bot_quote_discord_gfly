@@ -1,78 +1,124 @@
 import os
 import json
 from datetime import datetime
+
 import discord
 from discord.ext import commands
 
 from core.dynamic_holidays import get_dynamic_holidays
 from core.holidays_flags import COUNTRY_FLAGS, RELIGION_FLAGS
 
+# Base directory of the project
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+# Folder with holiday JSON files
 HOLIDAYS_PATH = os.path.join(BASE_DIR, "data", "holidays")
 
-def load_all_holidays():
-    holidays = []
 
-    for file in os.listdir(HOLIDAYS_PATH):
-        if not file.endswith(".json"):
-            continue
-        with open(os.path.join(HOLIDAYS_PATH, file), "r", encoding="utf-8") as f:
-            holidays.extend(json.load(f))
-
-    holidays.extend(get_dynamic_holidays())
-
-    return holidays
+def load_holidays_from_file(path: str):
+    """Load holidays from one JSON file. 
+    If error — return dict with 'error'."""
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        return {"error": str(e)}
 
 
-def get_next_holiday():
-    """Returns the closest upcoming holiday."""
+def get_next_from_list(holidays: list):
+    """Return the closest upcoming holiday from a list."""
     today = datetime.now()
     year = today.year
-
-    holidays = load_all_holidays()
-    upcoming = []
+    parsed = []
 
     for h in holidays:
-        mm, dd = h["date"].split("-")
-        holiday_date = datetime(year, int(mm), int(dd))
+        try:
+            mm, dd = h["date"].split("-")
+            date_obj = datetime(year, int(mm), int(dd))
 
-        # если в этом году уже прошло — переносим на следующий
-        if holiday_date < today:
-            holiday_date = holiday_date.replace(year=year + 1)
+            # If this year's date already passed → move to next year
+            if date_obj < today:
+                date_obj = date_obj.replace(year=year + 1)
+            parsed.append((date_obj, h))
+        except Exception:
+            continue
 
-        upcoming.append((holiday_date, h))
+    if not parsed:
+        return None
 
-    upcoming.sort(key=lambda x: x[0])
-    return upcoming[0]
+    # 👉 Sorting by nearest date (closest first)
+    parsed.sort(key=lambda x: x[0])
+    return parsed[0]
 
 
-def build_embed(holiday_date, holiday):
-    """Formats embed message for Discord."""
-    mmdd = holiday["date"]
-    name = holiday["name"]
-
-    flag = ""
-    if "countries" in holiday and holiday["countries"]:
-        c = holiday["countries"][0]
-        flag = COUNTRY_FLAGS.get(c, "")
-    elif "religion" in holiday and holiday.get("religion"):
-        flag = RELIGION_FLAGS.get(holiday["religion"], "")
-
-    embed = discord.Embed(
-        title="🎉 Next Holiday",
-        description=f"{flag} **{name}**\n📅 Date: `{mmdd}`\n(closest occurrence)",
-        color=0x00FF99,
-    )
-    return embed
+def get_flag(holiday: dict) -> str:
+    """Choose flag emoji based on country or religion."""
+    if holiday.get("countries"):
+        return COUNTRY_FLAGS.get(holiday["countries"][0], "")
+    if holiday.get("religion"):
+        return RELIGION_FLAGS.get(holiday["religion"], "")
+    return ""
 
 
 def setup(bot: commands.Bot):
-    @bot.command(
-        name="holidays",
-        aliases=["holiday", "today", "next"],
-        help="Shows the next upcoming holiday across all JSON files.",
-    )
+    @bot.command(name="holidays", help="Show closest holiday from every JSON file.")
     async def holidays_cmd(ctx: commands.Context):
-        holiday_date, holiday = get_next_holiday()
-        embed = build_embed(holiday_date, holiday)
+        """
+        Admin diagnostic command.
+        For every JSON file in /data/holidays, show the nearest holiday.
+        Purpose: check readability of all holiday files (especially new ones).
+        """
+
+        embed = discord.Embed(
+            title="🎉 Holiday Files Diagnostic",
+            description=(
+                "Shows the closest holiday from **each JSON file** in `/data/holidays`.\n"
+                "Useful to verify that all holiday files load correctly."
+            ),
+            color=0x00AEEF,
+        )
+
+        # 👉 SORT FILES ALPHABETICALLY HERE
+        files = sorted(os.listdir(HOLIDAYS_PATH))
+
+        for filename in files:
+            if not filename.endswith(".json"):
+                continue
+
+            full_path = os.path.join(HOLIDAYS_PATH, filename)
+            data = load_holidays_from_file(full_path)
+
+            # If there was an error reading the file
+            if isinstance(data, dict) and "error" in data:
+                embed.add_field(
+                    name=f"❌ {filename}",
+                    value=f"Error reading file:\n`{data['error']}`",
+                    inline=False,
+                )
+                continue
+
+            holidays_list = data  # Only JSON holidays, no dynamic ones for diagnostics
+
+            next_holiday = get_next_from_list(holidays_list)
+
+            if not next_holiday:
+                embed.add_field(
+                    name=f"⚠️ {filename}",
+                    value="No valid holidays found in this file.",
+                    inline=False,
+                )
+                continue
+
+            date_obj, holiday = next_holiday
+            mmdd = holiday["date"]
+            flag = get_flag(holiday)
+
+            embed.add_field(
+                name=f"📁 {filename}",
+                value=(
+                    f"{flag} **{holiday['name']}**\n"
+                    f"📅 File date: `{mmdd}`"
+                ),
+                inline=False,
+            )
+
         await ctx.send(embed=embed)
