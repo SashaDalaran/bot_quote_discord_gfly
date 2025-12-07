@@ -30,8 +30,37 @@ COUNTRY_FLAGS = {
     "tonga": "🇹🇴",
     "nepal": "🇳🇵",
     "sri_lanka": "🇱🇰",
+
+
     "orthodox": "✝️",
     "catholic": "✝️",
     "muslim": "☪️",
     "jewish": "✡️",
+}
+
+CATEGORY_EMOJIS = {
+    "Health": "🩺",
+    "Cultural": "🎎",
+    "Federal": "🏛️",
+    "Special Interest": "⭐",
+    "Cause": "🎗️",
+    "Food & Beverage": "🍽️",
+    "Animal": "🐾",
+    "Appreciation": "🙏",
+    "Arts & Entertainment": "🎭",
+    "Relationship": "❤️",
+    "Fun": "🎉",
+    "Religion": "⛪",
+    "Religious": "⛪",
+    "Activity": "⚽",
+    "Activities": "⚽",
+    "Environment": "🌱",
+    "History": "📜",
+    "Historical": "📜",
+    "Technology": "💻",
+    "Education": "📚",
+    "Educational": "📚",
+    "Safety": "🚨",
+    "Fashion": "👗",
+    "Lifestyle": "🏡",
 }

@@ -38,6 +38,7 @@ def load_all_holidays():
                     "date": mmdd,
                     "name": entry["name"],
                     "countries": entry.get("countries", []),
+                    "categories": entry.get("category", []),  # <- ВАЖНО
                     "source": filename,
                     "parsed_date": parsed,
                 }
@@ -53,6 +54,7 @@ def load_all_holidays():
                 "date": d["date"],
                 "name": d["name"],
                 "countries": d.get("countries", []),
+                "categories": d.get("categories", d.get("category", [])),
                 "source": "dynamic_holidays.py",
                 "parsed_date": full_date,
             }

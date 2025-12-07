@@ -7,6 +7,7 @@ import discord
 from discord.ext import tasks
 
 from commands.holidays_cmd import load_all_holidays
+from core.holidays_flags import COUNTRY_FLAGS, CATEGORY_EMOJIS
 
 logger = logging.getLogger("holidays_daily")
 
@@ -23,6 +24,29 @@ def is_today(h):
     """Check via parsed_date from load_all_holidays()"""
     today = datetime.now(TZ).date()
     return h["parsed_date"] == today
+
+
+def build_flag(h):
+    """Определить страну/религию и вернуть эмодзи-флаг."""
+    country = (
+        h.get("country")
+        or (h.get("countries")[0] if h.get("countries") else "")
+    )
+    return COUNTRY_FLAGS.get(country, "🌍")
+
+
+def build_category_line(h):
+    """Собрать строку для value: категория + эмодзи."""
+    categories = h.get("categories", [])
+    if not categories:
+        return ""
+
+    main_cat = categories[0]
+    cat_emoji = CATEGORY_EMOJIS.get(main_cat, "")
+    if cat_emoji:
+        return f"{cat_emoji} `{main_cat}`"
+    else:
+        return f"`{main_cat}`"
 
 
 @tasks.loop(time=time(hour=10, minute=1, tzinfo=TZ))
@@ -49,18 +73,12 @@ async def send_holidays_daily(bot):
         )
 
         for h in todays:
-            # Determine flag
-            country = ""
-            if "country" in h:
-                country = h["country"]
-            elif "countries" in h and h["countries"]:
-                country = h["countries"][0]
-
-            flag = h.get("flag") or "🌍"
+            flag = build_flag(h)
+            value = build_category_line(h)
 
             embed.add_field(
                 name=f"{flag} {h['name']}",
-                value="",   # No category
+                value=value,
                 inline=False,
             )
 
@@ -76,7 +94,7 @@ async def send_once_if_missed_holidays(bot):
     now = datetime.now(TZ)
     target_time = now.replace(hour=10, minute=1, second=0, microsecond=0)
 
-    # If time already passed today -> send once now
+    # Если время уже прошло сегодня -> отправляем один раз сейчас
     if now > target_time:
         logger.info("Missed daily holidays time — sending once now...")
 
@@ -99,10 +117,12 @@ async def send_once_if_missed_holidays(bot):
             )
 
             for h in todays:
-                flag = h.get("flag") or "🌍"
+                flag = build_flag(h)
+                value = build_category_line(h)
+
                 embed.add_field(
                     name=f"{flag} {h['name']}",
-                    value="",
+                    value=value,
                     inline=False,
                 )
 
