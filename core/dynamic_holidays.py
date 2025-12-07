@@ -1,12 +1,13 @@
 # core/dynamic_holidays.py
+
 from datetime import datetime, timedelta, date
 
 
 def _easter_western(year: int) -> date:
     """
-    Возвращает дату католической Пасхи (григорианский календарь)
-    как объект datetime.date.
-    Алгоритм — стандартный, только возвращаем date, а не строку.
+    Calculate the date of Catholic (Western) Easter
+    using the standard Gregorian algorithm.
+    Returns a datetime.date object.
     """
     a = year % 19
     b = year // 100
@@ -27,20 +28,23 @@ def _easter_western(year: int) -> date:
 
 def _easter_orthodox(year: int) -> date:
     """
-    Условная дата православной Пасхи:
-    берём западную Пасху и добавляем 13 дней (сдвиг юлианского календаря).
-    Для нашего бота такой точности более чем достаточно.
+    Approximate the date of Orthodox Easter by taking
+    Western Easter and adding 13 days (Julian calendar offset).
+    This precision is more than enough for our bot use-case.
     """
     western = _easter_western(year)
     return western + timedelta(days=13)
 
+
 def get_dynamic_holidays():
     """
-    Возвращает список из двух ближайших праздников:
+    Return a list containing the upcoming dates for:
     - Catholic Easter
     - Orthodox Easter
 
-    ВСЕГДА берём **следующую** Пасху (может быть уже в следующем году).
+    The function always returns the *next* occurrences.
+    If Easter for the current year has already passed,
+    it automatically shifts to the next year.
     """
     today = datetime.now().date()
     year = today.year
@@ -48,6 +52,7 @@ def get_dynamic_holidays():
     catholic = _easter_western(year)
     orthodox = _easter_orthodox(year)
 
+    # If both Easters are already in the past for this year → move to next year
     if max(catholic, orthodox) < today:
         year += 1
         catholic = _easter_western(year)
@@ -59,13 +64,13 @@ def get_dynamic_holidays():
             "date": catholic.strftime("%m-%d"),
             "name": "Catholic Easter",
             "countries": ["catholic"],
-            "categories": ["Religious"],  # 👈 добавили категорию
+            "categories": ["Religious"],
         },
         {
             "full_date": orthodox.strftime("%Y-%m-%d"),
             "date": orthodox.strftime("%m-%d"),
             "name": "Orthodox Easter",
             "countries": ["orthodox"],
-            "categories": ["Religious"],  # 👈 и тут
+            "categories": ["Religious"],
         },
     ]

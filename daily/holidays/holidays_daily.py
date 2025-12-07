@@ -21,13 +21,13 @@ HOLIDAYS_CHANNEL_IDS = [
 
 
 def is_today(h):
-    """Check via parsed_date from load_all_holidays()"""
+    """Return True if the holiday date matches today's date."""
     today = datetime.now(TZ).date()
     return h["parsed_date"] == today
 
 
 def build_flag(h):
-    """Определить страну/религию и вернуть эмодзи-флаг."""
+    """Determine holiday country/religion and return its emoji flag."""
     country = (
         h.get("country")
         or (h.get("countries")[0] if h.get("countries") else "")
@@ -36,7 +36,7 @@ def build_flag(h):
 
 
 def build_category_line(h):
-    """Собрать строку для value: категория + эмодзи."""
+    """Return category string with emoji for the embed."""
     categories = h.get("categories", [])
     if not categories:
         return ""
@@ -48,7 +48,9 @@ def build_category_line(h):
     else:
         return f"`{main_cat}`"
 
+
 def get_flag_for_holiday(h):
+    """Return emoji flag for the holiday."""
     country = ""
     if h.get("country"):
         country = h["country"]
@@ -58,6 +60,7 @@ def get_flag_for_holiday(h):
 
 
 def get_category_line(h):
+    """Return category text with emoji if available."""
     categories = h.get("categories") or []
     if not categories:
         return ""
@@ -65,14 +68,14 @@ def get_category_line(h):
     main = categories[0]
     emoji = CATEGORY_EMOJIS.get(main)
     if not emoji:
-        return main  # просто текст категории, если эмодзи нет
+        return main  # plain category text if no emoji found
 
     return f"{emoji} {main}"
 
 
 @tasks.loop(time=time(hour=10, minute=1, tzinfo=TZ))
 async def send_holidays_daily(bot):
-    """Runs daily at 10:01 GMT+3."""
+    """Send holidays every day at 10:01 GMT+3."""
     logger.info("Running daily holidays task...")
 
     holidays = load_all_holidays()
@@ -111,13 +114,15 @@ async def send_holidays_daily(bot):
 
 
 async def send_once_if_missed_holidays(bot):
-    """If bot was offline at 10:01, send once on startup."""
+    """
+    If the bot was offline at the scheduled time (10:01),
+    send today's holidays once on startup.
+    """
     now = datetime.now(TZ)
     target_time = now.replace(hour=10, minute=1, second=0, microsecond=0)
 
-    # Если время уже прошло сегодня -> отправляем один раз сейчас
     if now > target_time:
-        logger.info("Missed daily holidays time — sending once now...")
+        logger.info("Missed scheduled time — sending holiday list once now...")
 
         holidays = load_all_holidays()
         todays = [h for h in holidays if is_today(h)]
