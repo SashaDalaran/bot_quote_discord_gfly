@@ -1,6 +1,6 @@
 import os
 import json
-from datetime import datetime, date
+from datetime import datetime
 
 import discord
 from discord.ext import commands
@@ -11,52 +11,37 @@ from core.holidays_flags import COUNTRY_FLAGS
 HOLIDAYS_PATH = "daily/holidays/data"
 
 
-# ===============================
-#   DATE PARSER (supports MM-DD)
-# ===============================
-def parse_date(date_str: str) -> date:
+# ---------- DATE PARSER ----------
+def parse_date(date_str):
     """
-    Accepts:
-      • YYYY-MM-DD
-      • MM-DD   (auto-assigned to this or next year)
-    Returns: datetime.date
+    Converts MM-DD or YYYY-MM-DD → datetime object (year adjusted to THIS YEAR).
     """
+    today_year = datetime.now().year
 
-    today = datetime.now().date()
-
-    # Format MM-DD (length 5 → "04-20")
+    # MM-DD format
     if len(date_str) == 5 and date_str[2] == "-":
-        month = int(date_str[:2])
-        day = int(date_str[3:])
+        return datetime.strptime(f"{today_year}-{date_str}", "%Y-%m-%d")
 
-        year = today.year
-        parsed = date(year, month, day)
+    # YYYY-MM-DD format
+    if len(date_str) == 10 and date_str[4] == "-":
+        return datetime.strptime(date_str, "%Y-%m-%d")
 
-        # если праздник уже прошёл — переносим на следующий год
-        if parsed < today:
-            parsed = date(year + 1, month, day)
-
-        return parsed
-
-    # Format YYYY-MM-DD
-    return datetime.strptime(date_str, "%Y-%m-%d").date()
+    # Fallback
+    raise ValueError(f"Unsupported date format: {date_str}")
 
 
-# ===============================
-#      LOAD ALL HOLIDAYS
-# ===============================
+# ---------- LOADER ----------
 def load_all_holidays():
-    """Load all JSON holidays + dynamic holidays."""
+    """Loads static JSON holiday files + dynamic holidays."""
     holidays = []
 
-    # Static JSON files
+    # Load static json files
     if os.path.isdir(HOLIDAYS_PATH):
         for filename in sorted(os.listdir(HOLIDAYS_PATH), key=lambda x: x.lower()):
             if filename.endswith(".json"):
-                full_path = os.path.join(HOLIDAYS_PATH, filename)
-
+                path = os.path.join(HOLIDAYS_PATH, filename)
                 try:
-                    with open(full_path, "r", encoding="utf-8") as f:
+                    with open(path, "r", encoding="utf-8") as f:
                         data = json.load(f)
 
                         for h in data:
@@ -64,28 +49,23 @@ def load_all_holidays():
                             h["parsed_date"] = parse_date(h["date"])
 
                         holidays.extend(data)
-
                 except Exception as e:
                     print(f"Failed to load {filename}: {e}")
 
-    # Dynamic holidays
+    # Load dynamic holidays
     dynamic = get_dynamic_holidays()
     for h in dynamic:
         h["source"] = "dynamic_holidays.py"
         h["parsed_date"] = parse_date(h["date"])
     holidays.extend(dynamic)
 
-    # Global sort (по дате)
-    holidays.sort(key=lambda h: h["parsed_date"])
-
     return holidays
 
 
-# ===============================
-#   GET NEXT HOLIDAY PER FILE
-# ===============================
+# ---------- PICK CLOSEST ----------
 def get_next_for_source(source_name, holidays):
-    today = datetime.now().date()
+    """Returns the closest upcoming holiday for a given source."""
+    today = datetime.now()
 
     relevant = [h for h in holidays if h["source"] == source_name]
 
@@ -94,28 +74,27 @@ def get_next_for_source(source_name, holidays):
     if not upcoming:
         return None
 
-    upcoming.sort(key=lambda h: h["parsed_date"])
-    return upcoming[0]
+    return sorted(upcoming, key=lambda h: h["parsed_date"])[0]
 
 
-# ===============================
-#         COMMAND
-# ===============================
+# ---------- COMMAND ----------
 @commands.command(name="holidays")
 async def holidays_cmd(ctx):
-    """Diagnostic: show nearest holiday from each file."""
+    """Diagnostic command: show nearest holidays by file."""
     holidays = load_all_holidays()
 
     embed = discord.Embed(
         title="📅 Nearest Holidays by Source",
-        color=0x00AEEF
+        color=0x00AEEF,
     )
 
-    # --- 1) Dynamic ALWAYS first ---
+    # --- 1) DYNAMIC FIRST ---
     dyn = get_next_for_source("dynamic_holidays.py", holidays)
 
     if dyn:
-        flag = COUNTRY_FLAGS.get(dyn["country"], "🌍")
+        country = dyn.get("country", "")
+        flag = COUNTRY_FLAGS.get(country, "🌍")
+
         embed.add_field(
             name="📁 dynamic_holidays.py",
             value=(
@@ -131,7 +110,7 @@ async def holidays_cmd(ctx):
             inline=False,
         )
 
-    # --- 2) JSON files ---
+    # --- 2) STATIC JSON FILES ---
     files = [
         f for f in os.listdir(HOLIDAYS_PATH)
         if f.endswith(".json")
@@ -141,7 +120,8 @@ async def holidays_cmd(ctx):
         next_h = get_next_for_source(filename, holidays)
 
         if next_h:
-            flag = COUNTRY_FLAGS.get(next_h["country"], "🌍")
+            country = next_h.get("country", "")
+            flag = COUNTRY_FLAGS.get(country, "🌍")
 
             embed.add_field(
                 name=f"📁 {filename}",
@@ -161,8 +141,5 @@ async def holidays_cmd(ctx):
     await ctx.send(embed=embed)
 
 
-# ===============================
-#      COMMAND REGISTER
-# ===============================
 def setup(bot):
     bot.add_command(holidays_cmd)

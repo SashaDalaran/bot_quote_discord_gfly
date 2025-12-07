@@ -1,8 +1,9 @@
 # core/dynamic_holidays.py
 from datetime import datetime, timedelta
 
+
 def easter_date(year):
-    """Return the date of Easter for a given year (Western Christian)."""
+    """Return the date of Easter for a given year (Western)."""
     a = year % 19
     b = year // 100
     c = year % 100
@@ -19,11 +20,13 @@ def easter_date(year):
     day = ((h + l - 7 * m + 114) % 31) + 1
     return f"{month:02d}-{day:02d}"
 
+
 def orthodox_easter(year):
-    """Orthodox Easter using a simplified offset from Western Easter."""
+    """Orthodox Easter based on Western + 13 days."""
     western = datetime.strptime(easter_date(year), "%m-%d")
-    orthodox = western + timedelta(days=13)  # Julian offset
+    orthodox = western + timedelta(days=13)
     return f"{orthodox.month:02d}-{orthodox.day:02d}"
+
 
 def get_dynamic_holidays():
     year = datetime.now().year
@@ -35,11 +38,11 @@ def get_dynamic_holidays():
         {
             "date": easter,
             "name": "Catholic Easter",
-            "countries": ["catholic"],
+            "country": "world",      # 🌍 флаг — универсальный
         },
         {
             "date": orthodox,
             "name": "Orthodox Easter",
-            "countries": ["orthodox"],
+            "country": "orthodox",   # использует флаг ✝️
         },
     ]
