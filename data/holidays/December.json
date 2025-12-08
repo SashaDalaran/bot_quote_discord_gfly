@@ -13,7 +13,6 @@
 { "date": "12-01", "name": "Portugal Restoration of Independence Day", "category": ["Federal"], "countries": ["portugal"] },
 { "date": "12-01", "name": "Prisoners for Peace Day", "category": ["Cause"], "countries": ["world"] },
 { "date": "12-01", "name": "Romania Independence Day", "category": ["Federal"], "countries": ["romania"] },
-{ "date": "12-01", "name": "Romania National Day", "category": ["Federal"], "countries": ["romania"] },
 { "date": "12-01", "name": "Rosa Parks Day", "category": ["Special Interest"], "countries": ["usa"] },
 { "date": "12-01", "name": "State Inauguration Day in Nagaland", "category": ["Federal"], "countries": ["india"] },
 { "date": "12-01", "name": "World AIDS Day", "category": ["Health"], "countries": ["world"] },
@@ -30,6 +29,8 @@
 { "date": "12-01", "name": "Universal Human Rights Month", "category": ["Cause"], "countries": ["world"] },
 { "date": "12-01", "name": "Volunteerism Month (Philippines)", "category": ["Cause"], "countries": ["philippines"] },
 { "date": "12-01", "name": "Worldwide Food Service Safety Month", "category": ["Food & Beverage"], "countries": ["world"] },
+
+
 { "date": "12-02", "name": "Asom Divas", "category": ["Federal"], "countries": ["india"] },
 { "date": "12-02", "name": "Business of Popping Corn Day", "category": ["Food & Beverage"], "countries": ["world"] },
 { "date": "12-02", "name": "International Day for the Abolition of Slavery", "category": ["Cause"], "countries": ["international"] },
@@ -44,6 +45,8 @@
 { "date": "12-02", "name": "UAE National Day", "category": ["Federal"], "countries": ["uae"] },
 { "date": "12-02", "name": "World Computer Literacy Day", "category": ["Special Interest"], "countries": ["world"] },
 { "date": "12-02", "name": "World Pollution Prevention Day", "category": ["Cause"], "countries": ["world"] },
+
+
 { "date": "12-03", "name": "Day of Navarre", "category": ["Cultural"], "countries": ["spain"] },
 { "date": "12-03", "name": "Feast of St. Francis Xavier", "category": ["Religious"], "countries": ["christian"] },
 { "date": "12-03", "name": "International Day of Persons with Disabilities", "category": ["Cause"], "countries": ["international"] },
@@ -52,6 +55,7 @@
 { "date": "12-03", "name": "National Heather Day", "category": ["Fun"], "countries": ["world"] },
 { "date": "12-03", "name": "National Make a Gift Day", "category": ["Relationship"], "countries": ["world"] },
 { "date": "12-03", "name": "National Roof Over Your Head Day", "category": ["Appreciation"], "countries": ["world"] },
+
 { "date": "12-04", "name": "Cabernet Franc Day", "category": ["Food & Beverage"], "countries": ["world"] },
 { "date": "12-04", "name": "Celebrate Shelter Pets Day", "category": ["Animal"], "countries": ["usa"] },
 { "date": "12-04", "name": "Extraordinary Work Team Recognition Day", "category": ["Appreciation"], "countries": ["world"] },
@@ -61,9 +65,10 @@
 { "date": "12-04", "name": "National Francis Day", "category": ["Fun"], "countries": ["world"] },
 { "date": "12-04", "name": "National Sock Day", "category": ["Special Interest"], "countries": ["world"] },
 { "date": "12-04", "name": "Santa’s List Day", "category": ["Cultural"], "countries": ["world"] },
-{ "date": "12-04", "name": "Tupou I Day (in lieu)", "category": ["Cultural"], "countries": ["tonga"] },
 { "date": "12-04", "name": "Wear Brown Shoes Day", "category": ["Special Interest"], "countries": ["world"] },
 { "date": "12-04", "name": "World Wildlife Conservation Day", "category": ["Cause"], "countries": ["world"] },
+
+
 { "date": "12-05", "name": "Bathtub Party Day", "category": ["Fun"], "countries": ["world"] },
 { "date": "12-05", "name": "Discovery Day (Haiti)", "category": ["Cultural"], "countries": ["haiti"] },
 { "date": "12-05", "name": "International Ninja Day", "category": ["Special Interest"], "countries": ["world"] },
@@ -77,6 +82,8 @@
 { "date": "12-05", "name": "National Repeal Day", "category": ["Food & Beverage"], "countries": ["usa"] },
 { "date": "12-05", "name": "Sacher-Torte Day", "category": ["Food & Beverage"], "countries": ["austria"] },
 { "date": "12-05", "name": "World Soil Day", "category": ["Special Interest"], "countries": ["international"] },
+
+
 { "date": "12-06", "name": "Candle Day", "category": ["Special Interest"], "countries": ["world"] },
 { "date": "12-06", "name": "Chester Greenwood (Earmuff) Day", "category": ["Cultural"], "countries": ["usa"] },
 { "date": "12-06", "name": "Coats and Toys for Kids Day", "category": ["Cause"], "countries": ["world"] },
@@ -94,9 +101,9 @@
 { "date": "12-06", "name": "National Rhubarb Vodka Day", "category": ["Food & Beverage"], "countries": ["world"] },
 { "date": "12-06", "name": "Put on Your Own Shoes Day", "category": ["Special Interest"], "countries": ["world"] },
 { "date": "12-06", "name": "SKYWARN Recognition Day", "category": ["Special Interest"], "countries": ["usa"] },
-{ "date": "12-06", "name": "St. Nicholas Day", "category": ["Religious"], "countries": ["catholic"] },
-{ "date": "12-06", "name": "St. Nicholas Day (Family/Festivities Variant)", "category": ["Religious"], "countries": ["christian"] },
-{ "date": "12-06", "name": "Tree Dressing Day", "category": ["Fun"], "countries": ["world"] },
+{ "date": "12-06", "name": "St. Nicholas Day", "category": ["Religious"], "countries": ["christian"] },
+
+
 { "date": "12-07", "name": "Feast of St. Ambrose", "category": ["Religious"], "countries": ["christian"] },
 { "date": "12-07", "name": "Flag Day of India", "category": ["Federal"], "countries": ["india"] },
 { "date": "12-07", "name": "International Civil Aviation Day", "category": ["Special Interest"], "countries": ["world"] },
@@ -106,10 +113,11 @@
 { "date": "12-07", "name": "National Letter Writing Day", "category": ["Special Interest"], "countries": ["world"] },
 { "date": "12-07", "name": "National Pearl Harbor Day of Remembrance", "category": ["Federal"], "countries": ["usa"] },
 { "date": "12-07", "name": "National Rina Day", "category": ["Fun"], "countries": ["world"] },
+
+
 { "date": "12-08", "name": "Bodhi Day", "category": ["Religious"], "countries": ["buddhist"] },
 { "date": "12-08", "name": "Constitution Day of Uzbekistan", "category": ["Federal"], "countries": ["uzbekistan"] },
 { "date": "12-08", "name": "Feast of the Immaculate Conception", "category": ["Religious"], "countries": ["catholic"] },
-{ "date": "12-08", "name": "Immaculate Conception Day", "category": ["Religious"], "countries": ["catholic"] },
 { "date": "12-08", "name": "Mother’s Day in Panama", "category": ["Federal"], "countries": ["panama"] },
 { "date": "12-08", "name": "National Blue Collar Day", "category": ["Appreciation"], "countries": ["world"] },
 { "date": "12-08", "name": "National Brownie Day", "category": ["Food & Beverage"], "countries": ["world"] },
@@ -121,6 +129,8 @@
 { "date": "12-08", "name": "St. Clement of Ohrid", "category": ["Religious"], "countries": ["christian"] },
 { "date": "12-08", "name": "Take it in the Ear Day", "category": ["Fun"], "countries": ["usa"] },
 { "date": "12-08", "name": "Virgin of Caacupé Day", "category": ["Religious"], "countries": ["catholic"] },
+
+
 { "date": "12-09", "name": "Christmas Card Day", "category": ["Cultural"], "countries": ["world"] },
 { "date": "12-09", "name": "Genocide Prevention Day", "category": ["Cause"], "countries": ["world"] },
 { "date": "12-09", "name": "International Anti-Corruption Day", "category": ["Cause"], "countries": ["world"] },
@@ -133,6 +143,8 @@
 { "date": "12-09", "name": "Techno Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
 { "date": "12-09", "name": "V.C. Bird Day", "category": ["Federal"], "countries": ["antigua_and_barbuda"] },
 { "date": "12-09", "name": "Weary Willie Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
+
+
 { "date": "12-10", "name": "Dewey Decimal System Day", "category": ["Fun"], "countries": ["world"] },
 { "date": "12-10", "name": "Festival for the Souls of Dead Whales", "category": ["Appreciation"], "countries": ["world"] },
 { "date": "12-10", "name": "Human Rights Day", "category": ["Federal"], "countries": ["world"] },
@@ -140,9 +152,10 @@
 { "date": "12-10", "name": "Iraq Victory Day", "category": ["Federal"], "countries": ["iraq"] },
 { "date": "12-10", "name": "National Lager Day", "category": ["Food & Beverage"], "countries": ["world"] },
 { "date": "12-10", "name": "Nobel Prize Day", "category": ["Special Interest"], "countries": ["world"] },
+
+
 { "date": "12-11", "name": "Anniversary of the Statute of Westminster", "category": ["Special Interest"], "countries": ["canada"] },
 { "date": "12-11", "name": "Burkina Faso Republic Day", "category": ["Federal"], "countries": ["burkina_faso"] },
-{ "date": "12-11", "name": "Christmas Jumper Day", "category": ["Fun"], "countries": ["world"] },
 { "date": "12-11", "name": "Holiday Food Drive for Needy Animals Day", "category": ["Animal"], "countries": ["world"] },
 { "date": "12-11", "name": "International Mountain Day", "category": ["Cause"], "countries": ["world"] },
 { "date": "12-11", "name": "National App Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
@@ -150,6 +163,8 @@
 { "date": "12-11", "name": "Noodle Ring Day", "category": ["Food & Beverage"], "countries": ["usa"] },
 { "date": "12-11", "name": "UNICEF Birthday", "category": ["Cause"], "countries": ["international"] },
 { "date": "12-11", "name": "UNICEF Day for Change", "category": ["Cause"], "countries": ["international"] },
+
+
 { "date": "12-12", "name": "Choral Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
 { "date": "12-12", "name": "Constitution Day in Thailand", "category": ["Federal"], "countries": ["thailand"] },
 { "date": "12-12", "name": "Day of the Virgin of Guadalupe", "category": ["Federal"], "countries": ["mexico"] },
@@ -169,6 +184,8 @@
 { "date": "12-12", "name": "National Salesperson Day", "category": ["Appreciation"], "countries": ["world"] },
 { "date": "12-12", "name": "Pa Togan Nengminza Sangma", "category": ["Cultural"], "countries": ["india"] },
 { "date": "12-12", "name": "Universal Health Coverage Day", "category": ["Health"], "countries": ["world"] },
+
+
 { "date": "12-13", "name": "International Shareware Day", "category": ["Special Interest"], "countries": ["world"] },
 { "date": "12-13", "name": "Malta Republic Day", "category": ["Federal"], "countries": ["malta"] },
 { "date": "12-13", "name": "National Cocoa Day", "category": ["Food & Beverage"], "countries": ["world"] },
@@ -179,9 +196,9 @@
 { "date": "12-13", "name": "Pick A Pathologist Pal Day", "category": ["Health"], "countries": ["world"] },
 { "date": "12-13", "name": "St. Lucia National Day", "category": ["Federal"], "countries": ["christian"] },
 { "date": "12-13", "name": "U.S. National Guard Birthday", "category": ["Federal"], "countries": ["usa"] },
-{ "date": "12-14", "name": "Free Shipping Day", "category": ["Fun"], "countries": ["world"] },
+
+
 { "date": "12-14", "name": "Halcyon Days", "category": ["Fun"], "countries": ["world"] },
-{ "date": "12-14", "name": "Hanukkah", "category": ["Religious"], "countries": ["jewish"] },
 { "date": "12-14", "name": "Martyred Intellectuals Day", "category": ["Cause"], "countries": ["bangladesh"] },
 { "date": "12-14", "name": "Monkey Day", "category": ["Cause"], "countries": ["world"] },
 { "date": "12-14", "name": "More Good Today Day", "category": ["Special Interest"], "countries": ["world"] },
@@ -189,37 +206,29 @@
 { "date": "12-14", "name": "National Bouillabaisse Day", "category": ["Food & Beverage"], "countries": ["france"] },
 { "date": "12-14", "name": "National Energy Conservation Day", "category": ["Cause"], "countries": ["india"] },
 { "date": "12-14", "name": "Roast Chestnuts Day", "category": ["Food & Beverage"], "countries": ["world"] },
-{ "date": "12-14", "name": "Worldwide Candle Lighting Day", "category": ["Fun"], "countries": ["christian"] },{ "date": "12-15", "name": "Bill of Rights Day", "category": ["Federal"], "countries": ["usa"] },
+
+
+{ "date": "12-15", "name": "Bill of Rights Day", "category": ["Federal"], "countries": ["usa"] },
 { "date": "12-15", "name": "Cat Herders Day", "category": ["Fun"], "countries": ["world"] },
 { "date": "12-15", "name": "International Tea Day", "category": ["Food & Beverage"], "countries": ["world"] },
 { "date": "12-15", "name": "National Cupcake Day", "category": ["Food & Beverage"], "countries": ["world"] },
 { "date": "12-15", "name": "National Lemon Cupcake Day", "category": ["Food & Beverage"], "countries": ["world"] },
 { "date": "12-15", "name": "National Regifting Day", "category": ["Fun"], "countries": ["world"] },
 { "date": "12-15", "name": "National Wear Your Pearls Day", "category": ["Special Interest"], "countries": ["world"] },
+
+
 { "date": "12-16", "name": "Bahrain National Day", "category": ["Federal"], "countries": ["bahrain"] },
 { "date": "12-16", "name": "Barbie And Barney Backlash Day", "category": ["Special Interest"], "countries": ["world"] },
 { "date": "12-16", "name": "Day of Reconciliation", "category": ["Federal"], "countries": ["south_africa"] },
 { "date": "12-16", "name": "Kazakhstan Independence Day", "category": ["Federal"], "countries": ["kazakhstan"] },
 { "date": "12-16", "name": "National Chocolate Covered Anything Day", "category": ["Food & Beverage"], "countries": ["world"] },
 { "date": "12-16", "name": "National Underdog Day", "category": ["Special Interest"], "countries": ["world"] },
-{ "date": "12-16", "name": "National Wreaths Across America Day", "category": ["Cause"], "countries": ["usa"] },
 { "date": "12-16", "name": "Stupid Toy Day", "category": ["Fun"], "countries": ["world"] },
-{ "date": "12-16", "name": "Underdog Day", "category": ["Special Interest"], "countries": ["world"] },
 { "date": "12-16", "name": "Bangladesh Victory Day", "category": ["Federal"], "countries": ["bangladesh"] },
 { "date": "12-16", "name": "Vijay Diwas", "category": ["Federal"], "countries": ["india"] },
-{ "date": "12-16", "name": "Las Posadas", "category": ["Religious"], "countries": ["catholic"] },
-{ "date": "12-16", "name": "Bahrain National Day", "category": ["Federal"], "countries": ["bahrain"] },
-{ "date": "12-16", "name": "Barbie And Barney Backlash Day", "category": ["Special Interest"], "countries": ["world"] },
-{ "date": "12-16", "name": "Day of Reconciliation", "category": ["Federal"], "countries": ["south_africa"] },
-{ "date": "12-16", "name": "Kazakhstan Independence Day", "category": ["Federal"], "countries": ["kazakhstan"] },
-{ "date": "12-16", "name": "National Chocolate Covered Anything Day", "category": ["Food & Beverage"], "countries": ["world"] },
-{ "date": "12-16", "name": "National Underdog Day", "category": ["Special Interest"], "countries": ["world"] },
-{ "date": "12-16", "name": "National Wreaths Across America Day", "category": ["Cause"], "countries": ["usa"] },
-{ "date": "12-16", "name": "Stupid Toy Day", "category": ["Fun"], "countries": ["world"] },
-{ "date": "12-16", "name": "Underdog Day", "category": ["Special Interest"], "countries": ["world"] },
-{ "date": "12-16", "name": "Bangladesh Victory Day", "category": ["Federal"], "countries": ["bangladesh"] },
-{ "date": "12-16", "name": "Vijay Diwas", "category": ["Federal"], "countries": ["india"] },
-{ "date": "12-16", "name": "Las Posadas", "category": ["Religious"], "countries": ["catholic"] },
+
+
+
 { "date": "12-17", "name": "Bhutan National Day", "category": ["Cultural"], "countries": ["bhutan"] },
 { "date": "12-17", "name": "Festival of Winter Walks", "category": ["Special Interest"], "countries": ["world"] },
 { "date": "12-17", "name": "National Device Appreciation Day", "category": ["Appreciation"], "countries": ["world"] },
@@ -227,23 +236,29 @@
 { "date": "12-17", "name": "National Maple Syrup Day Canada", "category": ["Food & Beverage"], "countries": ["canada"] },
 { "date": "12-17", "name": "Wright Brother's Day", "category": ["Appreciation"], "countries": ["usa"] },
 { "date": "12-17", "name": "Saturnalia", "category": ["Special Interest"], "countries": ["world"] },
+
+
 { "date": "12-18", "name": "Answer The Telephone Like Buddy The Elf Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
 { "date": "12-18", "name": "Arabic Language Day", "category": ["Cultural"], "countries": ["world"] },
 { "date": "12-18", "name": "Bake Cookies Day", "category": ["Food & Beverage"], "countries": ["world"] },
 { "date": "12-18", "name": "Flake Appreciation Day", "category": ["Fun"], "countries": ["world"] },
 { "date": "12-18", "name": "Guru Ghasidas Jayanti", "category": ["Cultural"], "countries": ["india"] },
 { "date": "12-18", "name": "International Migrants Day", "category": ["Cause"], "countries": ["world"] },
-{ "date": "12-18", "name": "National Crime Junkie Day", "category": [""], "countries": ["world"] },
+{ "date": "12-18", "name": "National Crime Junkie Day", "category": ["Special Interest"], "countries": ["world"] },
 { "date": "12-18", "name": "National Roast Suckling Pig Day", "category": ["Food & Beverage"], "countries": ["world"] },
 { "date": "12-18", "name": "Qatar National Day", "category": ["Cultural"], "countries": ["qatar"] },
 { "date": "12-18", "name": "Republic Day of Niger", "category": ["Federal"], "countries": ["niger"] },
 { "date": "12-18", "name": "Wear a Plunger on Your Head Day", "category": ["Fun"], "countries": ["world"] },
+
+
 {"date": "12-19", "name": "Goa Liberation Day", "category": ["Cultural"], "countries": ["india"]},
 {"date": "12-19", "name": "Look for an Evergreen Day", "category": ["Fun"], "countries": ["world"]},
 {"date": "12-19", "name": "National Emo Day", "category": ["Cultural"], "countries": ["usa"]},
 {"date": "12-19", "name": "National Hard Candy Day", "category": ["Food & Beverage"], "countries": ["usa"]},
 {"date": "12-19", "name": "National Heroes and Heroines Day", "category": ["Federal"], "countries": ["bermuda"]},
 {"date": "12-19", "name": "National Oatmeal Muffin Day", "category": ["Food & Beverage"], "countries": ["usa"]},
+
+
 { "date": "12-20", "name": "Cathode-Ray Tube Day", "category": ["Fun"], "countries": ["world"] },
 { "date": "12-20", "name": "Dot Your I’s Day", "category": ["Special Interest"], "countries": ["world"] },
 { "date": "12-20", "name": "Games Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
@@ -252,30 +267,121 @@
 { "date": "12-20", "name": "Mudd Day", "category": ["Special Interest"], "countries": ["usa"] },
 { "date": "12-20", "name": "National Sangria Day", "category": ["Food & Beverage"], "countries": ["world"] },
 { "date": "12-20", "name": "Sacagawea Day", "category": ["Cultural"], "countries": ["usa"] },
-{ "date": "12-20", "name": "Ugly Sweater Day", "category": ["Fun"], "countries": ["world"] },
-{ "date": "12-21", "name": "Anne and Samantha Day", "category": "Appreciation", "countries": ["world"] },
-{ "date": "12-21", "name": "Blue Christmas Service", "category": "Religious", "countries": ["christian"] },
-{ "date": "12-21", "name": "December Solstice", "category": "Special Interest", "countries": ["world"] },
-{ "date": "12-21", "name": "Don't Make Your Bed Day", "category": "Fun", "countries": ["world"] },
-{ "date": "12-21", "name": "Dongzhi", "category": "Special Interest", "countries": ["china"] },
-{ "date": "12-21", "name": "Humbug Day", "category": "Fun", "countries": ["world"] },
-{ "date": "12-21", "name": "International Dalek Remembrance Day", "category": "Arts & Entertainment", "countries": ["world"] },
-{ "date": "12-21", "name": "Look On The Bright Side Day", "category": "Health", "countries": ["world"] },
-{ "date": "12-21", "name": "National Armagnac Day", "category": "Food & Beverage", "countries": ["usa"] },
-{ "date": "12-21", "name": "National Coquito Day", "category": "Food & Beverage", "countries": ["world"] },
-{ "date": "12-21", "name": "National Crossword Puzzle Day", "category": "Special Interest", "countries": ["world"] },
-{ "date": "12-21", "name": "National Flashlight Day", "category": "Special Interest", "countries": ["usa"] },
-{ "date": "12-21", "name": "National French Fried Shrimp Day", "category": "Food & Beverage", "countries": ["usa"] },
-{ "date": "12-21", "name": "National Homeless Persons' Remembrance Day", "category": "Appreciation", "countries": ["usa"] },
-{ "date": "12-21", "name": "National Maine Day", "category": "Cultural", "countries": ["usa"] },
-{ "date": "12-21", "name": "Phileas Fogg Win a Wager Day", "category": "Fun", "countries": ["world"] },
-{ "date": "12-21", "name": "São Tomé Day", "category": "Federal", "countries": ["sao_tome_and_principe"] },
-{ "date": "12-21", "name": "Short Girl Appreciation Day", "category": "Cause", "countries": ["world"] },
-{ "date": "12-21", "name": "Winter Solstice", "category": "Special Interest", "countries": ["world"] },
-{ "date": "12-21", "name": "World Snowboard Day", "category": "Special Interest", "countries": ["world"] },
-{ "date": "12-21", "name": "Yule", "category": "Cultural", "countries": ["world"] }
+
+
+{ "date": "12-21", "name": "Blue Christmas Service", "category": ["Religious"], "countries": ["christian"] },
+{ "date": "12-21", "name": "Don't Make Your Bed Day", "category": ["Fun"], "countries": ["world"] },
+{ "date": "12-21", "name": "Dongzhi", "category": ["Special Interest"], "countries": ["china"] },
+{ "date": "12-21", "name": "Humbug Day", "category": ["Fun"], "countries": ["world"] },
+{ "date": "12-21", "name": "International Dalek Remembrance Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
+{ "date": "12-21", "name": "Look On The Bright Side Day", "category": ["Health"], "countries": ["world"] },
+{ "date": "12-21", "name": "National Armagnac Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+{ "date": "12-21", "name": "National Coquito Day", "category": ["Food & Beverage"], "countries": ["world"] },
+{ "date": "12-21", "name": "National Crossword Puzzle Day", "category": ["Special Interest"], "countries": ["world"] },
+{ "date": "12-21", "name": "National Flashlight Day", "category": ["Special Interest"], "countries": ["usa"] },
+{ "date": "12-21", "name": "National French Fried Shrimp Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+{ "date": "12-21", "name": "National Maine Day", "category": ["Cultural"], "countries": ["usa"] },
+{ "date": "12-21", "name": "Phileas Fogg Win a Wager Day", "category": ["Fun"], "countries": ["world"] },
+{ "date": "12-21", "name": "São Tomé Day", "category": ["Federal"], "countries": ["sao_tome_and_principe"] },
+{ "date": "12-21", "name": "Short Girl Appreciation Day", "category": ["Cause"], "countries": ["world"] },
+
+
+{ "date": "12-22", "name": "Forefathers’ Day", "category": ["Federal"], "countries": ["usa"] },
+{ "date": "12-22", "name": "Mathematics Day", "category": ["Special Interest"], "countries": ["world"] },
+{ "date": "12-22", "name": "National Ashton Day", "category": ["Special Interest"], "countries": ["usa"] },
+{ "date": "12-22", "name": "National Cookie Exchange Day", "category": ["Food & Beverage"], "countries": ["world"] },
+{ "date": "12-22", "name": "National Date Nut Bread Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+{ "date": "12-22", "name": "National Short Person Day", "category": ["Cause"], "countries": ["usa"] },
+{ "date": "12-22", "name": "Unity Day Zimbabwe", "category": ["Federal"], "countries": ["zimbabwe"] },
+
+
+{ "date": "12-23", "name": "Birthday of Emperor Akihito", "category": ["Federal"], "countries": ["japan"] },
+{ "date": "12-23", "name": "Festivus", "category": ["Arts & Entertainment"], "countries": ["world"] },
+{ "date": "12-23", "name": "HumanLight", "category": ["Special Interest"], "countries": ["world"] },
+{ "date": "12-23", "name": "Kisan Diwas", "category": ["Cultural"], "countries": ["india"] },
+{ "date": "12-23", "name": "National Christmas Movie Marathon Day", "category": ["Fun"], "countries": ["world"] },
+{ "date": "12-23", "name": "National Laura Day", "category": ["Special Interest"], "countries": ["world"] },
+{ "date": "12-23", "name": "National Pfeffernusse Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+{ "date": "12-23", "name": "National Roots Day", "category": ["Relationship"], "countries": ["usa"] },
+
+
+{ "date": "12-24", "name": "Christmas Eve", "category": ["Cultural"], "countries": ["christian"] },
+{ "date": "12-24", "name": "Last-Minute Shopper's Day", "category": ["Special Interest"], "countries": ["world"] },
+{ "date": "12-24", "name": "Libya Independence Day", "category": ["Federal"], "countries": ["libya"] },
+{ "date": "12-24", "name": "National Consumer Rights Day", "category": ["Cause"], "countries": ["india"] },
+{ "date": "12-24", "name": "National Eggnog Day", "category": ["Food & Beverage"], "countries": ["world"] },
+
+
+
+{ "date": "12-25", "name": "A’Phabet Day or No “L” Day", "category": ["Fun"], "countries": ["usa"] },
+{ "date": "12-25", "name": "Christmas", "category": ["Religious"], "countries": ["catholic"] },
+{ "date": "12-25", "name": "GOAL Mile", "category": ["Cause"], "countries": ["ireland"] },
+{ "date": "12-25", "name": "Jesus' Birthday", "category": ["Religious"], "countries": ["christian"] },
+{ "date": "12-25", "name": "National Pumpkin Pie Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+{ "date": "12-25", "name": "Quaid-e-Azam Day", "category": ["Federal"], "countries": ["pakistan"] },
+{ "date": "12-25", "name": "Mari Lwyd", "category": ["Cultural"], "countries": ["uk"] },
+
+
+{ "date": "12-26", "name": "Boxing Day", "category": ["Cause"], "countries": ["uk"] },
+{ "date": "12-26", "name": "Day of Goodwill", "category": ["Cultural"], "countries": ["south_africa"] },
+{ "date": "12-26", "name": "Junkanoo", "category": ["Cultural"], "countries": ["bahamas"] },
+{ "date": "12-26", "name": "Kwanzaa", "category": ["Special Interest"], "countries": ["usa"] },
+{ "date": "12-26", "name": "National Candy Cane Day", "category": ["Food & Beverage"], "countries": ["world"] },
+{ "date": "12-26", "name": "National Homeowners Day", "category": ["Special Interest"], "countries": ["world"] },
+{ "date": "12-26", "name": "National Thank You Note Day", "category": ["Special Interest"], "countries": ["world"] },
+{ "date": "12-26", "name": "National Whiners Day", "category": ["Fun"], "countries": ["usa"] },
+{ "date": "12-26", "name": "Slovenia Independence Day", "category": ["Federal"], "countries": ["slovenia"] },
+{ "date": "12-26", "name": "St. Stephen's Day (Ireland)", "category": ["Federal"], "countries": ["ireland"] },
+{ "date": "12-26", "name": "Synaxis of the Mother of God", "category": ["Religious"], "countries": ["orthodox"] },
+
+
+{ "date": "12-27", "name": "Abigail Day", "category": ["Fun"], "countries": ["world"] },
+{ "date": "12-27", "name": "Anniversary of Benazir Bhutto's Death", "category": ["Federal"], "countries": ["pakistan"] },
+{ "date": "12-27", "name": "Case Day", "category": ["Special Interest"], "countries": ["usa"] },
+{ "date": "12-27", "name": "International Day of Epidemic Preparedness", "category": ["Health"], "countries": ["usa"] },
+{ "date": "12-27", "name": "National Fruitcake Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+{ "date": "12-27", "name": "National Make Cut-Out Snowflakes Day", "category": ["Arts & Entertainment"], "countries": ["usa"] },
+{ "date": "12-27", "name": "St John History", "category": ["Cultural"], "countries": ["christian"] },
+{ "date": "12-27", "name": "Visit the Zoo Day", "category": ["Animal"], "countries": ["usa"] },
+
+
+{ "date": "12-28", "name": "Card Playing Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
+{ "date": "12-28", "name": "Holy Innocents Day", "category": ["Religious"], "countries": ["christian"] },
+{ "date": "12-28", "name": "National Call a Friend Day", "category": ["Relationship"], "countries": ["world"] },
+{ "date": "12-28", "name": "National Chocolate Candy Day", "category": ["Food & Beverage"], "countries": ["world"] },
+{ "date": "12-28", "name": "National Download Day", "category": ["Special Interest"], "countries": ["world"] },
+{ "date": "12-28", "name": "National Short Film Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
+{ "date": "12-28", "name": "Pledge of Allegiance Day", "category": ["Federal"], "countries": ["usa"] },
+{ "date": "12-28", "name": "Proclamation Day", "category": ["Cultural"], "countries": ["australia"] },
+
+
+{ "date": "12-29", "name": "Constitution of Ireland", "category": ["Special Interest"], "countries": ["ireland"] },
+{ "date": "12-29", "name": "International Cello Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
+{ "date": "12-29", "name": "Mongolia Independence Day", "category": ["Federal"], "countries": ["mongolia"] },
+{ "date": "12-29", "name": "Pepper Pot Day", "category": ["Food & Beverage"], "countries": ["world"] },
+{ "date": "12-29", "name": "Still Need To Do Day", "category": ["Special Interest"], "countries": ["world"] },
+{ "date": "12-29", "name": "Tick Tock Day", "category": ["Special Interest"], "countries": ["world"] },
+{ "date": "12-29", "name": "Falls Festival History", "category": ["Special Interest"], "countries": ["australia"] },
+
+
+{ "date": "12-30", "name": "Falling Needles Family Fest Day", "category": ["Cultural"], "countries": ["world"] },
+{ "date": "12-30", "name": "Festival of Enormous Changes at the Last Minute", "category": ["Fun"], "countries": ["world"] },
+{ "date": "12-30", "name": "National Bacon Day", "category": ["Food & Beverage"], "countries": ["world"] },
+{ "date": "12-30", "name": "National Resolution Planning Day", "category": ["Fun"], "countries": ["world"] },
+{ "date": "12-30", "name": "Rizal Day", "category": ["Federal"], "countries": ["philippines"] },
+{ "date": "12-30", "name": "Sodium Bicarbonate Day", "category": ["Food & Beverage"], "countries": ["world"] },
+
+
+{ "date": "12-31", "name": "Hogmanay", "category": ["Cultural"], "countries": ["uk"] },
+{ "date": "12-31", "name": "International Solidarity Day of Azerbaijanis", "category": ["Federal"], "countries": ["azerbaijan"] },
+{ "date": "12-31", "name": "Make Up Your Mind Day", "category": ["Special Interest"], "countries": ["world"] },
+{ "date": "12-31", "name": "National Champagne Day", "category": ["Food & Beverage"], "countries": ["world"] },
+{ "date": "12-31", "name": "National Heroes Day (Timor-Leste)", "category": ["Federal"], "countries": ["timor_leste"] },
+{ "date": "12-31", "name": "New Year's Eve", "category": ["Cultural"], "countries": ["world"] },
+{ "date": "12-31", "name": "No Interruptions Day", "category": ["Special Interest"], "countries": ["world"] },
+{ "date": "12-31", "name": "Restoration Day in Geneva", "category": ["Federal"], "countries": ["switzerland"] },
+{ "date": "12-31", "name": "Unlucky Day", "category": ["Fun"], "countries": ["world"] },
+{ "date": "12-31", "name": "World Peace Meditation Day", "category": ["Special Interest"], "countries": ["world"] }
+
+
 ]
-
-
-
-
