@@ -165,7 +165,6 @@ COUNTRY_FLAGS = {
 "papua_new_guinea": "🇵🇬",
 "canadian": "🍁",  
 "spanish": "🇪🇸", 
-"timor_leste": "🇹🇱",
 # --- Global / Regions / Religion ---
 "world": "🌍",
 "international": "🌐",
