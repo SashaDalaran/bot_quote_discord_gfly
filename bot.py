@@ -20,11 +20,11 @@ from daily.banlu.banlu_daily import (
     send_once_if_missed as send_banlu_once,
 )
 
-from daily.holidays.holidays_daily import 
-(
+from daily.holidays.holidays_daily import (
     send_holidays_daily,
     send_once_if_missed_holidays,
 )
+
 
 # === Bot Setup ===
 intents = discord.Intents.default()
