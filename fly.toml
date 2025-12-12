@@ -1,23 +1,60 @@
-# fly.toml app configuration file generated for bot-quote-discord-gfly on 2025-12-06T20:21:28+04:00
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
-
 app = "bot-quote-discord-gfly"
 primary_region = "ams"
 
+# ============================
+# Build Configuration
+# ============================
 [build]
   dockerfile = "Dockerfile"
 
+# ============================
+# Deployment Strategy
+# ============================
 [deploy]
   strategy = "rolling"
+  # Ensures old machine stays alive until the new version is ready
+  max_unavailable = 0
 
+# ============================
+# Environment Variables
+# (Only safe defaults — real secrets must be Fly secrets)
+# ============================
 [env]
   PYTHONUNBUFFERED = "1"
+  # These are placeholders; real values come from `fly secrets set`
   DISCORD_BOT_TOKEN = "${DISCORD_BOT_TOKEN}"
   BANLU_CHANNEL_ID = "${BANLU_CHANNEL_ID}"
+  HOLIDAYS_CHANNEL_IDS = "${HOLIDAYS_CHANNEL_IDS}"
 
+# ============================
+# Virtual Machine Configuration
+# ============================
 [[vm]]
-  memory = "1gb"
   cpu_kind = "shared"
   cpus = 1
+  memory = "1gb"
+
+  # Recommended for Discord bots:
+  # Machines automatically restart if they crash
+  auto_restart = true
+  auto_stop = false
+
+  # Enable automatic machine-level garbage collection
+  # Useful for long-running Python apps
+  memory_mb = 1024
+
+# ============================
+# Metrics (Optional but Recommended)
+# Enables Fly's built-in monitoring
+# ============================
+[metrics]
+  port = 9091
+  path = "/metrics"
+  enabled = false  # set to true if you add a metrics exporter
+
+# ============================
+# Logs Configuration (Optional)
+# Cleaner, structured logs on Fly
+# ============================
+[logs]
+  format = "json"   # or "text"

@@ -1,12 +1,17 @@
-# core/dynamic_holidays.py
+# ==================================================
+# core/dynamic_holidays.py — Dynamic Holiday Generator
+# ==================================================
 
 from datetime import datetime, timedelta, date
 
 
+# ===========================
+# Western (Catholic) Easter Calculation
+# ===========================
 def _easter_western(year: int) -> date:
     """
-    Calculate the date of Catholic (Western) Easter
-    using the standard Gregorian algorithm.
+    Calculate the date of Western (Catholic) Easter
+    using the standard Gregorian computus.
     Returns a datetime.date object.
     """
     a = year % 19
@@ -21,38 +26,46 @@ def _easter_western(year: int) -> date:
     k = c % 4
     l = (32 + 2 * e + 2 * i - h - k) % 7
     m = (a + 11 * h + 22 * l) // 451
+
     month = (h + l - 7 * m + 114) // 31
     day = ((h + l - 7 * m + 114) % 31) + 1
+
     return date(year, month, day)
 
 
+# ===========================
+# Orthodox Easter (Approximation)
+# ===========================
 def _easter_orthodox(year: int) -> date:
     """
-    Approximate the date of Orthodox Easter by taking
-    Western Easter and adding 13 days (Julian calendar offset).
-    This precision is more than enough for our bot use-case.
+    Approximate Orthodox Easter by adding 13 days
+    to the Western Easter (Julian vs Gregorian shift).
+    This is sufficient for bot-level accuracy.
     """
     western = _easter_western(year)
     return western + timedelta(days=13)
 
 
-def get_dynamic_holidays():
+# ===========================
+# Public API: Dynamic Holidays
+# ===========================
+def get_dynamic_holidays() -> list[dict]:
     """
-    Return a list containing the upcoming dates for:
-    - Catholic Easter
-    - Orthodox Easter
+    Return upcoming occurrences of:
+      • Catholic Easter
+      • Orthodox Easter
 
-    The function always returns the *next* occurrences.
-    If Easter for the current year has already passed,
-    it automatically shifts to the next year.
+    If Easters for the current year have already passed,
+    the function automatically shifts calculations to next year.
     """
+
     today = datetime.now().date()
     year = today.year
 
     catholic = _easter_western(year)
     orthodox = _easter_orthodox(year)
 
-    # If both Easters are already in the past for this year → move to next year
+    # If both holidays are in the past → use next year
     if max(catholic, orthodox) < today:
         year += 1
         catholic = _easter_western(year)

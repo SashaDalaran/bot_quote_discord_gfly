@@ -1,20 +1,28 @@
 import os
 import logging
-from discord.ext import commands
 import discord
+from discord.ext import commands
 
-# === Logging Setup ===
+# ===========================
+# Logging Configuration
+# ===========================
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
+    format="%(asctime)s [%(levelname)s] %(message)s",
 )
 logger = logging.getLogger("bot")
 
+# ===========================
+# Environment Variables
+# ===========================
 DISCORD_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 if not DISCORD_TOKEN:
-    raise RuntimeError("❌ Environment variable DISCORD_BOT_TOKEN is missing!")
+    raise RuntimeError("❌ Missing environment variable: DISCORD_BOT_TOKEN")
 
-# === Daily Tasks ===
+# ===========================
+# Import Daily Task Modules
+# ( imported after env check )
+# ===========================
 from daily.banlu.banlu_daily import (
     send_banlu_daily,
     send_once_if_missed as send_banlu_once,
@@ -25,27 +33,41 @@ from daily.holidays.holidays_daily import (
     send_once_if_missed_holidays,
 )
 
-
-# === Bot Setup ===
+# ===========================
+# Bot Initialization
+# ===========================
 intents = discord.Intents.default()
 intents.message_content = True
 
 bot = commands.Bot(
     command_prefix="!",
     intents=intents,
-    help_command=None
+    help_command=None,
 )
 
-# === Attach bot reference to tasks ===
-send_banlu_daily.bot = bot
-send_banlu_once.bot = bot
 
-send_holidays_daily.bot = bot
-send_once_if_missed_holidays.bot = bot
+# ===========================
+# Dependency Injection
+# Attach bot reference into task modules
+# ===========================
+for task in (
+    send_banlu_daily,
+    send_banlu_once,
+    send_holidays_daily,
+    send_once_if_missed_holidays,
+):
+    task.bot = bot
 
 
-# === Load Commands ===
-def load_all_commands():
+# ===========================
+# Command Loader
+# ===========================
+def load_all_commands() -> None:
+    """
+    Imports and registers all command Cogs.
+    Structured this way to avoid circular imports and
+    allow clear entrypoint logic.
+    """
     from commands.quotes import setup as setup_quotes
     from commands.murloc_ai import setup as setup_ai
     from commands.simple_timer import setup as setup_simple_timer
@@ -62,31 +84,43 @@ def load_all_commands():
     setup_help(bot)
     setup_holidays(bot)
 
+    logger.info("All command modules loaded successfully.")
 
+
+# ===========================
+# Bot Lifecycle Events
+# ===========================
 @bot.event
 async def on_ready():
-    logger.info("✅ Bot online and ready.")
+    logger.info("✅ Bot is online.")
     logger.info(f"Logged in as: {bot.user} (ID: {bot.user.id})")
 
-    # Start daily tasks if not running
+    # Start background tasks if not already running
     if not send_banlu_daily.is_running():
         send_banlu_daily.start()
-        logger.info("Started: send_banlu_daily")
+        logger.info("Started task: send_banlu_daily")
 
     if not send_holidays_daily.is_running():
         send_holidays_daily.start()
-        logger.info("Started: send_holidays_daily")
+        logger.info("Started task: send_holidays_daily")
 
-    # Run missed messages detection
+    # Run fallback/missed checks
     logger.info("Running missed-task fallback checks...")
     await send_banlu_once()
     await send_once_if_missed_holidays()
 
-    logger.info("All background tasks started successfully.")
+    logger.info("Background scheduler initialized successfully.")
 
 
-# === Start Bot ===
-if __name__ == "__main__":
+# ===========================
+# Entrypoint
+# ===========================
+def main():
+    """Main application entrypoint."""
     load_all_commands()
-    logger.info("Starting bot...")
+    logger.info("Launching bot...")
     bot.run(DISCORD_TOKEN)
+
+
+if __name__ == "__main__":
+    main()

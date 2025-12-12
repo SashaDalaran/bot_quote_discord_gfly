@@ -1,3 +1,7 @@
+# ==================================================
+# daily/banlu/banlu_daily.py — Daily Ban’Lu Quote
+# ==================================================
+
 import os
 import random
 from datetime import datetime, timedelta, timezone, time
@@ -5,34 +9,41 @@ from datetime import datetime, timedelta, timezone, time
 import discord
 from discord.ext import tasks
 
-# Timezone for sending Ban'Lu quotes
-TZ = timezone(timedelta(hours=3))
 
-# Path to quotes file
+# ===========================
+# Configuration
+# ===========================
+TZ = timezone(timedelta(hours=3))  # GMT+3 timezone
 BANLU_FILE = os.getenv("BANLU_QUOTES_FILE", "data/quotersbanlu.txt")
-
-# Channel ID
 BANLU_CHANNEL_ID = int(os.getenv("BANLU_CHANNEL_ID", "0"))
 
 
-def load_banlu_quotes():
-    """Load Ban'Lu quotes from file."""
+# ===========================
+# Load Quotes
+# ===========================
+def load_banlu_quotes() -> list[str]:
+    """Load Ban’Lu quotes from file and return a cleaned list."""
     if not os.path.exists(BANLU_FILE):
         return []
+
     with open(BANLU_FILE, "r", encoding="utf-8") as f:
-        return [x.strip() for x in f.readlines() if x.strip()]
+        return [line.strip() for line in f.readlines() if line.strip()]
 
 
-# Loaded once at startup
+# Preload quotes once at startup
 banlu_quotes = load_banlu_quotes()
 
 
-# ============================
-# Daily Ban'Lu task (10:00)
-# ============================
+# ===========================
+# Daily Scheduled Task (10:00 GMT+3)
+# ===========================
 @tasks.loop(time=time(hour=10, minute=0, tzinfo=TZ))
 async def send_banlu_daily():
-    bot = send_banlu_daily.bot  # injected from bot.py
+    """
+    Automatically send a Ban’Lu quote every day at 10:00 GMT+3.
+    The bot reference is injected via `bot.py`.
+    """
+    bot = send_banlu_daily.bot  # injected externally
 
     if not banlu_quotes:
         return
@@ -44,30 +55,34 @@ async def send_banlu_daily():
     embed = discord.Embed(
         title="🏌️ Daily Quote • Ban'Lu",
         description=random.choice(banlu_quotes),
-        color=discord.Color.gold()
+        color=discord.Color.gold(),
     )
     embed.set_footer(text=datetime.now(TZ).strftime("%d.%m.%Y"))
 
     await channel.send(embed=embed)
 
 
-# ============================================================
-# One-time catch-up (if bot restarted after 10:00)
-# ============================================================
+# ==================================================
+# One-Time Catch-Up (if bot restarted after 10:00)
+# ==================================================
 async def send_once_if_missed():
-    bot = send_once_if_missed.bot  # injected from bot.py
+    """
+    If the bot was offline at 10:00, send the Ban’Lu quote once
+    when the bot restarts later in the day.
+    """
+    bot = send_once_if_missed.bot  # injected externally
 
     now = datetime.now(TZ)
     target = now.replace(hour=10, minute=0, second=0, microsecond=0)
 
-    # If already past 10:00 — send once
-    if now > target:
+    # If it's already past 10:00 → send the quote once
+    if now > target and banlu_quotes:
         channel = bot.get_channel(BANLU_CHANNEL_ID)
-        if channel and banlu_quotes:
+        if channel:
             embed = discord.Embed(
                 title="🏌️ Daily Quote • Ban'Lu",
                 description=random.choice(banlu_quotes),
-                color=discord.Color.gold()
+                color=discord.Color.gold(),
             )
             embed.set_footer(text=now.strftime("%d.%m.%Y"))
             await channel.send(embed=embed)

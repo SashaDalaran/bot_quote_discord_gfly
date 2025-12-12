@@ -1,4 +1,6 @@
-# commands/holidays_cmd.py
+# ==================================================
+# commands/holidays_cmd.py — Holiday Lookup Command
+# ==================================================
 
 import os
 import json
@@ -13,16 +15,20 @@ from core.holidays_flags import COUNTRY_FLAGS, CATEGORY_EMOJIS
 HOLIDAYS_PATH = "data/holidays"
 
 
+# ===========================
+# Load All Holidays (Static JSON + Dynamic)
+# ===========================
 def load_all_holidays():
     """
-    Load all holidays from JSON files + dynamic holidays (Easters).
-    Normalizes category fields and ensures all dates are mapped
-    to the next upcoming occurrence (today or future).
+    Load all holidays from JSON files and dynamic holiday sources.
+    Normalizes categories and maps holiday dates to their next occurrence.
     """
     today = datetime.now().date()
     holidays = []
 
-    # ===== 1. JSON files =====
+    # -------------------------------------------
+    # 1. Load static holidays from JSON files
+    # -------------------------------------------
     for filename in sorted(os.listdir(HOLIDAYS_PATH)):
         if not filename.endswith(".json"):
             continue
@@ -32,19 +38,24 @@ def load_all_holidays():
         with open(full_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
-        # Iterate through each holiday entry in the file
         for entry in data:
             mmdd = entry["date"]
+
+            # Construct YYYY-MM-DD from this year
             parsed_date = datetime.strptime(
                 f"{today.year}-{mmdd}", "%Y-%m-%d"
             ).date()
 
-            # If the date already passed this year → shift to next year
+            # If holiday already passed this year → shift to next year
             if parsed_date < today:
                 parsed_date = parsed_date.replace(year=today.year + 1)
 
-            # Normalize category/categories to a list
-            categories = entry.get("category") or entry.get("categories") or []
+            # Normalize category field
+            categories = (
+                entry.get("category")
+                or entry.get("categories")
+                or []
+            )
             if isinstance(categories, str):
                 categories = [categories]
 
@@ -59,7 +70,9 @@ def load_all_holidays():
                 }
             )
 
-    # ===== 2. Dynamic holidays (Easters) =====
+    # -------------------------------------------
+    # 2. Add dynamic holidays (e.g., Easters)
+    # -------------------------------------------
     dynamic_list = get_dynamic_holidays()
     for d in dynamic_list:
         full_date = datetime.strptime(d["full_date"], "%Y-%m-%d").date()
@@ -75,14 +88,19 @@ def load_all_holidays():
             }
         )
 
-    # Sort by upcoming date
+    # -------------------------------------------
+    # Sort by nearest date
+    # -------------------------------------------
     holidays.sort(key=lambda h: h["parsed_date"])
     return holidays
 
 
+# ===========================
+# Get Nearest Holiday For a Given Source File
+# ===========================
 def get_next_for_source(source_name, holidays):
     """
-    Return the nearest (upcoming) holiday for a specific source file.
+    Return the nearest upcoming holiday for a given source file.
     """
     today = datetime.now().date()
     relevant = [h for h in holidays if h["source"] == source_name]
@@ -94,26 +112,29 @@ def get_next_for_source(source_name, holidays):
     return sorted(upcoming, key=lambda h: h["parsed_date"])[0]
 
 
+# ===========================
+# Category Line Builder
+# Adds emoji if available
+# ===========================
 def build_category_line_for_cmd(h):
-    """
-    Build a category string (with emoji) for the !holidays command embed.
-    """
     categories = h.get("categories", [])
     if not categories:
         return ""
 
     main = categories[0]
     emoji = CATEGORY_EMOJIS.get(main, "")
-    if emoji:
-        return f"{emoji} {main}"
-    return main
+
+    return f"{emoji} {main}" if emoji else main
 
 
+# ===========================
+# Command: !holidays
+# Show nearest holiday per source file
+# ===========================
 @commands.command(name="holidays")
 async def holidays_cmd(ctx):
-    """
-    Diagnostic command: show the nearest holiday for each source (dynamic + JSON).
-    """
+    """Diagnostic command: show nearest holiday for each source file."""
+
     holidays = load_all_holidays()
 
     embed = discord.Embed(
@@ -121,15 +142,24 @@ async def holidays_cmd(ctx):
         color=0x00AEEF,
     )
 
-    # ===== 1. Dynamic holidays first =====
+    # -------------------------------------------
+    # 1. Dynamic Holidays (always shown first)
+    # -------------------------------------------
     dyn = get_next_for_source("dynamic_holidays.py", holidays)
 
     if dyn:
         cat_line = build_category_line_for_cmd(dyn)
         if cat_line:
-            value = f"🌍 **{dyn['name']}**\n{cat_line}\n📅 {dyn['date']}"
+            value = (
+                f"🌍 **{dyn['name']}**\n"
+                f"{cat_line}\n"
+                f"📅 {dyn['date']}"
+            )
         else:
-            value = f"🌍 **{dyn['name']}**\n📅 {dyn['date']}"
+            value = (
+                f"🌍 **{dyn['name']}**\n"
+                f"📅 {dyn['date']}"
+            )
 
         embed.add_field(
             name="📁 dynamic_holidays.py",
@@ -143,9 +173,14 @@ async def holidays_cmd(ctx):
             inline=False,
         )
 
-    # ===== 2. JSON holiday files =====
+    # -------------------------------------------
+    # 2. Static JSON Files
+    # -------------------------------------------
     try:
-        files = [f for f in os.listdir(HOLIDAYS_PATH) if f.endswith(".json")]
+        files = [
+            f for f in os.listdir(HOLIDAYS_PATH)
+            if f.endswith(".json")
+        ]
     except FileNotFoundError:
         return await ctx.send("❌ Error: holidays folder not found on server.")
 
@@ -153,11 +188,13 @@ async def holidays_cmd(ctx):
         next_h = get_next_for_source(filename, holidays)
 
         if next_h:
+            # Use first country if available
             country = (
                 next_h.get("country")
-                or (next_h.get("countries")[0] if next_h.get("countries") else "")
+                or (next_h["countries"][0] if next_h.get("countries") else "")
             )
             flag = COUNTRY_FLAGS.get(country, "🌍")
+
             cat_line = build_category_line_for_cmd(next_h)
 
             if cat_line:
@@ -177,6 +214,7 @@ async def holidays_cmd(ctx):
                 value=value,
                 inline=False,
             )
+
         else:
             embed.add_field(
                 name=f"📁 {filename}",
@@ -187,5 +225,8 @@ async def holidays_cmd(ctx):
     await ctx.send(embed=embed)
 
 
+# ===========================
+# Registration Hook
+# ===========================
 def setup(bot):
     bot.add_command(holidays_cmd)

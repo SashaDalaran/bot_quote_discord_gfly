@@ -165,7 +165,7 @@ COUNTRY_FLAGS = {
 "papua_new_guinea": "🇵🇬",
 "canadian": "🍁",  
 "spanish": "🇪🇸", 
-# --- Global / Regions / Religion ---
+# --- Global / Religion ---
 "world": "🌍",
 "international": "🌐",
 "orthodox": "✝️",

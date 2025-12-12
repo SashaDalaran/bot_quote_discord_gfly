@@ -1,6 +1,8 @@
-# commands/date_timer.py
+# ==================================================
+# commands/date_timer.py — Date-Based Timer Command
+# ==================================================
+
 from datetime import datetime, timedelta, timezone
-import os
 
 import discord
 from discord.ext import commands
@@ -9,7 +11,18 @@ from core.timers import create_timer
 from core.helpers import format_remaining
 
 
-def setup(bot: commands.Bot):
+# ===========================
+# Setup Function
+# Registers the !timerdate command
+# ===========================
+def setup(bot: commands.Bot) -> None:
+
+    # ===========================
+    # !timerdate DD.MM.YYYY HH:MM +TZ text --pin
+    #
+    # Example:
+    # !timerdate 31.12.2025 23:59 +3 New Year! --pin
+    # ===========================
     @bot.command(name="timerdate")
     async def timerdate_cmd(
         ctx: commands.Context,
@@ -18,37 +31,52 @@ def setup(bot: commands.Bot):
         gmt: str,
         *, text: str = ""
     ):
-        """
-        Format:
-        !timerdate 31.12.2025 23:59 +3 New Year! --pin
-        """
-        # Pin flag
+        """Create a date-based timer with optional pinning."""
+
+        # -------------------------------------------
+        # Extract pin flag from text
+        # -------------------------------------------
         should_pin = False
-        if text.endswith("--pin"):
-            should_pin = True
-            text = text[:-5].strip()
-        elif text.endswith("pin"):
-            should_pin = True
-            text = text[:-3].strip()
+        raw_text = text.strip()
 
-        if not text:
-            text = "⏰ Time is up!"
+        if raw_text.endswith("--pin"):
+            should_pin = True
+            raw_text = raw_text[:-5].strip()
 
-        # Parse date
+        elif raw_text.endswith("pin"):
+            # user-friendly fallback: "pin" without dashes
+            should_pin = True
+            raw_text = raw_text[:-3].strip()
+
+        if not raw_text:
+            raw_text = "⏰ Time is up!"
+
+
+        # ===========================
+        # Parse: Date, Time, GMT Offset
+        # ===========================
         try:
-            base_dt = datetime.strptime(f"{date} {time_str}", "%d.%m.%Y %H:%M")
+            # Parse DD.MM.YYYY and HH:MM
+            base_dt = datetime.strptime(
+                f"{date} {time_str}", "%d.%m.%Y %H:%M"
+            )
 
+            # Validate GMT format (+3 / -5)
             if not (gmt.startswith("+") or gmt.startswith("-")):
-                return await ctx.send("❌ GMT must be in format +3 / -5")
+                return await ctx.send("❌ GMT must be in the format `+3` or `-5`.")
 
             tz_offset = int(gmt)
             tz = timezone(timedelta(hours=tz_offset))
-            target_dt = base_dt.replace(tzinfo=tz)
 
+            target_dt = base_dt.replace(tzinfo=tz)
             now = datetime.now(tz)
-            remaining = int((target_dt - now).total_seconds())
-            if remaining <= 0:
-                return await ctx.send("❌ This date has already passed in the specified GMT.")
+            remaining_seconds = int((target_dt - now).total_seconds())
+
+            if remaining_seconds <= 0:
+                return await ctx.send(
+                    "❌ This date has already passed in the specified GMT."
+                )
+
         except Exception:
             return await ctx.send(
                 "❌ Invalid format.\n"
@@ -56,18 +84,25 @@ def setup(bot: commands.Bot):
                 "`!timerdate 31.12.2025 23:59 +3 New Year! --pin`"
             )
 
+
+        # ===========================
+        # Create Preview Embed
+        # ===========================
         embed = discord.Embed(
-            title=f"⏳ Timer: {text}",
+            title=f"⏳ Timer: {raw_text}",
             description=(
                 f"Date: **{date} {time_str} (GMT{gmt})**\n"
-                f"Remaining: **{format_remaining(remaining)}**"
+                f"Remaining: **{format_remaining(remaining_seconds)}**"
             ),
             color=discord.Color.orange(),
         )
 
         msg = await ctx.send(embed=embed)
 
-        # Pin
+
+        # ===========================
+        # Pin Message (Optional)
+        # ===========================
         if should_pin:
             try:
                 await msg.pin()
@@ -76,10 +111,14 @@ def setup(bot: commands.Bot):
             except Exception as e:
                 await ctx.send(f"⚠️ Pin error: {e}")
 
+
+        # ===========================
+        # Save Timer in Database
+        # ===========================
         timer_id = create_timer(
             channel_id=ctx.channel.id,
             message_id=msg.id,
-            text=text,
+            text=raw_text,
             timestamp=int(target_dt.timestamp()),
             tz_offset=tz_offset,
             pinned=should_pin,

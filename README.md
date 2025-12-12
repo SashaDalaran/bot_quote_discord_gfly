@@ -5,9 +5,8 @@
 <h1 align="center">bot-quote-discord</h1>
 
 <p align="center">
-  A lightweight, production-ready Discord bot built with <b>Python</b>, <b>discord.py</b>, and <b>Fly.io</b>.
-  <br>
-  Minimal footprint. Clean architecture. Zero maintenance.
+  A production-grade Discord bot powered by <b>Python 3.11</b>, <b>discord.py</b>, and <b>Fly.io Machines</b>.  
+  Built for reliability, clean architecture, fast deployment, and minimal resource usage.
 </p>
 
 <p align="center">
@@ -15,112 +14,157 @@
   <img src="https://img.shields.io/badge/discord.py-2.4+-7289DA?style=for-the-badge&logo=discord" />
   <img src="https://img.shields.io/badge/Docker-Multi--Stage-2496ED?style=for-the-badge&logo=docker" />
   <img src="https://img.shields.io/badge/Fly.io-Machines-8A2BE2?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/GitHub%20Actions-AutoDeploy-2088FF?style=for-the-badge&logo=githubactions" />
+  <img src="https://img.shields.io/badge/CI/CD-GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions" />
 </p>
 
 ---
 
-## ✨ Features
+# ✨ Overview
 
-* 🎮 **Game Quotes** — random quotes with source attribution  
-* 🧠 **Murloc AI** — generates Murloc wisdom  
-* 📅 **Holidays System** — static + dynamic holidays from all countries  
-* 🎉 **Daily Holiday Broadcast** — auto-posting today's holidays to chosen channels  
-* ⏱ **Timers** — simple timers and GMT date-timers  
-* 📌 **Pin Support** — optional auto-pin for date timers  
-* 🔁 **Daily Scheduler** — Ban’Lu quotes every morning  
-* 🐳 **Optimized Docker Image** (~40 MB)  
-* ☁️ **Fly.io Ready** — fully automated deploy  
-* 🔐 **Secure Secret Handling**
+`bot-quote-discord` is a lightweight Discord bot featuring:
+
+- 🎮 **Random Game Quotes**  
+- 🧠 **Murloc AI Generator**  
+- ⏱ **Simple and Date Timers (with TZ support)**  
+- 📅 **Static + Dynamic Holidays Engine**  
+- 📡 **Automated Daily Broadcasts**  
+- 🐉 **Ban’Lu Wisdom Delivery**  
+- 🐳 **40MB Optimized Docker Image**  
+- ☁️ **Zero-downtime Fly.io Deployment**
+
+The bot architecture prioritizes:
+
+- modularity  
+- maintainability  
+- predictable async behavior  
+- production-ready DevOps practices  
 
 ---
 
-## 📁 Project Structure
+# 🚀 Quick Start
+
+## 1. Create a virtual environment
+```sh
+python3.11 -m venv venv
+source venv/bin/activate
+```
+
+## 2. Install dependencies
+```sh
+pip install -r requirements.txt
+```
+
+## 3. Configure environment variables
+```sh
+export DISCORD_BOT_TOKEN="your-token"
+export BANLU_CHANNEL_ID="123456"
+export HOLIDAYS_CHANNEL_IDS="111,222,333"
+```
+
+## 4. Start the bot
+```sh
+python bot.py
+```
+
+---
+
+# 📁 Project Structure (Accurate)
 
 ```
 bot_quote_discord/
 │
-├── bot.py
-├── Dockerfile
-├── fly.toml
-├── requirements.txt
+├── bot.py                        # Application entrypoint
 │
-├── core/
-│     ├── holidays_flags.py     # Country + religion flags
-│     ├── timer_engine.py
-│     └── helpers.py
-│
-├── commands/
-│     ├── quotes.py
-│     ├── murloc_ai.py
-│     ├── simple_timer.py
+├── commands/                     # All bot commands (Cogs)
+│     ├── cancel.py
 │     ├── date_timer.py
-│     └── holidays_cmd.py       # Holiday lookup command
+│     ├── help_cmd.py
+│     ├── murloc_ai.py
+│     ├── quotes.py
+│     ├── simple_timer.py
+│     └── holidays_cmd.py
 │
-├── daily/
+├── core/                         # Core engine logic
+│     ├── dynamic_holidays.py     # Dynamic holiday algorithms (e.g., Easter)
+│     ├── helpers.py              # Shared utility functions
+│     ├── holidays_flags.py       # Country / religion flag resolver
+│     ├── timer_engine.py         # Async timer scheduler engine
+│     └── timers.py               # Timer object model
+│
+├── daily/                        # Scheduled automated tasks
 │     ├── banlu/
-│     │     └── banlu_daily.py
+│     │     └── banlu_daily.py    # Ban'Lu daily post at 10:00 GMT+3
 │     └── holidays/
-│           └── holidays_daily.py   # Daily holiday poster
+│           └── holidays_daily.py # Holiday broadcast at 10:01 GMT+3
 │
-├── data/
-│     └── holidays/              # All JSON holiday files
-│           ├── world.json
-│           ├── usa.json
-│           ├── eu.json
-│           ├── georgia.json
-│           └── ... etc
+├── data/                         # All bot content/data
+│     ├── holidays/               # JSON holiday definitions
+│     │     ├── Desember.json
+│     │     └── ...
+│     │
+│     ├── murloc_starts.txt       # Murloc AI generator sources
+│     ├── murloc_middles.txt
+│     ├── murloc_endings.txt
+│     ├── quotersbanlu.txt        # Daily Ban’Lu wisdom quotes
+│     └── quotes.txt              # General game quotes
 │
-└── .github/workflows/
-       └── fly-deploy.yml
+├── Dockerfile                    # Multi-stage optimized build
+├── fly.toml                      # Fly.io Machines configuration
+├── requirements.txt              # Dependencies
+├── README.md                     # Documentation
+└── Murloc-Fulltime-Logo.gif      # Branding asset
 ```
 
 ---
 
-## 🎮 Commands Overview
+# 🎮 Commands
 
-### Quotes
+## 🗨️ Quotes
 ```
 !quote          — random game quote  
-!murloc_ai      — Murloc AI wisdom
+!murloc_ai      — generate Murloc wisdom
 ```
 
-### Simple Timer
+## ⏱ Simple Timer
 ```
-!timer 10m text  
-Supports: 10s, 5m, 1h, 1h20m, 90
+!timer 10m text
 ```
+Supports: `10s`, `5m`, `1h`, `1h20m`, `90`
 
-### Date Timer
+## 📅 Date Timer
 ```
 !timerdate DD.MM.YYYY HH:MM +TZ text --pin
+```
+
 Example:
+```
 !timerdate 31.12.2025 23:59 +3 New Year! --pin
 ```
 
-### Timer Management
+## 🔧 Timer Management
 ```
-!timers         — list active timers  
-!cancel <ID>    — cancel one timer  
-!cancelall      — clear all timers in channel
+!timers          — list active timers  
+!cancel <ID>     — cancel one timer  
+!cancelall       — clear all timers in the channel
 ```
 
 ---
 
-## 🎉 Holidays System
+# 🎉 Holidays System
 
-### Command
+## Lookup Command
 ```
-!holidays — shows the closest upcoming holiday (from all JSON files)
+!holidays
 ```
 
-### How it works
-✔ Loads **all holidays** from `data/holidays/*.json`  
-✔ Supports **static** (e.g. 01-05) and **dynamic** (Easter etc.) holidays  
-✔ Automatically detects **flag** (country or religion)  
-✔ Returns the **nearest** future holiday
+## Features
+- Loads all holidays from `data/holidays/*.json`  
+- Static (`"12-01"`) and dynamic holidays supported  
+- Automatic flag resolution  
+- Finds the **nearest upcoming** holiday  
+- Supports **multiple holidays** per date  
 
-### Example response
+Example output:
 ```
 🎉 Next Holiday
 🇺🇸 Independence Day
@@ -129,46 +173,68 @@ Example:
 
 ---
 
-## 🔁 Daily Holiday Broadcast
+# 🔁 Daily Scheduled Tasks (Correct Times)
 
-The bot automatically:
+The bot includes **two independent daily jobs**:
 
-🕙 Posts every day at **10:01 GMT+3**  
-📌 Sends all holidays matching **today's date**  
-📡 Sends to all channels listed in env-variable:
-
-```
-HOLIDAYS_CHANNEL_IDS="123,456,789"
-```
-
-Fallback:  
-If the bot was offline — sends once on startup.
+### **🕙 Ban’Lu Daily Quote — 10:00 GMT+3**
+Posts one inspirational Ban’Lu quote to the configured channel.  
+Source: `data/quotersbanlu.txt`
 
 ---
 
-## 🔐 Environment Variables
+### **🕙 Holiday Broadcast — 10:01 GMT+3**
+Checks all holiday JSON files and posts every holiday matching today's date.  
+Source folder: `data/holidays/`
 
-| Variable                  | Description                          |
-|--------------------------|--------------------------------------|
-| `DISCORD_BOT_TOKEN`      | Bot token                            |
-| `BANLU_CHANNEL_ID`       | Ban’Lu quote channel                 |
-| `HOLIDAYS_CHANNEL_IDS`   | Comma-separated list of target IDs   |
+**Offline fallback:**  
+If the bot was offline at 10:01, the broadcast executes once at startup.
 
-Set using Fly:
+---
 
+# 🔐 Environment Variables
+
+| Variable                | Description                               |
+|------------------------|---------------------------------------------|
+| `DISCORD_BOT_TOKEN`    | Discord bot token                           |
+| `BANLU_CHANNEL_ID`     | Channel ID for Ban’Lu daily quote           |
+| `HOLIDAYS_CHANNEL_IDS` | Comma-separated list of broadcast channels  |
+
+Example:
 ```sh
-fly secrets set HOLIDAYS_CHANNEL_IDS="123,456,789"
-```
-
----
-
-## ☁️ Deployment (Fly.io)
-
-```
-fly deploy
-fly logs
 fly secrets set DISCORD_BOT_TOKEN=...
 ```
+
+---
+
+# 🐳 Deployment (Fly.io Machines)
+
+## Deploy
+```sh
+fly deploy
+```
+
+## View logs
+```sh
+fly logs
+```
+
+## Set secrets
+```sh
+fly secrets set DISCORD_BOT_TOKEN=...
+```
+
+---
+
+# 🧩 Architecture Notes
+
+- Fully async design (asyncio-native)  
+- Minimal shared state — loose coupling via module-bound injections  
+- Predictable startup/shutdown lifecycle  
+- Optimized Docker image (~40 MB)  
+- Runs as a non-root user  
+- Clean structured logging  
+- Production-ready CI/CD pipeline  
 
 ---
 

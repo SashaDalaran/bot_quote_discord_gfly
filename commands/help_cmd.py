@@ -1,27 +1,45 @@
-# commands/help_cmd.py
+# ==================================================
+# commands/help_cmd.py — Help / Command Overview
+# ==================================================
+
 import discord
 from discord.ext import commands
 
 
-def setup(bot: commands.Bot):
+# ===========================
+# Setup Function
+# Registers the !help command
+# ===========================
+def setup(bot: commands.Bot) -> None:
+
+    # ===========================
+    # !help
+    # Display full command reference
+    # ===========================
     @bot.command(name="help")
     async def cmd_help(ctx: commands.Context):
+        """Send a nicely formatted help menu embed."""
+
         embed = discord.Embed(
             title="📘 Just_Quotes Bot – Command List",
-            color=discord.Color.blurple()
+            color=discord.Color.blurple(),
         )
 
+        # ===========================
         # Quotes
+        # ===========================
         embed.add_field(
             name="🎮 Quotes",
             value=(
                 "**!quote** — Random game quote\n"
                 "**!murloc_ai** — Generate Murloc AI wisdom"
             ),
-            inline=False
+            inline=False,
         )
 
-        # Simple timer
+        # ===========================
+        # Simple Timer
+        # ===========================
         embed.add_field(
             name="⏱ Simple Timer",
             value=(
@@ -29,41 +47,46 @@ def setup(bot: commands.Bot):
                 "Supports: `10s`, `5m`, `1h`, `1h20m`\n"
                 "Example: `!timer 30s Time to fight!`"
             ),
-            inline=False
+            inline=False,
         )
 
-        # Date timer
+        # ===========================
+        # Date Timer
+        # ===========================
         embed.add_field(
             name="🎯 Date Timer (GMT + optional pin)",
             value=(
                 "`!timerdate DD.MM.YYYY HH:MM +TZ text --pin`\n"
-                "Example:\n"
-                "`!timerdate 31.12.2025 23:59 +3 New Year! --pin`\n\n"
+                "Example: `!timerdate 31.12.2025 23:59 +3 New Year! --pin`\n\n"
                 "Countdown format: days / hours / minutes / seconds.\n"
                 "`--pin` is optional."
             ),
-            inline=False
+            inline=False,
         )
 
+        # ===========================
         # Holidays
+        # ===========================
         embed.add_field(
             name="🎉 Holidays",
             value=(
                 "`!holidays` — Shows the next upcoming holiday across all JSON files.\n"
                 "Includes: world, country-specific, religious, and dynamic holidays."
             ),
-            inline=False
+            inline=False,
         )
 
-        # Timer management
+        # ===========================
+        # Timer Management
+        # ===========================
         embed.add_field(
             name="🛑 Timer Management",
             value=(
-                "`!timers` — list active timers\n"
-                "`!cancel <ID>` — cancel one timer\n"
-                "`!cancelall` — delete all timers in this channel"
+                "`!timers` — List active timers\n"
+                "`!cancel <ID>` — Cancel one timer\n"
+                "`!cancelall` — Delete all timers in this channel"
             ),
-            inline=False
+            inline=False,
         )
 
         embed.set_footer(text="Murloc Edition 🐸")
