@@ -145,6 +145,7 @@
 { "date": "12-09", "name": "Weary Willie Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
 
 
+{ "date": "12-10", "name": "Constitution Day in Thailand", "category": ["Federal"], "countries": ["thailand"] },
 { "date": "12-10", "name": "Dewey Decimal System Day", "category": ["Fun"], "countries": ["world"] },
 { "date": "12-10", "name": "Festival for the Souls of Dead Whales", "category": ["Appreciation"], "countries": ["world"] },
 { "date": "12-10", "name": "Human Rights Day", "category": ["Federal"], "countries": ["world"] },
@@ -165,16 +166,12 @@
 { "date": "12-11", "name": "UNICEF Day for Change", "category": ["Cause"], "countries": ["international"] },
 
 
-{ "date": "12-12", "name": "Choral Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
-{ "date": "12-12", "name": "Constitution Day in Thailand", "category": ["Federal"], "countries": ["thailand"] },
 { "date": "12-12", "name": "Day of the Virgin of Guadalupe", "category": ["Federal"], "countries": ["mexico"] },
 { "date": "12-12", "name": "Festival of Unmentionable Thoughts", "category": ["Special Interest"], "countries": ["world"] },
 { "date": "12-12", "name": "Gingerbread Decorating Day", "category": ["Food & Beverage"], "countries": ["world"] },
 { "date": "12-12", "name": "Gingerbread House Day", "category": ["Food & Beverage"], "countries": ["world"] },
-{ "date": "12-12", "name": "Green Monday", "category": ["Cause"], "countries": ["world"] },
 { "date": "12-12", "name": "Guadalupe Day", "category": ["Religious"], "countries": ["catholic"] },
 { "date": "12-12", "name": "International Day of Neutrality", "category": ["Cultural"], "countries": ["world"] },
-{ "date": "12-12", "name": "International Universal Health Coverage Day", "category": ["Health"], "countries": ["world"] },
 { "date": "12-12", "name": "Jamhuri Day", "category": ["Federal"], "countries": ["kenya"] },
 { "date": "12-12", "name": "Lost and Found Day", "category": ["Fun"], "countries": ["world"] },
 { "date": "12-12", "name": "MS Ireland Christmas Jumper Day", "category": ["Cause"], "countries": ["ireland"] },
@@ -198,6 +195,7 @@
 { "date": "12-13", "name": "U.S. National Guard Birthday", "category": ["Federal"], "countries": ["usa"] },
 
 
+{ "date": "12-14", "name": "Choral Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
 { "date": "12-14", "name": "Halcyon Days", "category": ["Fun"], "countries": ["world"] },
 { "date": "12-14", "name": "Martyred Intellectuals Day", "category": ["Cause"], "countries": ["bangladesh"] },
 { "date": "12-14", "name": "Monkey Day", "category": ["Cause"], "countries": ["world"] },
