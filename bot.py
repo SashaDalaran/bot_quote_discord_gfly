@@ -1,33 +1,32 @@
-import logging
 import os
-
-import discord
+import logging
 from discord.ext import commands
+import discord
 
-from core.timer_engine import update_timers_loop
-from daily.banlu.banlu_daily import send_banlu_daily, send_once_if_missed
-from daily.holidays.holidays_daily import (
-    send_holidays_daily,
-    send_once_if_missed_holidays
-)
-
-# ===========================
-# Logging
-# ===========================
+# === Logging Setup ===
 logging.basicConfig(
-    format="%(asctime)s [%(levelname)s] %(message)s",
     level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s"
 )
 logger = logging.getLogger("bot")
 
-# ===========================
-# Environment
-# ===========================
 DISCORD_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
+if not DISCORD_TOKEN:
+    raise RuntimeError("❌ Environment variable DISCORD_BOT_TOKEN is missing!")
 
-# ===========================
-# Bot Setup
-# ===========================
+# === Daily Tasks ===
+from daily.banlu.banlu_daily import (
+    send_banlu_daily,
+    send_once_if_missed as send_banlu_once,
+)
+
+from daily.holidays.holidays_daily import 
+(
+    send_holidays_daily,
+    send_once_if_missed_holidays,
+)
+
+# === Bot Setup ===
 intents = discord.Intents.default()
 intents.message_content = True
 
@@ -37,12 +36,18 @@ bot = commands.Bot(
     help_command=None
 )
 
-# ===========================
-# Load Commands
-# ===========================
+# === Attach bot reference to tasks ===
+send_banlu_daily.bot = bot
+send_banlu_once.bot = bot
+
+send_holidays_daily.bot = bot
+send_once_if_missed_holidays.bot = bot
+
+
+# === Load Commands ===
 def load_all_commands():
     from commands.quotes import setup as setup_quotes
-    from commands.murloc_ai import setup as setup_murloc
+    from commands.murloc_ai import setup as setup_ai
     from commands.simple_timer import setup as setup_simple_timer
     from commands.date_timer import setup as setup_date_timer
     from commands.cancel import setup as setup_cancel
@@ -50,7 +55,7 @@ def load_all_commands():
     from commands.holidays_cmd import setup as setup_holidays
 
     setup_quotes(bot)
-    setup_murloc(bot)
+    setup_ai(bot)
     setup_simple_timer(bot)
     setup_date_timer(bot)
     setup_cancel(bot)
@@ -58,50 +63,30 @@ def load_all_commands():
     setup_holidays(bot)
 
 
-load_all_commands()
-
-# ===========================
-# Bot Ready Event
-# ===========================
 @bot.event
 async def on_ready():
-    logger.info("Bot online and ready.")
+    logger.info("✅ Bot online and ready.")
+    logger.info(f"Logged in as: {bot.user} (ID: {bot.user.id})")
 
-    # Attach bot instance to all daily tasks
-    send_banlu_daily.bot = bot
-    send_holidays_daily.bot = bot
-    send_once_if_missed.bot = bot
-    send_once_if_missed_holidays.bot = bot
-    update_timers_loop.bot = bot
-
-    # Start BAN'LU daily loop
+    # Start daily tasks if not running
     if not send_banlu_daily.is_running():
         send_banlu_daily.start()
+        logger.info("Started: send_banlu_daily")
 
-    # Start Holidays daily loop
     if not send_holidays_daily.is_running():
         send_holidays_daily.start()
+        logger.info("Started: send_holidays_daily")
 
-    # Run missed BAN'LU once on startup
-    await send_once_if_missed()
-
-    # Run missed Holidays once on startup
+    # Run missed messages detection
+    logger.info("Running missed-task fallback checks...")
+    await send_banlu_once()
     await send_once_if_missed_holidays()
-
-    # Start reminders/timers engine
-    if not update_timers_loop.is_running():
-        update_timers_loop.start()
 
     logger.info("All background tasks started successfully.")
 
-# ===========================
-# Entry Point
-# ===========================
-def main():
-    if not DISCORD_TOKEN:
-        raise RuntimeError("DISCORD_BOT_TOKEN is missing.")
-    bot.run(DISCORD_TOKEN)
 
-
+# === Start Bot ===
 if __name__ == "__main__":
-    main()
+    load_all_commands()
+    logger.info("Starting bot...")
+    bot.run(DISCORD_TOKEN)
