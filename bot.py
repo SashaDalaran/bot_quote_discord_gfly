@@ -11,25 +11,35 @@ from daily.holidays.holidays_daily import (
     send_once_if_missed_holidays
 )
 
-
+# ===========================
+# Logging
+# ===========================
 logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s",
     level=logging.INFO,
 )
 logger = logging.getLogger("bot")
 
+# ===========================
+# Environment
+# ===========================
 DISCORD_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 
+# ===========================
+# Bot Setup
+# ===========================
 intents = discord.Intents.default()
 intents.message_content = True
-bot = commands.Bot(command_prefix="!", intents=intents, help_command=None)
 
-# attach bot to scheduled daily tasks
-send_banlu_daily.bot = bot
-send_holidays_daily.bot = bot
-update_timers_loop.bot = bot
+bot = commands.Bot(
+    command_prefix="!",
+    intents=intents,
+    help_command=None
+)
 
-
+# ===========================
+# Load Commands
+# ===========================
 def load_all_commands():
     from commands.quotes import setup as setup_quotes
     from commands.murloc_ai import setup as setup_murloc
@@ -50,30 +60,43 @@ def load_all_commands():
 
 load_all_commands()
 
-
+# ===========================
+# Bot Ready Event
+# ===========================
 @bot.event
 async def on_ready():
-    logger.info("Bot started!")
+    logger.info("Bot online and ready.")
 
-    # BAN'LU DAILY TASK — 10:00 GMT+3
+    # Attach bot instance to all daily tasks
+    send_banlu_daily.bot = bot
+    send_holidays_daily.bot = bot
+    send_once_if_missed.bot = bot
+    send_once_if_missed_holidays.bot = bot
+    update_timers_loop.bot = bot
+
+    # Start BAN'LU daily loop
     if not send_banlu_daily.is_running():
         send_banlu_daily.start()
 
-    await send_once_if_missed(bot)
-
-    # REMINDERS & TIMERS ENGINE
-    if not update_timers_loop.is_running():
-        update_timers_loop.start()
-
-    # HOLIDAYS DAILY TASK — 10:01 GMT+3
+    # Start Holidays daily loop
     if not send_holidays_daily.is_running():
         send_holidays_daily.start()
 
-    await send_once_if_missed_holidays(bot)
+    # Run missed BAN'LU once on startup
+    await send_once_if_missed()
 
-    logger.info("Background tasks started.")
+    # Run missed Holidays once on startup
+    await send_once_if_missed_holidays()
 
+    # Start reminders/timers engine
+    if not update_timers_loop.is_running():
+        update_timers_loop.start()
 
+    logger.info("All background tasks started successfully.")
+
+# ===========================
+# Entry Point
+# ===========================
 def main():
     if not DISCORD_TOKEN:
         raise RuntimeError("DISCORD_BOT_TOKEN is missing.")

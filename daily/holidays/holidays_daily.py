@@ -1,5 +1,4 @@
 import os
-import json
 import logging
 from datetime import datetime, timedelta, timezone, time
 
@@ -11,8 +10,10 @@ from core.holidays_flags import COUNTRY_FLAGS, CATEGORY_EMOJIS
 
 logger = logging.getLogger("holidays_daily")
 
-TZ = timezone(timedelta(hours=3))  # GMT+3
+# Timezone: GMT+3
+TZ = timezone(timedelta(hours=3))
 
+# List of channel IDs from environment
 HOLIDAYS_CHANNEL_IDS = [
     cid.strip()
     for cid in os.getenv("HOLIDAYS_CHANNEL_IDS", "").split(",")
@@ -21,13 +22,13 @@ HOLIDAYS_CHANNEL_IDS = [
 
 
 def is_today(h):
-    """Return True if the holiday date matches today's date."""
+    """Return True if the holiday matches today's date."""
     today = datetime.now(TZ).date()
-    return h["parsed_date"] == today
+    return h.get("parsed_date") == today
 
 
 def build_flag(h):
-    """Determine holiday country/religion and return its emoji flag."""
+    """Return emoji flag for holiday country."""
     country = (
         h.get("country")
         or (h.get("countries")[0] if h.get("countries") else "")
@@ -36,46 +37,23 @@ def build_flag(h):
 
 
 def build_category_line(h):
-    """Return category string with emoji for the embed."""
-    categories = h.get("categories", [])
-    if not categories:
-        return ""
-
-    main_cat = categories[0]
-    cat_emoji = CATEGORY_EMOJIS.get(main_cat, "")
-    if cat_emoji:
-        return f"{cat_emoji} `{main_cat}`"
-    else:
-        return f"`{main_cat}`"
-
-
-def get_flag_for_holiday(h):
-    """Return emoji flag for the holiday."""
-    country = ""
-    if h.get("country"):
-        country = h["country"]
-    elif h.get("countries"):
-        country = h["countries"][0]
-    return COUNTRY_FLAGS.get(country, "🌍")
-
-
-def get_category_line(h):
-    """Return category text with emoji if available."""
+    """Return first category with emoji."""
     categories = h.get("categories") or []
     if not categories:
         return ""
 
     main = categories[0]
-    emoji = CATEGORY_EMOJIS.get(main)
-    if not emoji:
-        return main  # plain category text if no emoji found
-
-    return f"{emoji} {main}"
+    emoji = CATEGORY_EMOJIS.get(main, "")
+    return f"{emoji} `{main}`" if emoji else f"`{main}`"
 
 
+# ======================================================
+# DAILY HOLIDAYS TASK @ 10:01 (GMT+3)
+# ======================================================
 @tasks.loop(time=time(hour=10, minute=1, tzinfo=TZ))
-async def send_holidays_daily(bot):
-    """Send holidays every day at 10:01 GMT+3."""
+async def send_holidays_daily():
+    """Daily holidays sender."""
+    bot = send_holidays_daily.bot  # injected from bot.py
     logger.info("Running daily holidays task...")
 
     holidays = load_all_holidays()
@@ -97,63 +75,62 @@ async def send_holidays_daily(bot):
         )
 
         for h in todays:
-            flag = build_flag(h)
-            value = build_category_line(h)
-
             embed.add_field(
-                name=f"{flag} {h['name']}",
-                value=value,
+                name=f"{build_flag(h)} {h['name']}",
+                value=build_category_line(h),
                 inline=False,
             )
 
         try:
             await channel.send(embed=embed)
-            logger.info(f"Sent holidays to channel {channel_id}")
+            logger.info(f"Sent daily holidays to {channel_id}")
         except Exception as e:
             logger.exception(f"Failed to send to {channel_id}: {e}")
 
 
-async def send_once_if_missed_holidays(bot):
-    """
-    If the bot was offline at the scheduled time (10:01),
-    send today's holidays once on startup.
-    """
+# ======================================================
+# "SEND ONCE IF MISSED" (bot restart after 10:01)
+# ======================================================
+async def send_once_if_missed_holidays():
+    """Send holidays once if bot missed the scheduled time."""
+    bot = send_once_if_missed_holidays.bot  # injected from bot.py
+
     now = datetime.now(TZ)
-    target_time = now.replace(hour=10, minute=1, second=0, microsecond=0)
+    scheduled = now.replace(hour=10, minute=1, second=0, microsecond=0)
 
-    if now > target_time:
-        logger.info("Missed scheduled time — sending holiday list once now...")
+    # If now is after 10:01 => send once
+    if now <= scheduled:
+        return
 
-        holidays = load_all_holidays()
-        todays = [h for h in holidays if is_today(h)]
+    holidays = load_all_holidays()
+    todays = [h for h in holidays if is_today(h)]
 
-        if not todays:
-            logger.info("No holidays today.")
-            return
+    if not todays:
+        logger.info("No holidays today (missed check).")
+        return
 
-        for channel_id in HOLIDAYS_CHANNEL_IDS:
-            channel = bot.get_channel(int(channel_id))
-            if not channel:
-                logger.warning(f"Channel {channel_id} not found.")
-                continue
+    logger.info("Missed scheduled time — sending holiday list once now...")
 
-            embed = discord.Embed(
-                title="🎉 Today's Holidays",
-                color=0x00AEEF,
+    for channel_id in HOLIDAYS_CHANNEL_IDS:
+        channel = bot.get_channel(int(channel_id))
+        if not channel:
+            logger.warning(f"Channel {channel_id} not found.")
+            continue
+
+        embed = discord.Embed(
+            title="🎉 Today's Holidays",
+            color=0x00AEEF,
+        )
+
+        for h in todays:
+            embed.add_field(
+                name=f"{build_flag(h)} {h['name']}",
+                value=build_category_line(h),
+                inline=False,
             )
 
-            for h in todays:
-                flag = build_flag(h)
-                value = build_category_line(h)
-
-                embed.add_field(
-                    name=f"{flag} {h['name']}",
-                    value=value,
-                    inline=False,
-                )
-
-            try:
-                await channel.send(embed=embed)
-                logger.info(f"Sent missed holidays to {channel_id}")
-            except Exception as e:
-                logger.exception(f"Failed to send missed holidays to {channel_id}: {e}")
+        try:
+            await channel.send(embed=embed)
+            logger.info(f"Sent missed holidays to {channel_id}")
+        except Exception as e:
+            logger.exception(f"Failed to send missed holidays to {channel_id}: {e}")

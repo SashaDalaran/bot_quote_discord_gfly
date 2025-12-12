@@ -5,9 +5,13 @@ from datetime import datetime, timedelta, timezone, time
 import discord
 from discord.ext import tasks
 
+# Timezone for sending Ban'Lu quotes
 TZ = timezone(timedelta(hours=3))
 
+# Path to quotes file
 BANLU_FILE = os.getenv("BANLU_QUOTES_FILE", "data/quotersbanlu.txt")
+
+# Channel ID
 BANLU_CHANNEL_ID = int(os.getenv("BANLU_CHANNEL_ID", "0"))
 
 
@@ -19,16 +23,20 @@ def load_banlu_quotes():
         return [x.strip() for x in f.readlines() if x.strip()]
 
 
+# Loaded once at startup
 banlu_quotes = load_banlu_quotes()
 
 
+# ============================
+# Daily Ban'Lu task (10:00)
+# ============================
 @tasks.loop(time=time(hour=10, minute=0, tzinfo=TZ))
 async def send_banlu_daily():
-    """Send a daily Ban'Lu quote at 10:00 MSK."""
-    if not BANLU_CHANNEL_ID or not banlu_quotes:
+    bot = send_banlu_daily.bot  # injected from bot.py
+
+    if not banlu_quotes:
         return
 
-    bot = send_banlu_daily.bot
     channel = bot.get_channel(BANLU_CHANNEL_ID)
     if not channel:
         return
@@ -43,15 +51,19 @@ async def send_banlu_daily():
     await channel.send(embed=embed)
 
 
-async def send_once_if_missed(bot):
-    """If it's already past 10:00 and the daily quote wasn't sent, send it once."""
+# ============================================================
+# One-time catch-up (if bot restarted after 10:00)
+# ============================================================
+async def send_once_if_missed():
+    bot = send_once_if_missed.bot  # injected from bot.py
+
     now = datetime.now(TZ)
     target = now.replace(hour=10, minute=0, second=0, microsecond=0)
 
-    # If it's after 10:00 and the quote wasn't sent — send it once
+    # If already past 10:00 — send once
     if now > target:
         channel = bot.get_channel(BANLU_CHANNEL_ID)
-        if channel:
+        if channel and banlu_quotes:
             embed = discord.Embed(
                 title="🏌️ Daily Quote • Ban'Lu",
                 description=random.choice(banlu_quotes),
