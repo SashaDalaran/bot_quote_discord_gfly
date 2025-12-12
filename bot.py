@@ -21,8 +21,9 @@ if not DISCORD_TOKEN:
 
 # ===========================
 # Import Daily Task Modules
-# ( imported after env check )
+# (imported after env check)
 # ===========================
+
 from daily.banlu.banlu_daily import (
     send_banlu_daily,
     send_once_if_missed as send_banlu_once,
