@@ -1,49 +1,26 @@
-app = "bot-quote-discord-gfly"
-primary_region = "ams"
+# fly.toml app configuration file generated for bot-quote-discord-gfly on 2025-12-13T18:50:55+04:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
-# ============================
-# Build Configuration
-# ============================
+app = 'bot-quote-discord-gfly'
+primary_region = 'ams'
+
 [build]
-  dockerfile = "Dockerfile"
+  dockerfile = 'Dockerfile'
 
-# ============================
-# Deployment Strategy
-# Discord bot can run multiple machines safely
-# Rolling deploy = zero downtime
-# ============================
 [deploy]
-  strategy = "rolling"
-  max_unavailable = 0
+  strategy = 'immediate'
+  max_unavailable = 1.0
 
-# ============================
-# Environment Variables
-# Secrets are injected via:
-# fly secrets set ...
-# ============================
 [env]
-  PYTHONUNBUFFERED = "1"
+  BANLU_CHANNEL_ID = '${BANLU_CHANNEL_ID}'
+  DISCORD_BOT_TOKEN = '${DISCORD_BOT_TOKEN}'
+  HOLIDAYS_CHANNEL_IDS = '${HOLIDAYS_CHANNEL_IDS}'
+  PYTHONUNBUFFERED = '1'
 
-  DISCORD_BOT_TOKEN = "${DISCORD_BOT_TOKEN}"
-  BANLU_CHANNEL_ID = "${BANLU_CHANNEL_ID}"
-  HOLIDAYS_CHANNEL_IDS = "${HOLIDAYS_CHANNEL_IDS}"
-
-# ============================
-# Virtual Machine Configuration
-# Free tier friendly:
-# shared CPU + 512 MB RAM
-# ============================
 [[vm]]
-  cpu_kind = "shared"
+  memory = '512mb'
+  cpu_kind = 'shared'
   cpus = 1
-  memory = "512mb"
-
-  # Bot must always stay online
-  auto_restart = true
-  auto_stop = false
-
-# ============================
-# Logs Configuration
-# ============================
-[logs]
-  format = "json"
+  memory_mb = 512
