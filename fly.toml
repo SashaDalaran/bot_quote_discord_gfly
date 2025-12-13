@@ -9,52 +9,41 @@ primary_region = "ams"
 
 # ============================
 # Deployment Strategy
+# Discord bot can run multiple machines safely
+# Rolling deploy = zero downtime
 # ============================
 [deploy]
   strategy = "rolling"
-  # Ensures old machine stays alive until the new version is ready
   max_unavailable = 0
 
 # ============================
 # Environment Variables
-# (Only safe defaults — real secrets must be Fly secrets)
+# Secrets are injected via:
+# fly secrets set ...
 # ============================
 [env]
   PYTHONUNBUFFERED = "1"
-  # These are placeholders; real values come from `fly secrets set`
+
   DISCORD_BOT_TOKEN = "${DISCORD_BOT_TOKEN}"
   BANLU_CHANNEL_ID = "${BANLU_CHANNEL_ID}"
   HOLIDAYS_CHANNEL_IDS = "${HOLIDAYS_CHANNEL_IDS}"
 
 # ============================
 # Virtual Machine Configuration
+# Free tier friendly:
+# shared CPU + 512 MB RAM
 # ============================
 [[vm]]
   cpu_kind = "shared"
   cpus = 1
-  memory = "1gb"
+  memory = "512mb"
 
-  # Recommended for Discord bots:
-  # Machines automatically restart if they crash
+  # Bot must always stay online
   auto_restart = true
   auto_stop = false
 
-  # Enable automatic machine-level garbage collection
-  # Useful for long-running Python apps
-  memory_mb = 1024
-
 # ============================
-# Metrics (Optional but Recommended)
-# Enables Fly's built-in monitoring
-# ============================
-[metrics]
-  port = 9091
-  path = "/metrics"
-  enabled = false  # set to true if you add a metrics exporter
-
-# ============================
-# Logs Configuration (Optional)
-# Cleaner, structured logs on Fly
+# Logs Configuration
 # ============================
 [logs]
-  format = "json"   # or "text"
+  format = "json"
