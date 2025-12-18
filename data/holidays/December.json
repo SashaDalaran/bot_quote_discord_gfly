@@ -211,7 +211,6 @@
 { "date": "12-15", "name": "International Tea Day", "category": ["Food & Beverage"], "countries": ["world"] },
 { "date": "12-15", "name": "National Cupcake Day", "category": ["Food & Beverage"], "countries": ["world"] },
 { "date": "12-15", "name": "National Lemon Cupcake Day", "category": ["Food & Beverage"], "countries": ["world"] },
-{ "date": "12-15", "name": "National Regifting Day", "category": ["Fun"], "countries": ["world"] },
 { "date": "12-15", "name": "National Wear Your Pearls Day", "category": ["Special Interest"], "countries": ["world"] },
 
 
@@ -228,9 +227,7 @@
 
 
 { "date": "12-17", "name": "Bhutan National Day", "category": ["Cultural"], "countries": ["bhutan"] },
-{ "date": "12-17", "name": "Festival of Winter Walks", "category": ["Special Interest"], "countries": ["world"] },
 { "date": "12-17", "name": "National Device Appreciation Day", "category": ["Appreciation"], "countries": ["world"] },
-{ "date": "12-17", "name": "National Maple Syrup Day", "category": ["Food & Beverage"], "countries": ["world"] },
 { "date": "12-17", "name": "National Maple Syrup Day Canada", "category": ["Food & Beverage"], "countries": ["canada"] },
 { "date": "12-17", "name": "Wright Brother's Day", "category": ["Appreciation"], "countries": ["usa"] },
 { "date": "12-17", "name": "Saturnalia", "category": ["Special Interest"], "countries": ["world"] },
@@ -257,6 +254,7 @@
 {"date": "12-19", "name": "National Oatmeal Muffin Day", "category": ["Food & Beverage"], "countries": ["usa"]},
 
 
+{ "date": "12-20", "name": "Festival of Winter Walks", "category": ["Special Interest"], "countries": ["world"] },
 { "date": "12-20", "name": "Cathode-Ray Tube Day", "category": ["Fun"], "countries": ["world"] },
 { "date": "12-20", "name": "Dot Your I’s Day", "category": ["Special Interest"], "countries": ["world"] },
 { "date": "12-20", "name": "Games Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
