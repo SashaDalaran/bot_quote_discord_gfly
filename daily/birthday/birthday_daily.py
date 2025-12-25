@@ -18,21 +18,27 @@
 
 import logging
 from datetime import datetime, timedelta, timezone, time, date
+from zoneinfo import ZoneInfo
 from typing import Optional
 
 import discord
 from discord.ext import tasks
 
-from services.channel_ids import parse_chat_ids
+from services.channel_ids import parse_chat_ids_from_env
 from services.birthday_service import load_birthday_events, get_today_birthday_payload
 from services.birthday_format import format_birthday_message
 
 logger = logging.getLogger("birthday_daily")
 
-TZ = timezone(timedelta(hours=3))  # GMT+3
+TZ_NAME = os.getenv("BOT_TZ", "Europe/Moscow")
+try:
+    TZ = ZoneInfo(TZ_NAME)
+except Exception:
+    logger.warning("Invalid BOT_TZ=%s, fallback to UTC", TZ_NAME)
+    TZ = timezone.utc
 
 # Accept one or many channel IDs, comma-separated.
-BIRTHDAY_CHANNEL_IDS = parse_chat_ids("BIRTHDAY_CHANNEL_IDS")
+BIRTHDAY_CHANNEL_ID = parse_chat_ids_from_env("BIRTHDAY_CHANNEL_ID")
 
 # In-memory guard to avoid double-sends after restarts.
 _last_sent: Optional[date] = None
@@ -40,10 +46,10 @@ _last_sent: Optional[date] = None
 
 async def _send_to_channels(bot: discord.Client, text: str) -> None:
     """Send a text message to all configured channels."""
-    if not BIRTHDAY_CHANNEL_IDS:
+    if not BIRTHDAY_CHANNEL_ID:
         return
 
-    for channel_id in BIRTHDAY_CHANNEL_IDS:
+    for channel_id in BIRTHDAY_CHANNEL_ID:
         channel = bot.get_channel(channel_id)
         if channel is None:
             logger.warning("Channel %s not found.", channel_id)

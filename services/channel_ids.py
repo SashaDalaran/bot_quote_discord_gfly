@@ -15,10 +15,14 @@
 # - Parse comma-separated lists of integers from env values
 # - Filter invalid entries with clear logging
 #
-# Boundaries:
-# - This module does NOT send messages.
-# - It only prepares a validated list of IDs for callers.
+# Env format:
+#   SOME_CHANNEL_ID="123"                -> [123]
+#   SOME_CHANNEL_ID="123,456,789"        -> [123,456,789]
 #
+# NOTE:
+# - We intentionally support *one or many* IDs in the same variable.
+# - We do NOT provide backward-compatible aliases here on purpose.
+#   (Keep secrets clean and consistent.)
 # ==================================================
 
 from __future__ import annotations
@@ -33,60 +37,43 @@ logger = logging.getLogger(__name__)
 def parse_chat_ids_from_env(env_key: str) -> List[int]:
     """Parse a comma-separated list of chat IDs from an env var.
 
-    Expected format:
-        ENV_KEY="123,-1009876543210,456"
+    Examples:
+        ENV_KEY="123"
+        ENV_KEY="123,456,789"
 
     Notes:
-    - Telegram channel IDs are often negative (e.g. -100...).
-    - We treat missing/empty values as "no configured destinations".
+    - Discord channel IDs are positive integers.
+    - Missing/empty values mean "no configured destinations".
 
     Args:
-        env_key:
-            Name of the environment variable to read.
+        env_key: Environment variable name to read.
 
     Returns:
-        A list of valid integer chat IDs. Empty if none.
+        List of valid channel IDs (ints). Invalid parts are ignored with warnings.
     """
-
-    # --------------------------------------------------
-    # Read raw value (secrets/config live in env)
-    # --------------------------------------------------
     raw = (os.getenv(env_key) or "").strip()
     if not raw:
-        # Not an error: daily jobs may be disabled by simply not setting env vars.
         return []
 
-    # --------------------------------------------------
-    # Split + normalize tokens
-    # --------------------------------------------------
-    parts = [p.strip() for p in raw.split(",") if p.strip()]
     ids: List[int] = []
-
-    # --------------------------------------------------
-    # Validate each token
-    # --------------------------------------------------
-    for p in parts:
+    for part in raw.split(","):
+        token = part.strip()
+        if not token:
+            continue
+        # allow optional + sign
+        if token.startswith("+"):
+            token = token[1:].strip()
         try:
-            ids.append(int(p))
+            value = int(token)
         except ValueError:
-            # Log and skip instead of crashing at startup.
-            logger.warning("Invalid chat id '%s' in %s; skipping it.", p, env_key)
+            logger.warning("Invalid channel ID '%s' in %s; skipping.", part, env_key)
+            continue
+        if value <= 0:
+            logger.warning("Discord channel IDs must be positive (%s in %s); skipping.", value, env_key)
+            continue
+        ids.append(value)
 
-    # --------------------------------------------------
-    # Final sanity logging (helps during deployments)
-    # --------------------------------------------------
     if not ids:
-        logger.warning("No valid chat IDs found in %s; skipping send.", env_key)
+        logger.warning("No valid channel IDs found in %s; skipping send.", env_key)
 
     return ids
-
-
-def parse_chat_ids(env_key: str) -> List[int]:
-    """
-    Backward-compatible alias.
-
-    Older modules import `parse_chat_ids(...)`.
-    The canonical function is now `parse_chat_ids_from_env(...)`,
-    but we keep this wrapper to avoid breaking imports.
-    """
-    return parse_chat_ids_from_env(env_key)

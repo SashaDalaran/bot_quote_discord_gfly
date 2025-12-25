@@ -10,20 +10,27 @@
 import logging
 import os
 from datetime import datetime, timedelta, timezone, time, date
+from zoneinfo import ZoneInfo
 from typing import Optional
 
 import discord
 from discord.ext import tasks
 
-from services.channel_ids import parse_chat_ids
+from services.channel_ids import parse_chat_ids_from_env
 from services.banlu_service import load_banlu_quotes, get_random_banlu_quote, format_banlu_message
 
 logger = logging.getLogger("banlu_daily")
 
-TZ = timezone(timedelta(hours=3))  # GMT+3
+TZ_NAME = os.getenv("BOT_TZ", "Europe/Moscow")
+try:
+    TZ = ZoneInfo(TZ_NAME)
+except Exception:
+    logger.warning("Invalid BOT_TZ=%s, fallback to UTC", TZ_NAME)
+    TZ = timezone.utc
+
 
 BANLU_FILE = os.getenv("BANLU_QUOTES_FILE", "data/quotersbanlu.txt")
-BANLU_CHANNEL_IDS = parse_chat_ids("BANLU_CHANNEL_ID")  # accepts one or many (comma-separated)
+BANLU_CHANNELS = parse_chat_ids_from_env("BANLU_CHANNEL_ID")  # one or many, comma-separated
 
 # Preload quotes once at startup
 _banlu_quotes = load_banlu_quotes(BANLU_FILE)
@@ -32,10 +39,10 @@ _last_sent: Optional[date] = None
 
 
 async def _send_to_channels(bot: discord.Client, text: str) -> None:
-    if not BANLU_CHANNEL_IDS:
+    if not BANLU_CHANNELS:
         return
 
-    for channel_id in BANLU_CHANNEL_IDS:
+    for channel_id in BANLU_CHANNELS:
         channel = bot.get_channel(channel_id)
         if channel is None:
             logger.warning("Channel %s not found.", channel_id)

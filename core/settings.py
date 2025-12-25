@@ -10,8 +10,8 @@ DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 # Channels
 BANLU_CHANNEL_ID = int(os.getenv("BANLU_CHANNEL_ID", "0"))
 
-HOLIDAYS_CHANNEL_IDS = [
-    int(x) for x in os.getenv("HOLIDAYS_CHANNEL_IDS", "").split(",") if x
+HOLIDAYS_CHANNEL_ID = [
+    int(x) for x in os.getenv("HOLIDAYS_CHANNEL_ID", "").split(",") if x
 ]
 
 # ============================

@@ -9,21 +9,27 @@
 
 import logging
 from datetime import datetime, timedelta, timezone, time, date
+from zoneinfo import ZoneInfo
 from typing import Optional
 
 import discord
 from discord.ext import tasks
 
-from services.channel_ids import parse_chat_ids
+from services.channel_ids import parse_chat_ids_from_env
 from services.holidays_service import get_today_holidays
 from services.holidays_flags import COUNTRY_FLAGS, CATEGORY_EMOJIS
 
 logger = logging.getLogger("holidays_daily")
 
-TZ = timezone(timedelta(hours=3))  # GMT+3 timezone
+TZ_NAME = os.getenv("BOT_TZ", "Europe/Moscow")
+try:
+    TZ = ZoneInfo(TZ_NAME)
+except Exception:
+    logger.warning("Invalid BOT_TZ=%s, fallback to UTC", TZ_NAME)
+    TZ = timezone.utc
 
 # Accept one or many channel IDs, comma-separated.
-HOLIDAYS_CHANNEL_IDS = parse_chat_ids("HOLIDAYS_CHANNEL_IDS")
+HOLIDAYS_CHANNEL_ID = parse_chat_ids_from_env("HOLIDAYS_CHANNEL_ID")
 
 _last_sent: Optional[date] = None
 
@@ -49,10 +55,10 @@ def build_category_line(h) -> str:
 
 
 async def _send_embed_to_channels(bot: discord.Client, embed: discord.Embed) -> None:
-    if not HOLIDAYS_CHANNEL_IDS:
+    if not HOLIDAYS_CHANNEL_ID:
         return
 
-    for channel_id in HOLIDAYS_CHANNEL_IDS:
+    for channel_id in HOLIDAYS_CHANNEL_ID:
         channel = bot.get_channel(channel_id)
         if not channel:
             logger.warning("Channel %s not found.", channel_id)
