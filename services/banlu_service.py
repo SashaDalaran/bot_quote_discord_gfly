@@ -11,9 +11,30 @@ from __future__ import annotations
 
 import os
 import random
+import re
 from typing import List, Optional
 
 from core.settings import BANLU_WOWHEAD_URL
+
+# Optional: link/image for Ban'Lu embeds in Discord.
+# If not provided, we default to the given Steam page (The Last of Us Part I)
+# and its header image. You can override with:
+# - BANLU_LINK_URL (clickable link on the embed)
+# - BANLU_IMAGE_URL (image displayed in the embed)
+DEFAULT_BANLU_STEAM_URL = "https://store.steampowered.com/app/1888930/The_Last_of_Us_Part_I/"
+
+_STEAM_APP_RE = re.compile(r"/app/(\d+)/")
+
+def _steam_header_image(url: str) -> Optional[str]:
+    """Try to derive Steam header image URL from a Steam store URL."""
+    m = _STEAM_APP_RE.search(url or "")
+    if not m:
+        return None
+    app_id = m.group(1)
+    return f"https://cdn.cloudflare.steamstatic.com/steam/apps/{app_id}/header.jpg"
+
+BANLU_LINK_URL = os.getenv("BANLU_LINK_URL", DEFAULT_BANLU_STEAM_URL)
+BANLU_IMAGE_URL = os.getenv("BANLU_IMAGE_URL", _steam_header_image(BANLU_LINK_URL) or BANLU_WOWHEAD_URL)
 
 
 def load_banlu_quotes(path: str) -> List[str]:

@@ -27,7 +27,7 @@ from discord.ext import tasks
 
 from services.channel_ids import parse_chat_ids_from_env
 from services.birthday_service import load_birthday_events, get_today_birthday_payload
-from services.birthday_format import format_birthday_message
+from services.birthday_format import build_guild_events_embed
 
 logger = logging.getLogger("birthday_daily")
 
@@ -45,8 +45,8 @@ BIRTHDAY_CHANNEL_ID = parse_chat_ids_from_env("BIRTHDAY_CHANNEL_ID")
 _last_sent: Optional[date] = None
 
 
-async def _send_to_channels(bot: discord.Client, text: str) -> None:
-    """Send a text message to all configured channels."""
+async def _send_to_channels(bot: discord.Client, *, embed: discord.Embed) -> None:
+    """Send an embed to all configured channels."""
     if not BIRTHDAY_CHANNEL_ID:
         return
 
@@ -57,17 +57,17 @@ async def _send_to_channels(bot: discord.Client, text: str) -> None:
             continue
 
         try:
-            await channel.send(text)
+            await channel.send(embed=embed)
         except Exception:
             logger.exception("Failed to send guild events message to channel %s.", channel_id)
 
 
-def _build_today_message(today: date) -> Optional[str]:
+def _build_today_embed(today: date) -> Optional[discord.Embed]:
     events = load_birthday_events()
     payload = get_today_birthday_payload(events=events, today=today)
     if not payload:
         return None
-    return format_birthday_message(payload=payload, today=today)
+    return build_guild_events_embed(payload=payload, today=today)
 
 
 @tasks.loop(time=time(hour=10, minute=5, tzinfo=TZ))
@@ -82,11 +82,11 @@ async def send_birthday_daily():
     if _last_sent == today:
         return
 
-    text = _build_today_message(today)
-    if not text:
+    embed = _build_today_embed(today)
+    if not embed:
         return
 
-    await _send_to_channels(bot, text)
+    await _send_to_channels(bot, embed=embed)
     _last_sent = today
     logger.info("Guild events sent for %s.", today.isoformat())
 
@@ -109,10 +109,10 @@ async def send_once_if_missed_birthday():
     if _last_sent == today:
         return
 
-    text = _build_today_message(today)
-    if not text:
+    embed = _build_today_embed(today)
+    if not embed:
         return
 
     logger.info("Bot restarted after schedule → sending missed guild events.")
-    await _send_to_channels(bot, text)
+    await _send_to_channels(bot, embed=embed)
     _last_sent = today

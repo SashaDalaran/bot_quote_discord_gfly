@@ -23,6 +23,8 @@ from dataclasses import dataclass
 from datetime import date, timedelta
 from typing import Any, Dict, List, Optional, Tuple
 
+import discord
+
 from services.birthday_service import _norm_token  # reuse normalization (avoid duplicates)
 # IMPORTANT:
 # - Do NOT modify services/holidays_flags.py (user-managed mapping).
@@ -462,3 +464,65 @@ def format_birthday_message(payload: Dict[str, Any], today: date) -> str:
         lines.pop()
 
     return "\n".join(lines)
+
+
+def build_guild_events_embed(
+    payload: Dict[str, Any],
+    *,
+    today: Optional[date] = None,
+) -> discord.Embed:
+    """Discord embed version of `format_birthday_message`.
+
+    This keeps the *same facts/order* as the text formatter, but renders them
+    inside an Embed with 3 fields (Challenge/Heroes/Birthdays), similar to the
+    Holidays "tile" look.
+    """
+
+    if today is None:
+        today = date.today()
+
+    # Title matches the screenshot style
+    title = f"📅 Guild events — {today.strftime('%d %b')}"
+    embed = discord.Embed(title=title)
+
+    challenges = list(payload.get("challenges") or [])
+    heroes = list(payload.get("heroes") or [])
+    birthdays = list(payload.get("birthdays") or [])
+
+    # ---- Challenge field ----
+    if challenges:
+        challenge_lines = _render_challenge(challenges[0], today)
+        if len(challenges) > 1:
+            # Keep extra challenges visible without changing the main layout too much.
+            for ch in challenges[1:]:
+                challenge_lines.append("")
+                challenge_lines.extend(_render_challenge(ch, today))
+        challenge_value = "\n".join([l for l in challenge_lines if l != ""]).strip() or "↳ no challenge found"
+    else:
+        challenge_value = "↳ no challenge found"
+
+    embed.add_field(name="🏆 Guild Challenge", value=challenge_value, inline=False)
+
+    # ---- Heroes field ----
+    if heroes:
+        hero_lines: List[str] = []
+        for h in heroes:
+            hero_lines.extend(_render_hero(h))
+        hero_value = "\n".join([l for l in hero_lines if l != ""]).strip() or "↳ no heroes found"
+    else:
+        hero_value = "↳ no heroes found"
+
+    embed.add_field(name="🦸 Heroes", value=hero_value, inline=False)
+
+    # ---- Birthdays field ----
+    if birthdays:
+        b_lines: List[str] = []
+        for b in birthdays:
+            b_lines.extend(_render_birthday(b))
+        b_value = "\n".join([l for l in b_lines if l != ""]).strip() or "↳ no birthdays found"
+    else:
+        b_value = "↳ no birthdays found"
+
+    embed.add_field(name="🎂 Birthdays", value=b_value, inline=False)
+
+    return embed

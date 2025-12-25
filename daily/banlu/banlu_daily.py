@@ -32,13 +32,24 @@ except Exception:
 BANLU_FILE = os.getenv("BANLU_QUOTES_FILE", "data/quotersbanlu.txt")
 BANLU_CHANNELS = parse_chat_ids_from_env("BANLU_CHANNEL_ID")  # one or many, comma-separated
 
+# Optional media/links for the quote "tile".
+# Defaults are set to The Last of Us Part I Steam page.
+BANLU_LINK_URL = os.getenv(
+    "BANLU_LINK_URL",
+    "https://store.steampowered.com/app/1888930/The_Last_of_Us_Part_I/",
+)
+BANLU_IMAGE_URL = os.getenv(
+    "BANLU_IMAGE_URL",
+    "https://cdn.akamai.steamstatic.com/steam/apps/1888930/header.jpg",
+)
+
 # Preload quotes once at startup
 _banlu_quotes = load_banlu_quotes(BANLU_FILE)
 
 _last_sent: Optional[date] = None
 
 
-async def _send_to_channels(bot: discord.Client, text: str) -> None:
+async def _send_to_channels(bot: discord.Client, *, embed: discord.Embed) -> None:
     if not BANLU_CHANNELS:
         return
 
@@ -48,16 +59,25 @@ async def _send_to_channels(bot: discord.Client, text: str) -> None:
             logger.warning("Channel %s not found.", channel_id)
             continue
         try:
-            await channel.send(text)
+            await channel.send(embed=embed)
         except Exception:
             logger.exception("Failed to send Ban'Lu message to channel %s.", channel_id)
 
 
-def _build_message() -> Optional[str]:
+def _build_embed() -> Optional[discord.Embed]:
     quote = get_random_banlu_quote(_banlu_quotes)
     if not quote:
         return None
-    return format_banlu_message(quote)
+
+    text = format_banlu_message(quote)
+    embed = discord.Embed(
+        title="💬 Ban'Lu quote",
+        description=text,
+        url=BANLU_LINK_URL,
+    )
+    # One image per embed: use the Steam header by default (can be overridden via env).
+    embed.set_image(url=BANLU_IMAGE_URL)
+    return embed
 
 
 @tasks.loop(time=time(hour=10, minute=0, tzinfo=TZ))
@@ -72,11 +92,11 @@ async def send_banlu_daily():
     if _last_sent == today:
         return
 
-    text = _build_message()
-    if not text:
+    embed = _build_embed()
+    if not embed:
         return
 
-    await _send_to_channels(bot, text)
+    await _send_to_channels(bot, embed=embed)
     _last_sent = today
     logger.info("Ban'Lu quote sent for %s.", today.isoformat())
 
@@ -98,10 +118,10 @@ async def send_banlu_once():
     if _last_sent == today:
         return
 
-    text = _build_message()
-    if not text:
+    embed = _build_embed()
+    if not embed:
         return
 
     logger.info("Bot restarted after schedule → sending missed Ban'Lu quote.")
-    await _send_to_channels(bot, text)
+    await _send_to_channels(bot, embed=embed)
     _last_sent = today
