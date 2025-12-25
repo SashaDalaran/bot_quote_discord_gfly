@@ -26,12 +26,17 @@ if not DISCORD_TOKEN:
 
 from daily.banlu.banlu_daily import (
     send_banlu_daily,
-    send_once_if_missed as send_banlu_once,
+    send_banlu_once,
 )
 
 from daily.holidays.holidays_daily import (
     send_holidays_daily,
     send_once_if_missed_holidays,
+)
+
+from daily.birthday.birthday_daily import (
+    send_birthday_daily,
+    send_once_if_missed_birthday,
 )
 
 # ===========================
@@ -56,6 +61,8 @@ for task in (
     send_banlu_once,
     send_holidays_daily,
     send_once_if_missed_holidays,
+    send_birthday_daily,
+    send_once_if_missed_birthday,
 ):
     task.bot = bot
 
@@ -105,10 +112,16 @@ async def on_ready():
         send_holidays_daily.start()
         logger.info("Started task: send_holidays_daily")
 
+
+    if not send_birthday_daily.is_running():
+        send_birthday_daily.start()
+        logger.info("Started task: send_birthday_daily")
+
     # Run fallback/missed checks
     logger.info("Running missed-task fallback checks...")
     await send_banlu_once()
     await send_once_if_missed_holidays()
+    await send_once_if_missed_birthday()
 
     logger.info("Background scheduler initialized successfully.")
 

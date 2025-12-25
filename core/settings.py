@@ -28,3 +28,8 @@ MAX_TIMERS_PER_CHANNEL = 50
 ENABLE_DAILY_BANLU = True
 ENABLE_HOLIDAYS = True
 ENABLE_TIMERS = True
+
+# ============================
+# Ban'Lu
+# ============================
+BANLU_WOWHEAD_URL = "https://www.wowhead.com/item=142225"

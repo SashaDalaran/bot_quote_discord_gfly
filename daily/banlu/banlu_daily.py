@@ -1,88 +1,100 @@
 # ==================================================
-# daily/banlu/banlu_daily.py — Daily Ban’Lu Quote
+# daily/banlu/banlu_daily.py — Ban'Lu Daily Job
+# ==================================================
+#
+# Posts a random Ban'Lu quote to configured Discord channels.
+#
+# Layer: Daily
 # ==================================================
 
+import logging
 import os
-import random
-from datetime import datetime, timedelta, timezone, time
+from datetime import datetime, timedelta, timezone, time, date
+from typing import Optional
 
 import discord
 from discord.ext import tasks
 
+from services.channel_ids import parse_chat_ids
+from services.banlu_service import load_banlu_quotes, get_random_banlu_quote, format_banlu_message
 
-# ===========================
-# Configuration
-# ===========================
-TZ = timezone(timedelta(hours=3))  # GMT+3 timezone
+logger = logging.getLogger("banlu_daily")
+
+TZ = timezone(timedelta(hours=3))  # GMT+3
+
 BANLU_FILE = os.getenv("BANLU_QUOTES_FILE", "data/quotersbanlu.txt")
-BANLU_CHANNEL_ID = int(os.getenv("BANLU_CHANNEL_ID", "0"))
-
-
-# ===========================
-# Load Quotes
-# ===========================
-def load_banlu_quotes() -> list[str]:
-    """Load Ban’Lu quotes from file and return a cleaned list."""
-    if not os.path.exists(BANLU_FILE):
-        return []
-
-    with open(BANLU_FILE, "r", encoding="utf-8") as f:
-        return [line.strip() for line in f.readlines() if line.strip()]
-
+BANLU_CHANNEL_IDS = parse_chat_ids("BANLU_CHANNEL_ID")  # accepts one or many (comma-separated)
 
 # Preload quotes once at startup
-banlu_quotes = load_banlu_quotes()
+_banlu_quotes = load_banlu_quotes(BANLU_FILE)
+
+_last_sent: Optional[date] = None
 
 
-# ===========================
-# Daily Scheduled Task (10:00 GMT+3)
-# ===========================
+async def _send_to_channels(bot: discord.Client, text: str) -> None:
+    if not BANLU_CHANNEL_IDS:
+        return
+
+    for channel_id in BANLU_CHANNEL_IDS:
+        channel = bot.get_channel(channel_id)
+        if channel is None:
+            logger.warning("Channel %s not found.", channel_id)
+            continue
+        try:
+            await channel.send(text)
+        except Exception:
+            logger.exception("Failed to send Ban'Lu message to channel %s.", channel_id)
+
+
+def _build_message() -> Optional[str]:
+    quote = get_random_banlu_quote(_banlu_quotes)
+    if not quote:
+        return None
+    return format_banlu_message(quote)
+
+
 @tasks.loop(time=time(hour=10, minute=0, tzinfo=TZ))
 async def send_banlu_daily():
-    """
-    Automatically send a Ban’Lu quote every day at 10:00 GMT+3.
-    The bot reference is injected via `bot.py`.
-    """
-    bot = send_banlu_daily.bot  # injected externally
+    """Scheduled daily job (10:00 GMT+3)."""
+    global _last_sent
 
-    if not banlu_quotes:
-        return
-
-    channel = bot.get_channel(BANLU_CHANNEL_ID)
-    if not channel:
-        return
-
-    embed = discord.Embed(
-        title="🏌️ Daily Quote • Ban'Lu",
-        description=random.choice(banlu_quotes),
-        color=discord.Color.gold(),
-    )
-    embed.set_footer(text=datetime.now(TZ).strftime("%d.%m.%Y"))
-
-    await channel.send(embed=embed)
-
-
-# ==================================================
-# One-Time Catch-Up (if bot restarted after 10:00)
-# ==================================================
-async def send_once_if_missed():
-    """
-    If the bot was offline at 10:00, send the Ban’Lu quote once
-    when the bot restarts later in the day.
-    """
-    bot = send_once_if_missed.bot  # injected externally
-
+    bot = send_banlu_daily.bot
     now = datetime.now(TZ)
-    target = now.replace(hour=10, minute=0, second=0, microsecond=0)
+    today = now.date()
 
-    # If it's already past 10:00 → send the quote once
-    if now > target and banlu_quotes:
-        channel = bot.get_channel(BANLU_CHANNEL_ID)
-        if channel:
-            embed = discord.Embed(
-                title="🏌️ Daily Quote • Ban'Lu",
-                description=random.choice(banlu_quotes),
-                color=discord.Color.gold(),
-            )
-            embed.set_footer(text=now.strftime("%d.%m.%Y"))
-            await channel.send(embed=embed)
+    if _last_sent == today:
+        return
+
+    text = _build_message()
+    if not text:
+        return
+
+    await _send_to_channels(bot, text)
+    _last_sent = today
+    logger.info("Ban'Lu quote sent for %s.", today.isoformat())
+
+
+# ==================================================
+# One-Time Recovery (Bot Restart After 10:00)
+# ==================================================
+async def send_banlu_once():
+    global _last_sent
+
+    bot = send_banlu_once.bot
+    now = datetime.now(TZ)
+    scheduled = now.replace(hour=10, minute=0, second=0, microsecond=0)
+
+    if now <= scheduled:
+        return
+
+    today = now.date()
+    if _last_sent == today:
+        return
+
+    text = _build_message()
+    if not text:
+        return
+
+    logger.info("Bot restarted after schedule → sending missed Ban'Lu quote.")
+    await _send_to_channels(bot, text)
+    _last_sent = today

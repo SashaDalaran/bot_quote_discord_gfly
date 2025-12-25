@@ -1,0 +1,111 @@
+# ==================================================
+# daily/birthday/birthday_daily.py — Daily Guild Events Sender
+# ==================================================
+#
+# Posts guild events (Challenges / Heroes / Birthdays) to configured Discord channels.
+#
+# Layer: Daily
+#
+# Responsibilities:
+# - Schedule recurring jobs via discord.ext.tasks
+# - Load/normalize/format content via services/
+# - Send messages to configured channels
+#
+# Boundaries:
+# - Daily jobs are orchestration only: no domain logic here.
+#
+# ==================================================
+
+import logging
+from datetime import datetime, timedelta, timezone, time, date
+from typing import Optional
+
+import discord
+from discord.ext import tasks
+
+from services.channel_ids import parse_chat_ids
+from services.birthday_service import load_birthday_events, get_today_birthday_payload
+from services.birthday_format import format_birthday_message
+
+logger = logging.getLogger("birthday_daily")
+
+TZ = timezone(timedelta(hours=3))  # GMT+3
+
+# Accept one or many channel IDs, comma-separated.
+BIRTHDAY_CHANNEL_IDS = parse_chat_ids("BIRTHDAY_CHANNEL_IDS")
+
+# In-memory guard to avoid double-sends after restarts.
+_last_sent: Optional[date] = None
+
+
+async def _send_to_channels(bot: discord.Client, text: str) -> None:
+    """Send a text message to all configured channels."""
+    if not BIRTHDAY_CHANNEL_IDS:
+        return
+
+    for channel_id in BIRTHDAY_CHANNEL_IDS:
+        channel = bot.get_channel(channel_id)
+        if channel is None:
+            logger.warning("Channel %s not found.", channel_id)
+            continue
+
+        try:
+            await channel.send(text)
+        except Exception:
+            logger.exception("Failed to send guild events message to channel %s.", channel_id)
+
+
+def _build_today_message(today: date) -> Optional[str]:
+    events = load_birthday_events()
+    payload = get_today_birthday_payload(events=events, today=today)
+    if not payload:
+        return None
+    return format_birthday_message(payload=payload, today=today)
+
+
+@tasks.loop(time=time(hour=10, minute=5, tzinfo=TZ))
+async def send_birthday_daily():
+    """Scheduled daily job (10:05 GMT+3)."""
+    global _last_sent
+
+    bot = send_birthday_daily.bot
+    now = datetime.now(TZ)
+    today = now.date()
+
+    if _last_sent == today:
+        return
+
+    text = _build_today_message(today)
+    if not text:
+        return
+
+    await _send_to_channels(bot, text)
+    _last_sent = today
+    logger.info("Guild events sent for %s.", today.isoformat())
+
+
+# ==================================================
+# One-Time Recovery (Bot Restart After 10:05)
+# ==================================================
+async def send_once_if_missed_birthday():
+    """If the bot starts after today's scheduled time, send once."""
+    global _last_sent
+
+    bot = send_once_if_missed_birthday.bot
+    now = datetime.now(TZ)
+    scheduled = now.replace(hour=10, minute=5, second=0, microsecond=0)
+
+    if now <= scheduled:
+        return
+
+    today = now.date()
+    if _last_sent == today:
+        return
+
+    text = _build_today_message(today)
+    if not text:
+        return
+
+    logger.info("Bot restarted after schedule → sending missed guild events.")
+    await _send_to_channels(bot, text)
+    _last_sent = today
