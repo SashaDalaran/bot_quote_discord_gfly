@@ -466,6 +466,50 @@ def format_birthday_message(payload: Dict[str, Any], today: date) -> str:
     return "\n".join(lines)
 
 
+def _render_challenge(ev: dict, today: date) -> list[str]:
+    """Render one challenge event as embed-friendly lines."""
+    owner, task = _split_owner_task(ev.get("name", ""))
+    lines: list[str] = []
+
+    # Owner/title line
+    if owner:
+        lines.append(f"⚡️ {owner}")
+    else:
+        lines.append("⚡️ Challenge")
+
+    # Task line
+    if task:
+        emo = _emoji_for_category(ev.get("category") or [])
+        lines.append(f"↳ {emo} {task}".rstrip())
+
+    # Period + progress for ranged events
+    start, end = _parse_range_dates(ev.get("date", ""), today.year)
+    if start and end:
+        lines.append(f"↳ challenge period 🗓️ {start:%b %d}–{end:%b %d}")
+        prog = _range_progress(start, end, today)
+        if prog:
+            lines.append(f"↳ {prog}")
+    return lines
+
+
+def _render_hero(ev: dict) -> str:
+    name = (ev.get("name") or "").strip()
+    if not name:
+        return "↳ (unnamed hero)"
+    return f"↳ {name}"
+
+
+def _render_birthday(ev: dict) -> str:
+    name = (ev.get("name") or "").strip()
+    if not name:
+        name = "(unknown)"
+    # Try to add a category emoji if present (falls back to 🎂)
+    emo = _emoji_for_category(ev.get("category") or [])
+    if not emo or emo == "🎉":
+        emo = "🎂"
+    return f"{emo} {name}".rstrip()
+
+
 def build_guild_events_embed(
     payload: Dict[str, Any],
     *,

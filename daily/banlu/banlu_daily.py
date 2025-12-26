@@ -9,6 +9,7 @@
 
 import logging
 import os
+import random
 from datetime import datetime, timedelta, timezone, time, date
 from zoneinfo import ZoneInfo
 from typing import Optional
@@ -75,8 +76,8 @@ def _build_embed() -> Optional[discord.Embed]:
         description=text,
         url=BANLU_LINK_URL,
     )
-    # One image per embed: use the Steam header by default (can be overridden via env).
-    embed.set_image(url=BANLU_IMAGE_URL)
+    # One image per embed: randomize by default (can be overridden via BANLU_IMAGE_URL or BANLU_IMAGE_URLS).
+    embed.set_image(url=os.getenv("BANLU_IMAGE_URL") or _choose_banlu_image_url())
     return embed
 
 
