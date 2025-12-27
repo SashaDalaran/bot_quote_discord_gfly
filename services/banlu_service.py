@@ -52,11 +52,13 @@ def get_random_banlu_quote(quotes: List[str]) -> Optional[str]:
     return random.choice(quotes)
 
 
-def format_banlu_message(quote: str) -> str:
-    """Discord-friendly message format."""
-    # Keep it simple: short intro + quote + reference link.
+def format_banlu_message() -> str:
+    quote = get_random_banlu_quote()
+
+    # We intentionally do NOT append an external link (e.g., Wowhead) here.
+    # The Discord embed can carry an image + optional Steam URL separately.
     return (
         "🧙‍♂️ **Ban'Lu** — the Grandmaster of Deception\n"
-        f"💬 *{quote}*\n"
-        f"🔗 {BANLU_WOWHEAD_URL}"
+        f"💬 *{quote}*"
     )
+

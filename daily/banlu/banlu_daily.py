@@ -20,6 +20,62 @@ from discord.ext import tasks
 from services.channel_ids import parse_chat_ids_from_env
 from services.banlu_service import load_banlu_quotes, get_random_banlu_quote, format_banlu_message
 
+import random
+import re
+import time
+import urllib.request
+
+_STEAM_SCREENSHOT_CACHE: list[str] = []
+_STEAM_SCREENSHOT_CACHE_TS: float = 0.0
+
+def _fetch_steam_screenshots() -> list[str]:
+    """Fetch screenshot URLs from the Steam store page (best-effort)."""
+    url = os.getenv(
+        "BANLU_STEAM_URL",
+        "https://store.steampowered.com/app/1888930/The_Last_of_Us_Part_I/",
+    )
+    req = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0 (compatible; Just_Quotes/1.0)",
+            "Accept-Language": "en-US,en;q=0.9",
+        },
+    )
+    with urllib.request.urlopen(req, timeout=7) as resp:
+        html = resp.read().decode("utf-8", errors="ignore")
+
+    urls = set(
+        re.findall(
+            r"https://shared\.fastly\.steamstatic\.com/store_item_assets/steam/apps/1888930/[^\"\s]+?\.jpg[^\"\s]*",
+            html,
+        )
+    )
+    shots = [u for u in urls if "/ss_" in u]
+    shots_1080 = [u for u in shots if "1920x1080" in u]
+    if shots_1080:
+        return sorted(shots_1080)
+    if shots:
+        return sorted(shots)
+    return []
+
+def _choose_banlu_image_url() -> str:
+    """Pick a random image for the Ban'Lu embed (cached)."""
+    global _STEAM_SCREENSHOT_CACHE_TS, _STEAM_SCREENSHOT_CACHE
+    now = time.time()
+
+    # Refresh cache every 12 hours
+    if (now - _STEAM_SCREENSHOT_CACHE_TS) > 12 * 3600 or not _STEAM_SCREENSHOT_CACHE:
+        try:
+            _STEAM_SCREENSHOT_CACHE = _fetch_steam_screenshots()
+            _STEAM_SCREENSHOT_CACHE_TS = now
+        except Exception as e:
+            logger.warning("Steam image fetch failed: %s", e)
+
+    if _STEAM_SCREENSHOT_CACHE:
+        return random.choice(_STEAM_SCREENSHOT_CACHE)
+
+    return "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1888930/header.jpg"
+
 logger = logging.getLogger("banlu_daily")
 
 TZ_NAME = os.getenv("BOT_TZ", "Europe/Moscow")
