@@ -160,6 +160,35 @@ def _range_dates(date_str: str, today: date) -> Optional[Tuple[date, date]]:
     return date(start_y, sm, sd), date(end_y, em, ed)
 
 
+
+
+def _parse_range_dates(rng: str, year: int):
+    """Parse a range date string like 'MM-DD:MM-DD' into (start_date, end_date).
+
+    Returns (None, None) if the format is invalid.
+
+    If the end date is earlier than start date, it's assumed the range crosses
+    into the next year (end_year = year + 1).
+    """
+    if not isinstance(rng, str):
+        return None, None
+    rng = rng.strip()
+    m = re.fullmatch(r"(\d{2})-(\d{2}):(\d{2})-(\d{2})", rng)
+    if not m:
+        return None, None
+    sm, sd, em, ed = map(int, m.groups())
+    try:
+        start = date(year, sm, sd)
+        end = date(year, em, ed)
+    except Exception:
+        return None, None
+    if end < start:
+        try:
+            end = date(year + 1, em, ed)
+        except Exception:
+            return None, None
+    return start, end
+
 def _range_progress(date_str: str, today: date) -> Optional[RangeProgress]:
     """Service function:  range progress."""
     rng = _range_dates(date_str, today)
@@ -484,6 +513,9 @@ def _render_challenge(ev: dict, today: date) -> list[str]:
 
     # Period + progress for ranged events
     start, end = _parse_range_dates(ev.get("date", ""), today.year)
+
+    if not start or not end:
+        return [f"↳ {ev.get('name','(no name)')}", "↳ (invalid date range)"]
     if start and end:
         lines.append(f"↳ challenge period 🗓️ {start:%b %d}–{end:%b %d}")
         prog = _range_progress(start, end, today)

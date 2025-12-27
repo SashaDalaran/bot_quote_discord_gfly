@@ -16,6 +16,9 @@ from typing import List, Optional
 
 from core.settings import BANLU_WOWHEAD_URL
 
+STEAM_APP_URL = "https://store.steampowered.com/app/1888930/The_Last_of_Us_Part_I/"
+
+
 # Optional: link/image for Ban'Lu embeds in Discord.
 # If not provided, we default to the given Steam page (The Last of Us Part I)
 # and its header image. You can override with:
@@ -61,4 +64,3 @@ def format_banlu_message() -> str:
         "🧙‍♂️ **Ban'Lu** — the Grandmaster of Deception\n"
         f"💬 *{quote}*"
     )
-

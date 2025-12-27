@@ -133,7 +133,20 @@ def _build_embed() -> Optional[discord.Embed]:
         url=BANLU_LINK_URL,
     )
     # One image per embed: randomize by default (can be overridden via BANLU_IMAGE_URL or BANLU_IMAGE_URLS).
-    embed.set_image(url=os.getenv("BANLU_IMAGE_URL") or _choose_banlu_image_url())
+    # If BANLU_IMAGE_URL env is set → force that image.
+    # Otherwise we try to pick a random screenshot from the Steam page,
+    # and fall back to the default header image.
+    image_url = os.getenv("BANLU_IMAGE_URL")
+    if not image_url:
+        chooser = globals().get("_choose_banlu_image_url")
+        try:
+            image_url = chooser() if chooser else None
+        except Exception:
+            image_url = None
+        if not image_url:
+            image_url = BANLU_IMAGE_URL
+    if image_url:
+        embed.set_image(url=image_url)
     return embed
 
 
