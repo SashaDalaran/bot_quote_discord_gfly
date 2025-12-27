@@ -1,48 +1,46 @@
 # ==================================================
 # daily/holidays/holidays_daily.py — Daily Holidays Sender
 # ==================================================
+#
+# Posts today's holidays (static + dynamic) to configured Discord channels.
+#
+# Layer: Daily
+# ==================================================
 
 import os
 import logging
-from datetime import datetime, timedelta, timezone, time
+from datetime import datetime, timedelta, timezone, time, date
+from zoneinfo import ZoneInfo
+from typing import Optional
 
 import discord
 from discord.ext import tasks
 
-from commands.holidays_cmd import load_all_holidays
-from core.holidays_flags import COUNTRY_FLAGS, CATEGORY_EMOJIS
+from services.channel_ids import parse_chat_ids_from_env
+from services.holidays_service import get_today_holidays
+from services.holidays_flags import COUNTRY_FLAGS, CATEGORY_EMOJIS
 
 logger = logging.getLogger("holidays_daily")
 
+TZ_NAME = os.getenv("BOT_TZ", "Europe/Moscow")
+try:
+    TZ = ZoneInfo(TZ_NAME)
+except Exception:
+    logger.warning("Invalid BOT_TZ=%s, fallback to UTC", TZ_NAME)
+    TZ = timezone.utc
 
-# ===========================
-# Configuration
-# ===========================
-TZ = timezone(timedelta(hours=3))  # GMT+3 timezone
+# Accept one or many channel IDs, comma-separated.
+HOLIDAYS_CHANNEL_ID = parse_chat_ids_from_env("HOLIDAYS_CHANNEL_ID")
 
-# List of target channels (environment variable)
-HOLIDAYS_CHANNEL_IDS = [
-    cid.strip()
-    for cid in os.getenv("HOLIDAYS_CHANNEL_IDS", "").split(",")
-    if cid.strip().isdigit()
-]
-
-
-# ===========================
-# Utility Helpers
-# ===========================
-def is_today(h) -> bool:
-    """Return True if the holiday occurs today (local TZ)."""
-    today = datetime.now(TZ).date()
-    return h.get("parsed_date") == today
+_last_sent: Optional[date] = None
 
 
 def build_flag(h) -> str:
-    """Return emoji flag for the holiday's country."""
-    country = (
-        h.get("country")
-        or (h.get("countries")[0] if h.get("countries") else "")
-    )
+    """Return first country flag emoji for a holiday entry."""
+    countries = h.get("countries") or []
+    if not countries:
+        return "🌍"
+    country = countries[0]
     return COUNTRY_FLAGS.get(country, "🌍")
 
 
@@ -57,100 +55,82 @@ def build_category_line(h) -> str:
     return f"{emoji} `{main}`" if emoji else f"`{main}`"
 
 
-# ==================================================
-# Daily Scheduled Holidays Task — 10:01 GMT+3
-# ==================================================
+async def _send_embed_to_channels(bot: discord.Client, embed: discord.Embed) -> None:
+    if not HOLIDAYS_CHANNEL_ID:
+        return
+
+    for channel_id in HOLIDAYS_CHANNEL_ID:
+        channel = bot.get_channel(channel_id)
+        if not channel:
+            logger.warning("Channel %s not found.", channel_id)
+            continue
+        try:
+            await channel.send(embed=embed)
+        except Exception:
+            logger.exception("Failed to send holidays embed to channel %s.", channel_id)
+
+
+def _build_today_embed(today: date) -> Optional[discord.Embed]:
+    todays = get_today_holidays(today=today)
+    if not todays:
+        return None
+
+    embed = discord.Embed(
+        title="🎉 Today's Holidays",
+    )
+
+    for h in todays:
+        embed.add_field(
+            name=f"{build_flag(h)} {h.get('name', 'Holiday')}",
+            value=build_category_line(h) or " ",
+            inline=False,
+        )
+    return embed
+
+
 @tasks.loop(time=time(hour=10, minute=1, tzinfo=TZ))
 async def send_holidays_daily():
-    """
-    Send the list of today's holidays daily at 10:01 GMT+3.
-    Bot reference is injected from bot.py.
-    """
-    bot = send_holidays_daily.bot  # injected externally
-    logger.info("Running daily holidays task...")
+    """Scheduled daily job (10:01 GMT+3)."""
+    global _last_sent
 
-    holidays = load_all_holidays()
-    todays = [h for h in holidays if is_today(h)]
+    bot = send_holidays_daily.bot
+    now = datetime.now(TZ)
+    today = now.date()
 
-    if not todays:
+    if _last_sent == today:
+        return
+
+    embed = _build_today_embed(today)
+    if not embed:
         logger.info("No holidays today.")
         return
 
-    for channel_id in HOLIDAYS_CHANNEL_IDS:
-        channel = bot.get_channel(int(channel_id))
-        if not channel:
-            logger.warning(f"Channel {channel_id} not found.")
-            continue
-
-        embed = discord.Embed(
-            title="🎉 Today's Holidays",
-            color=0x00AEEF,
-        )
-
-        for h in todays:
-            embed.add_field(
-                name=f"{build_flag(h)} {h['name']}",
-                value=build_category_line(h) or " ",
-                inline=False,
-            )
-
-        try:
-            await channel.send(embed=embed)
-            logger.info(f"Sent daily holidays to {channel_id}")
-        except Exception as e:
-            logger.exception(
-                f"Failed to send daily holidays to {channel_id}: {e}"
-            )
+    await _send_embed_to_channels(bot, embed)
+    _last_sent = today
+    logger.info("Holidays sent for %s.", today.isoformat())
 
 
 # ==================================================
 # One-Time Recovery (Bot Restart After 10:01)
 # ==================================================
 async def send_once_if_missed_holidays():
-    """
-    If the bot starts after the scheduled time (10:01),
-    send today's holidays once on startup.
-    """
-    bot = send_once_if_missed_holidays.bot  # injected externally
+    global _last_sent
 
+    bot = send_once_if_missed_holidays.bot
     now = datetime.now(TZ)
-    scheduled_time = now.replace(hour=10, minute=1, second=0, microsecond=0)
+    scheduled = now.replace(hour=10, minute=1, second=0, microsecond=0)
 
-    # If it's not past 10:01 yet → do nothing
-    if now <= scheduled_time:
+    if now <= scheduled:
         return
 
-    holidays = load_all_holidays()
-    todays = [h for h in holidays if is_today(h)]
-
-    if not todays:
-        logger.info("No holidays today (missed-task check).")
+    today = now.date()
+    if _last_sent == today:
         return
 
-    logger.info("Bot restarted after 10:01 → sending holiday list once...")
+    embed = _build_today_embed(today)
+    if not embed:
+        return
 
-    for channel_id in HOLIDAYS_CHANNEL_IDS:
-        channel = bot.get_channel(int(channel_id))
-        if not channel:
-            logger.warning(f"Channel {channel_id} not found.")
-            continue
-
-        embed = discord.Embed(
-            title="🎉 Today's Holidays",
-            color=0x00AEEF,
-        )
-
-        for h in todays:
-            embed.add_field(
-                name=f"{build_flag(h)} {h['name']}",
-                value=build_category_line(h) or " ",
-                inline=False,
-            )
-
-        try:
-            await channel.send(embed=embed)
-            logger.info(f"Sent missed holidays to {channel_id}")
-        except Exception as e:
-            logger.exception(
-                f"Failed to send missed holidays to {channel_id}: {e}"
-            )
+    logger.info("Bot restarted after schedule → sending missed holidays.")
+    await _send_embed_to_channels(bot, embed)
+    _last_sent = today

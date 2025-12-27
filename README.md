@@ -58,7 +58,7 @@ pip install -r requirements.txt
 ```sh
 export DISCORD_BOT_TOKEN="your-token"
 export BANLU_CHANNEL_ID="123456"
-export HOLIDAYS_CHANNEL_IDS="111,222,333"
+export HOLIDAYS_CHANNEL_ID="111,222,333"
 ```
 
 ## 4. Start the bot
@@ -198,7 +198,7 @@ If the bot was offline at 10:01, the broadcast executes once at startup.
 |------------------------|---------------------------------------------|
 | `DISCORD_BOT_TOKEN`    | Discord bot token                           |
 | `BANLU_CHANNEL_ID`     | Channel ID for Ban’Lu daily quote           |
-| `HOLIDAYS_CHANNEL_IDS` | Comma-separated list of broadcast channels  |
+| `HOLIDAYS_CHANNEL_ID` | Comma-separated list of broadcast channels  |
 
 Example:
 ```sh

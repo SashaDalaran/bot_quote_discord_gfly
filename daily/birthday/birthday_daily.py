@@ -1,152 +1,104 @@
 # ==================================================
-# daily/birthday/birthday_daily.py — Daily Birthday / Challenge Sender
+# daily/birthday/birthday_daily.py — Daily Guild Events Sender
+# ==================================================
+#
+# Posts guild events (Challenges / Heroes / Birthdays) to configured Discord channels.
+#
+# Layer: Daily
+#
+# Responsibilities:
+# - Schedule recurring jobs via discord.ext.tasks
+# - Load/normalize/format content via services/
+# - Send messages to configured channels
+#
+# Boundaries:
+# - Daily jobs are orchestration only: no domain logic here.
+#
 # ==================================================
 
-import os
-import json
 import logging
+import os
 from datetime import datetime, timedelta, timezone, time, date
+from zoneinfo import ZoneInfo
+from typing import Optional
 
 import discord
 from discord.ext import tasks
 
-from core.holidays_flags import COUNTRY_FLAGS, CATEGORY_EMOJIS
+from services.channel_ids import parse_chat_ids_from_env
+from services.birthday_service import load_birthday_events, get_today_birthday_payload
+from services.birthday_format import build_guild_events_embed
 
 logger = logging.getLogger("birthday_daily")
 
-# ===========================
-# Configuration
-# ===========================
-TZ = timezone(timedelta(hours=3))  # GMT+3
+TZ_NAME = os.getenv("BOT_TZ", "Europe/Moscow")
+try:
+    TZ = ZoneInfo(TZ_NAME)
+except Exception:
+    logger.warning("Invalid BOT_TZ=%s, fallback to UTC", TZ_NAME)
+    TZ = timezone.utc
 
-BIRTHDAY_CHANNEL_IDS = [
-    cid.strip()
-    for cid in os.getenv("BIRTHDAY_CHANNEL_IDS", "").split(",")
-    if cid.strip().isdigit()
-]
+# Accept one or many channel IDs, comma-separated.
+BIRTHDAY_CHANNEL_ID = parse_chat_ids_from_env("BIRTHDAY_CHANNEL_ID")
 
-BIRTHDAY_DATA_PATH = os.getenv(
-    "BIRTHDAY_DATA_PATH",
-    "data/birthday.json",
-)
-
-# ===========================
-# Helpers — Date logic
-# ===========================
-def is_today_in_date(date_str: str, today: date) -> bool:
-    """
-    Supports:
-    - MM-DD
-    - MM-DD:MM-DD (including year wrap)
-    """
-    if ":" not in date_str:
-        m, d = map(int, date_str.split("-"))
-        return today.month == m and today.day == d
-
-    start_str, end_str = date_str.split(":")
-    sm, sd = map(int, start_str.split("-"))
-    em, ed = map(int, end_str.split("-"))
-
-    start = date(today.year, sm, sd)
-    end = date(today.year, em, ed)
-
-    # wrap through New Year
-    if end < start:
-        return today >= start or today <= end
-
-    return start <= today <= end
+# In-memory guard to avoid double-sends after restarts.
+_last_sent: Optional[date] = None
 
 
-# ===========================
-# Data loading
-# ===========================
-def load_birthdays() -> list[dict]:
-    try:
-        with open(BIRTHDAY_DATA_PATH, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception as e:
-        logger.exception(f"Failed to load birthday data: {e}")
-        return []
-
-
-def filter_events(events: list[dict], category: str, today: date) -> list[dict]:
-    return [
-        e for e in events
-        if category in e.get("category", [])
-        and is_today_in_date(e.get("date", ""), today)
-    ]
-
-
-# ===========================
-# Message formatters
-# ===========================
-def format_challenge_message() -> str:
-    emoji = CATEGORY_EMOJIS.get("Сhallenge", "🔥")
-    return f"{emoji} **ЧЕЛЕНДЖ МУРЛОКОВ В АКТИВЕ!**"
-
-
-def format_hero_message(event: dict) -> str:
-    emoji = CATEGORY_EMOJIS.get("Accept", "🏆")
-    country = event.get("countries", [""])[0]
-    flag = COUNTRY_FLAGS.get(country, "🏆")
-    return f"{emoji} {flag} **ГЕРОЙ МУРЛОКОВ:** {event['name']}"
-
-
-def format_birthday_message(events: list[dict]) -> str:
-    emoji = CATEGORY_EMOJIS.get("Birthday", "🎂")
-    names = ", ".join(e["name"] for e in events)
-    return f"{emoji} **ДНИ РОЖДЕНИЯ МУРЛОКОВ СЕГОДНЯ:**\n{names}"
-
-
-# ==================================================
-# Daily Scheduled Task — 10:05 GMT+3
-# ==================================================
-@tasks.loop(time=time(hour=10, minute=5, tzinfo=TZ))
-async def send_birthday_daily():
-    bot = send_birthday_daily.bot
-    logger.info("Running birthday daily task...")
-
-    today = datetime.now(TZ).date()
-    events = load_birthdays()
-
-    challenges =s = filter_events(events, "Сhallenge", today)
-    heroes = filter_events(events, "Accept", today)
-    birthdays = filter_events(events, "Birthday", today)
-
-    messages: list[str] = []
-
-    if challenges:
-        messages.append(format_challenge_message())
-
-    for hero in heroes:
-        messages.append(format_hero_message(hero))
-
-    if birthdays:
-        messages.append(format_birthday_message(birthdays))
-
-    if not messages:
-        logger.info("No birthday / challenge events today.")
+async def _send_to_channels(bot: discord.Client, *, embed: discord.Embed) -> None:
+    """Send an embed to all configured channels."""
+    if not BIRTHDAY_CHANNEL_ID:
         return
 
-    for channel_id in BIRTHDAY_CHANNEL_IDS:
-        channel = bot.get_channel(int(channel_id))
-        if not channel:
-            logger.warning(f"Channel {channel_id} not found.")
+    for channel_id in BIRTHDAY_CHANNEL_ID:
+        channel = bot.get_channel(channel_id)
+        if channel is None:
+            logger.warning("Channel %s not found.", channel_id)
             continue
 
-        for msg in messages:
-            try:
-                await channel.send(msg)
-            except Exception as e:
-                logger.exception(f"Failed to send birthday message: {e}")
+        try:
+            await channel.send(embed=embed)
+        except Exception:
+            logger.exception("Failed to send guild events message to channel %s.", channel_id)
+
+
+def _build_today_embed(today: date) -> Optional[discord.Embed]:
+    events = load_birthday_events()
+    payload = get_today_birthday_payload(events=events, today=today)
+    if not payload:
+        return None
+    return build_guild_events_embed(payload=payload, today=today)
+
+
+@tasks.loop(time=time(hour=10, minute=5, tzinfo=TZ))
+async def send_birthday_daily():
+    """Scheduled daily job (10:05 GMT+3)."""
+    global _last_sent
+
+    bot = send_birthday_daily.bot
+    now = datetime.now(TZ)
+    today = now.date()
+
+    if _last_sent == today:
+        return
+
+    embed = _build_today_embed(today)
+    if not embed:
+        return
+
+    await _send_to_channels(bot, embed=embed)
+    _last_sent = today
+    logger.info("Guild events sent for %s.", today.isoformat())
 
 
 # ==================================================
 # One-Time Recovery (Bot Restart After 10:05)
 # ==================================================
 async def send_once_if_missed_birthday():
-    bot = send_once_if_missed_birthday.bot
+    """If the bot starts after today's scheduled time, send once."""
+    global _last_sent
 
+    bot = send_once_if_missed_birthday.bot
     now = datetime.now(TZ)
     scheduled = now.replace(hour=10, minute=5, second=0, microsecond=0)
 
@@ -154,35 +106,13 @@ async def send_once_if_missed_birthday():
         return
 
     today = now.date()
-    events = load_birthdays()
-
-    challenges = filter_events(events, "Сhallenge", today)
-    heroes = filter_events(events, "Accept", today)
-    birthdays = filter_events(events, "Birthday", today)
-
-    messages: list[str] = []
-
-    if challenges:
-        messages.append(format_challenge_message())
-
-    for hero in heroes:
-        messages.append(format_hero_message(hero))
-
-    if birthdays:
-        messages.append(format_birthday_message(birthdays))
-
-    if not messages:
+    if _last_sent == today:
         return
 
-    logger.info("Bot restarted after schedule → sending birthday messages once")
+    embed = _build_today_embed(today)
+    if not embed:
+        return
 
-    for channel_id in BIRTHDAY_CHANNEL_IDS:
-        channel = bot.get_channel(int(channel_id))
-        if not channel:
-            continue
-
-        for msg in messages:
-            try:
-                await channel.send(msg)
-            except Exception:
-                logger.exception("Failed to send missed birthday message")
+    logger.info("Bot restarted after schedule → sending missed guild events.")
+    await _send_to_channels(bot, embed=embed)
+    _last_sent = today

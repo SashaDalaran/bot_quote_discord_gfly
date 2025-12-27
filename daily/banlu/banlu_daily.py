@@ -22,7 +22,7 @@ from services.banlu_service import load_banlu_quotes, get_random_banlu_quote, fo
 
 import random
 import re
-import time
+import time as time_module
 import urllib.request
 
 _STEAM_SCREENSHOT_CACHE: list[str] = []
@@ -61,7 +61,7 @@ def _fetch_steam_screenshots() -> list[str]:
 def _choose_banlu_image_url() -> str:
     """Pick a random image for the Ban'Lu embed (cached)."""
     global _STEAM_SCREENSHOT_CACHE_TS, _STEAM_SCREENSHOT_CACHE
-    now = time.time()
+    now = time_module.time()
 
     # Refresh cache every 12 hours
     if (now - _STEAM_SCREENSHOT_CACHE_TS) > 12 * 3600 or not _STEAM_SCREENSHOT_CACHE:
@@ -133,20 +133,7 @@ def _build_embed() -> Optional[discord.Embed]:
         url=BANLU_LINK_URL,
     )
     # One image per embed: randomize by default (can be overridden via BANLU_IMAGE_URL or BANLU_IMAGE_URLS).
-    # If BANLU_IMAGE_URL env is set → force that image.
-    # Otherwise we try to pick a random screenshot from the Steam page,
-    # and fall back to the default header image.
-    image_url = os.getenv("BANLU_IMAGE_URL")
-    if not image_url:
-        chooser = globals().get("_choose_banlu_image_url")
-        try:
-            image_url = chooser() if chooser else None
-        except Exception:
-            image_url = None
-        if not image_url:
-            image_url = BANLU_IMAGE_URL
-    if image_url:
-        embed.set_image(url=image_url)
+    embed.set_image(url=os.getenv("BANLU_IMAGE_URL") or _choose_banlu_image_url())
     return embed
 
 

@@ -26,6 +26,61 @@ from typing import Any, Dict, List, Optional, Tuple
 import discord
 
 from services.birthday_service import _norm_token  # reuse normalization (avoid duplicates)
+# ------------------------------------------------------------------
+# Date range helpers
+# ------------------------------------------------------------------
+
+_MMDD_RE = re.compile(r"^\s*(\d{1,2})\s*[-/\.]\s*(\d{1,2})\s*$")
+
+
+def _parse_mmdd(mmdd: str) -> tuple[int, int]:
+    """Parse 'MM-DD' (or 'MM/DD') into (month, day)."""
+    m = _MMDD_RE.match(mmdd or "")
+    if not m:
+        raise ValueError(f"Bad MM-DD date: {mmdd!r}")
+    month = int(m.group(1))
+    day = int(m.group(2))
+    return month, day
+
+
+def _parse_range_dates(rng: str, today: date) -> tuple[date, date]:
+    """Parse a range like 'MM-DD:MM-DD' into concrete dates around *today*.
+
+    Ranges may cross a year boundary (e.g. '12-19:01-20'). We resolve years
+    using *today* so that the returned [start, end] window is the one that
+    actually contains the current season around today's calendar position.
+    """
+    rng = (rng or "").strip()
+    if not rng:
+        raise ValueError("Empty date range")
+
+    if ":" not in rng:
+        m, d = _parse_mmdd(rng)
+        dt = date(today.year, m, d)
+        return dt, dt
+
+    left, right = [p.strip() for p in rng.split(":", 1)]
+    sm, sd = _parse_mmdd(left)
+    em, ed = _parse_mmdd(right)
+
+    start_md = sm * 100 + sd
+    end_md = em * 100 + ed
+    today_md = today.month * 100 + today.day
+
+    # Cross-year window (end earlier than start on calendar).
+    if end_md < start_md:
+        # If we're in Jan/Feb/... up to end_md, the season started last year.
+        if today_md <= end_md:
+            start_year = today.year - 1
+            end_year = today.year
+        else:
+            start_year = today.year
+            end_year = today.year + 1
+    else:
+        start_year = today.year
+        end_year = today.year
+
+    return date(start_year, sm, sd), date(end_year, em, ed)
 # IMPORTANT:
 # - Do NOT modify services/holidays_flags.py (user-managed mapping).
 # - That module may or may not expose UI_EMOJIS depending on the deployed version.
@@ -159,35 +214,6 @@ def _range_dates(date_str: str, today: date) -> Optional[Tuple[date, date]]:
 
     return date(start_y, sm, sd), date(end_y, em, ed)
 
-
-
-
-def _parse_range_dates(rng: str, year: int):
-    """Parse a range date string like 'MM-DD:MM-DD' into (start_date, end_date).
-
-    Returns (None, None) if the format is invalid.
-
-    If the end date is earlier than start date, it's assumed the range crosses
-    into the next year (end_year = year + 1).
-    """
-    if not isinstance(rng, str):
-        return None, None
-    rng = rng.strip()
-    m = re.fullmatch(r"(\d{2})-(\d{2}):(\d{2})-(\d{2})", rng)
-    if not m:
-        return None, None
-    sm, sd, em, ed = map(int, m.groups())
-    try:
-        start = date(year, sm, sd)
-        end = date(year, em, ed)
-    except Exception:
-        return None, None
-    if end < start:
-        try:
-            end = date(year + 1, em, ed)
-        except Exception:
-            return None, None
-    return start, end
 
 def _range_progress(date_str: str, today: date) -> Optional[RangeProgress]:
     """Service function:  range progress."""
@@ -512,10 +538,7 @@ def _render_challenge(ev: dict, today: date) -> list[str]:
         lines.append(f"↳ {emo} {task}".rstrip())
 
     # Period + progress for ranged events
-    start, end = _parse_range_dates(ev.get("date", ""), today.year)
-
-    if not start or not end:
-        return [f"↳ {ev.get('name','(no name)')}", "↳ (invalid date range)"]
+    start, end = _parse_range_dates(ev.get("date", ""), today)
     if start and end:
         lines.append(f"↳ challenge period 🗓️ {start:%b %d}–{end:%b %d}")
         prog = _range_progress(start, end, today)
