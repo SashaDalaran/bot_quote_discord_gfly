@@ -19,7 +19,7 @@
 
 ---
 
-# ✨ Overview
+# ✨ Overview!
 
 `bot-quote-discord` is a lightweight Discord bot featuring:
 
