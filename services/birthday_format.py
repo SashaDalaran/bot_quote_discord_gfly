@@ -537,14 +537,18 @@ def _render_challenge(ev: dict, today: date) -> list[str]:
         emo = _emoji_for_category(ev.get("category") or [])
         lines.append(f"↳ {emo} {task}".rstrip())
 
-    # Period + progress for ranged events
-    start, end = _parse_range_dates(ev.get("date", ""), today)
-    if start and end:
-        lines.append(f"↳ challenge period 🗓️ {start:%b %d}–{end:%b %d}")
-        prog = _range_progress(start, end, today)
-        if prog:
-            lines.append(f"↳ {prog}")
+    # Period + progress for ranged events (✅ фикс сигнатуры)
+    date_str = str(ev.get("date", ""))
+    prog = _range_progress(date_str, today)
+    if prog:
+        lines.append(f"↳ challenge period 🗓️ {prog.start:%b %d}–{prog.end:%b %d}")
+        lines.append(
+            f"↳ Currently day {prog.day_index} out of {prog.remaining_days} {_days_word(prog.remaining_days)} remaining "
+            f"(day {prog.day_index} of {prog.total_days})"
+        )
+
     return lines
+
 
 
 def _render_hero(ev: dict) -> str:
