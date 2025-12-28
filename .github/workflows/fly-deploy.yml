@@ -20,5 +20,3 @@ jobs:
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
-          BANLU_CHANNEL_ID: ${{ secrets.BANLU_CHANNEL_ID }}
