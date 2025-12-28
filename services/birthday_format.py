@@ -544,7 +544,6 @@ def _render_challenge(ev: dict, today: date) -> list[str]:
         lines.append(f"↳ challenge period 🗓️ {prog.start:%b %d}–{prog.end:%b %d}")
         lines.append(
             f"↳ Currently day {prog.day_index} out of {prog.remaining_days} {_days_word(prog.remaining_days)} remaining "
-            f"(day {prog.day_index} of {prog.total_days})"
         )
 
     return lines
