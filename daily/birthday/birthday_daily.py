@@ -70,7 +70,7 @@ def _build_today_embed(today: date) -> Optional[discord.Embed]:
     return build_guild_events_embed(payload=payload, today=today)
 
 
-@tasks.loop(time=time(hour=10, minute=5, tzinfo=TZ))
+@tasks.loop(time=time(hour=10, minute=2, tzinfo=TZ))
 async def send_birthday_daily():
     """Scheduled daily job (10:05 GMT+3)."""
     global _last_sent
