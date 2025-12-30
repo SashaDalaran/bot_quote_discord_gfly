@@ -609,7 +609,7 @@ def build_guild_events_embed(
     if heroes:
         hero_lines: List[str] = []
         for h in heroes:
-            hero_lines.extend(_render_hero(h))
+            hero_lines.append(_render_hero(h))
         hero_value = "\n".join([l for l in hero_lines if l != ""]).strip() or "↳ no heroes found"
     else:
         hero_value = "↳ no heroes found"
@@ -620,7 +620,7 @@ def build_guild_events_embed(
     if birthdays:
         b_lines: List[str] = []
         for b in birthdays:
-            b_lines.extend(_render_birthday(b))
+            b_lines.append(_render_birthday(b))
         b_value = "\n".join([l for l in b_lines if l != ""]).strip() or "↳ no birthdays found"
     else:
         b_value = "↳ no birthdays found"
