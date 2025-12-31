@@ -1,0 +1,22 @@
+[
+  { "date": "01-01", "name": "Apple Gifting Day", "category": ["Food & Beverage"], "countries": ["world"] },
+  { "date": "01-01", "name": "Commitment Day", "category": ["Relationship"], "countries": ["world"] },
+  { "date": "01-01", "name": "Copyright Law Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "01-01", "name": "Ellis Island Day", "category": ["Federal"], "countries": ["usa"] },
+  { "date": "01-01", "name": "Euro Day", "category": ["Special Interest"], "countries": ["eu"] },
+  { "date": "01-01", "name": "Global Family Day", "category": ["Relationship"], "countries": ["world"] },
+  { "date": "01-01", "name": "Haitian Independence Day", "category": ["Federal"], "countries": ["haiti"] },
+  { "date": "01-01", "name": "Public Domain Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
+  { "date": "01-01", "name": "National Bloody Mary Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "01-01", "name": "National Hangover Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "01-01", "name": "National Shepherd Day", "category": ["Fun"], "countries": ["world"] },
+  { "date": "01-01", "name": "New Year's Day", "category": ["Federal"], "countries": ["world"] },
+  { "date": "01-01", "name": "New Year’s Dishonor List Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "01-01", "name": "Ring a Bell Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "01-01", "name": "Solemnity of Mary", "category": ["Religious"], "countries": ["catholic"] },
+  { "date": "01-01", "name": "Sudan Independence Day", "category": ["Federal"], "countries": ["sudan"] },
+  { "date": "01-01", "name": "Triumph of the Revolution", "category": ["Federal"], "countries": ["cuba"] },
+  { "date": "01-01", "name": "Universal Hour of Peace", "category": ["Cause"], "countries": ["world"] },
+  { "date": "01-01", "name": "World Day of Peace", "category": ["Cause"], "countries": ["world"] },
+  { "date": "01-01", "name": "Z Day", "category": ["Fun"], "countries": ["world"] }
+]
