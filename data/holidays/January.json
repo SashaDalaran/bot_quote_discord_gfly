@@ -18,5 +18,87 @@
   { "date": "01-01", "name": "Triumph of the Revolution", "category": ["Federal"], "countries": ["cuba"] },
   { "date": "01-01", "name": "Universal Hour of Peace", "category": ["Cause"], "countries": ["world"] },
   { "date": "01-01", "name": "World Day of Peace", "category": ["Cause"], "countries": ["world"] },
-  { "date": "01-01", "name": "Z Day", "category": ["Fun"], "countries": ["world"] }
+  { "date": "01-01", "name": "Z Day", "category": ["Fun"], "countries": ["world"] },
+
+
+  { "date": "01-01", "name": "Apple Gifting Day", "category": ["Food & Beverage"], "countries": ["world"] },
+  { "date": "01-01", "name": "Commitment Day", "category": ["Relationship"], "countries": ["world"] },
+  { "date": "01-01", "name": "Copyright Law Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "01-01", "name": "Ellis Island Day", "category": ["Federal"], "countries": ["usa"] },
+  { "date": "01-01", "name": "Euro Day", "category": ["Special Interest"], "countries": ["eu"] },
+  { "date": "01-01", "name": "Global Family Day", "category": ["Relationship"], "countries": ["world"] },
+  { "date": "01-01", "name": "Haitian Independence Day", "category": ["Federal"], "countries": ["haiti"] },
+  { "date": "01-01", "name": "Public Domain Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
+  { "date": "01-01", "name": "National Bloody Mary Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "01-01", "name": "National Hangover Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "01-01", "name": "National Shepherd Day", "category": ["Fun"], "countries": ["world"] },
+  { "date": "01-01", "name": "New Year's Day", "category": ["Federal"], "countries": ["world"] },
+  { "date": "01-01", "name": "New Year’s Dishonor List Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "01-01", "name": "Ring a Bell Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "01-01", "name": "Solemnity of Mary", "category": ["Religious"], "countries": ["catholic"] },
+  { "date": "01-01", "name": "Sudan Independence Day", "category": ["Federal"], "countries": ["sudan"] },
+  { "date": "01-01", "name": "Triumph of the Revolution", "category": ["Federal"], "countries": ["cuba"] },
+  { "date": "01-01", "name": "Universal Hour of Peace", "category": ["Cause"], "countries": ["world"] },
+  { "date": "01-01", "name": "World Day of Peace", "category": ["Cause"], "countries": ["world"] },
+  { "date": "01-01", "name": "Z Day", "category": ["Fun"], "countries": ["world"] },
+
+  
+  { "date": "01-03", "name": "Drinking Straw Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "01-03", "name": "Festival of Sleep Day", "category": ["Health"], "countries": ["world"] },
+  { "date": "01-03", "name": "Fruitcake Toss Day", "category": ["Food & Beverage"], "countries": ["world"] },
+  { "date": "01-03", "name": "Humiliation Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "01-03", "name": "International Mind-Body Wellness Day", "category": ["Health"], "countries": ["world"] },
+  { "date": "01-03", "name": "JRR Tolkien Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
+  { "date": "01-03", "name": "Memento Mori \"Remember You Die\" Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "01-03", "name": "National Chocolate Covered Cherry Day", "category": ["Food & Beverage"], "countries": ["world"] },
+  { "date": "01-03", "name": "National Write to Congress Day", "category": ["Cause"], "countries": ["usa"] },
+  { "date": "01-03", "name": "Women Rock! Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
+
+
+  { "date": "01-04", "name": "Dimpled Chad Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "01-04", "name": "Free Flower Basket Day", "category": ["Relationship"], "countries": ["world"] },
+  { "date": "01-04", "name": "National CanDo Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "01-04", "name": "National Clara Day", "category": ["Fun"], "countries": ["world"] },
+  { "date": "01-04", "name": "National Missouri Day", "category": ["Federal"], "countries": ["usa"] },
+  { "date": "01-04", "name": "National Spaghetti Day", "category": ["Food & Beverage"], "countries": ["world"] },
+  { "date": "01-04", "name": "National Trivia Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "01-04", "name": "Pop Music Chart Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
+  { "date": "01-04", "name": "Tom Thumb Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
+  { "date": "01-04", "name": "Weigh-In Day", "category": ["Health"], "countries": ["world"] },
+  { "date": "01-04", "name": "World Braille Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "01-04", "name": "World Hypnotism Day", "category": ["Special Interest"], "countries": ["world"] },
+
+
+  { "date": "01-05", "name": "Carver Day", "category": ["Appreciation"], "countries": ["usa"] },
+  { "date": "01-05", "name": "National Bird Day", "category": ["Animal"], "countries": ["world"] },
+  { "date": "01-05", "name": "National Day of Dialogue", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "01-05", "name": "National Ellen Day", "category": ["Fun"], "countries": ["world"] },
+  { "date": "01-05", "name": "National Keto Day", "category": ["Health"], "countries": ["world"] },
+  { "date": "01-05", "name": "National Screenwriters Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
+  { "date": "01-05", "name": "National Whipped Cream Day", "category": ["Food & Beverage"], "countries": ["world"] },
+  { "date": "01-05", "name": "Twelfth Night", "category": ["Religious"], "countries": ["christian"] },
+
+  
+  { "date": "01-06", "name": "Apple Tree Day", "category": ["Food & Beverage"], "countries": ["world"] },
+  { "date": "01-06", "name": "Armenian Christmas", "category": ["Religious"], "countries": ["armenia"] },
+  { "date": "01-06", "name": "Day of Los Reyes", "category": ["Religious"], "countries": ["world"] },
+  { "date": "01-06", "name": "Dry Bean Day", "category": ["Food & Beverage"], "countries": ["world"] },
+  { "date": "01-06", "name": "Epiphany", "category": ["Religious"], "countries": ["christian"] },
+  { "date": "01-06", "name": "National Bean Day", "category": ["Food & Beverage"], "countries": ["world"] },
+  { "date": "01-06", "name": "National Cuddle Day", "category": ["Relationship"], "countries": ["world"] },
+  { "date": "01-06", "name": "National Davis Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "01-06", "name": "National Samantha Day", "category": ["Fun"], "countries": ["world"] },
+  { "date": "01-06", "name": "National Smith Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "01-06", "name": "National Take a Poet to Lunch Day", "category": ["Appreciation"], "countries": ["world"] },
+  { "date": "01-06", "name": "National Take Down the Christmas Tree Day", "category": ["Cultural"], "countries": ["world"] },
+  { "date": "01-06", "name": "National Walker’s Shortbread Day", "category": ["Food & Beverage"], "countries": ["world"] },
+  { "date": "01-06", "name": "Three Kings Day", "category": ["Religious"], "countries": ["christian"] },
+  { "date": "01-06", "name": "Uruguay Children’s Day / Epiphany", "category": ["Special Interest"], "countries": ["uruguay"] },
+  { "date": "01-06", "name": "World Day of War Orphans", "category": ["Cause"], "countries": ["world"] }
+
+
 ]
+
+
+
+
