@@ -489,5 +489,5 @@ Safe improvements = minimal risk, no refactor avalanche:
 ---
 
 <p align="center">
-  <b>Murloc Edition 🐸 — Mrrglglglgl!</b>
+  <b>Murloc Edition 🐸 — Mrrglglglgl</b>
 </p>
