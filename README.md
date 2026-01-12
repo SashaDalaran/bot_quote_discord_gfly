@@ -173,15 +173,18 @@ bot_quote_discord_gfly/
 │       ├── __init__.py
 │       └── birthday_daily.py     # birthdays/guild events (see note in Daily Jobs)
 │
-├── data/                         # content & datasets
-│   ├── holidays/                 # holiday JSON packs
+├── data/                        # Content & datasets
+│   ├── holidays/                  # holiday JSON packs
 │   │   └── December.json
-│   ├── birthday.json             # guild events dataset
-│   ├── murloc_starts.txt
-│   ├── murloc_middles.txt
-│   ├── murloc_endings.txt
-│   ├── quotersbanlu.txt
-│   └── quotes.txt
+│   │   └── January.json
+|   |   └── February.json
+│   ├── __init__.py             # package marker
+│   ├── birthday.json           # guild events dataset
+│   ├── murloc_endings.txt      # Murloc AI dataset
+│   ├── murloc_middles.txt      # Murloc AI dataset
+│   ├── murloc_starts.txt       # Murloc AI dataset
+│   ├── quotersbanlu.txt        # Ban'Lu quotes dataset
+│   └── quotes.txt              # quotes dataset
 │
 ├── timers.json                   # persistent store (created at runtime, safe to commit-ignore)
 │
