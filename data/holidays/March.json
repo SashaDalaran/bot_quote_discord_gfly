@@ -1,0 +1,11 @@
+[
+  { "date": "03-01", "name": "St. David's Day", "category": ["Cultural"], "countries": ["wales","uk"] },
+  { "date": "03-01", "name": "Zero Discrimination Day", "category": ["Cause"], "countries": ["world"] },
+  { "date": "03-01", "name": "World Civil Defense Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "03-01", "name": "World Compliment Day", "category": ["Relationship"], "countries": ["world"] },
+  { "date": "03-01", "name": "Self-Injury Awareness Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "03-01", "name": "Endometriosis Awareness Day", "category": ["Health"], "countries": ["world"] },
+  { "date": "03-01", "name": "Peace Corps Day", "category": ["Appreciation"], "countries": ["usa"] },
+  { "date": "03-01", "name": "National Peanut Butter Lover's Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "03-01", "name": "National Pig Day", "category": ["Fun"], "countries": ["usa"] }
+]

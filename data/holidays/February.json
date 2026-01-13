@@ -108,7 +108,231 @@
   { "date": "02-05", "name": "Unity Day (Burundi)", "category": ["Federal"], "countries": ["burundi"] },
   { "date": "02-05", "name": "Western Monarch Day", "category": ["Animal"], "countries": ["world"] },
   { "date": "02-05", "name": "World Animal Reiki Day", "category": ["Animal"], "countries": ["world"] },
-  { "date": "02-05", "name": "World Nutella Day", "category": ["Food & Beverage"], "countries": ["world"] }
+  { "date": "02-05", "name": "World Nutella Day", "category": ["Food & Beverage"], "countries": ["world"] },
+
+
+  { "date": "02-06", "name": "Bubblegum Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-06", "name": "International Day of Zero Tolerance to Female Genital Mutilation", "category": ["Cause"], "countries": ["world"] },
+  { "date": "02-06", "name": "National Chopsticks Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-06", "name": "National Frozen Yogurt Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-06", "name": "National Lame Duck Day", "category": ["Federal"], "countries": ["usa"] },
+  { "date": "02-06", "name": "National Valentine Shopping Reminder Day", "category": ["Fun"], "countries": ["usa"] },
+  { "date": "02-06", "name": "National Woman’s Heart Day", "category": ["Health"], "countries": ["usa"] },
+  { "date": "02-06", "name": "Reclaim Social Day", "category": ["Cause"], "countries": ["world"] },
+  { "date": "02-06", "name": "Ronald Reagan Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-06", "name": "Sami National Day", "category": ["Cultural"], "countries": ["norway", "sweden", "finland", "russia"] },
+  { "date": "02-06", "name": "Waitangi Day", "category": ["Federal"], "countries": ["new_zealand"] },
+  { "date": "02-06", "name": "Working Naked Day", "category": ["Special Interest"], "countries": ["world"] },
+
+
+  { "date": "02-07", "name": "Grenada Independence Day", "category": ["Federal"], "countries": ["grenada"] },
+  { "date": "02-07", "name": "Ménière's Disease Awareness Day", "category": ["Health"], "countries": ["world"] },
+  { "date": "02-07", "name": "National Black HIV/AIDS Awareness Day", "category": ["Health"], "countries": ["usa"] },
+  { "date": "02-07", "name": "National Fettuccine Alfredo Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-07", "name": "National Periodic Table Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "02-07", "name": "National Send a Card to a Friend Day", "category": ["Relationship"], "countries": ["usa"] },
+  { "date": "02-07", "name": "Pisco Sour Day", "category": ["Food & Beverage"], "countries": ["peru", "chile"] },
+  { "date": "02-07", "name": "Rose Day", "category": ["Relationship"], "countries": ["india", "world"] },
+  { "date": "02-07", "name": "Wave All Your Fingers at Your Neighbor Day", "category": ["Fun"], "countries": ["usa"] },
+
+
+  { "date": "02-08", "name": "Molasses Bar Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-08", "name": "National Boy Scout Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-08", "name": "National Iowa Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-08", "name": "Prešeren Day", "category": ["Federal"], "countries": ["slovenia"] },
+  { "date": "02-08", "name": "Propose Day", "category": ["Relationship"], "countries": ["india", "world"] },
+
+
+  {"date":"02-09","name":"Chocolate Day","category":["Food & Beverage"],"countries":["india","world"]},
+  {"date":"02-09","name":"National Pizza Day","category":["Food & Beverage"],"countries":["usa"]},
+  {"date":"02-09","name":"Pizza Pie Day","category":["Food & Beverage"],"countries":["usa"]},
+  {"date":"02-09","name":"Read In The Bathtub Day","category":["Special Interest"],"countries":["usa"]},
+  {"date":"02-09","name":"St. Maroun Day","category":["Religious"],"countries":["lebanon"]},
+
+
+  { "date": "02-10", "name": "All the News That's Fit to Print Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-10", "name": "Children's Hospice Day", "category": ["Cause"], "countries": ["world"] },
+  { "date": "02-10", "name": "Extraterrestrial Culture Day", "category": ["Fun"], "countries": ["world"] },
+  { "date": "02-10", "name": "Feast of St. Paul's Shipwreck", "category": ["Special Interest"], "countries": ["malta"] },
+  { "date": "02-10", "name": "International Cribbage Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "02-10", "name": "National Cream Cheese Brownie Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-10", "name": "National Flannel Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-10", "name": "National Home Warranty Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-10", "name": "National Julio Day", "category": ["Fun"], "countries": ["world"] },
+  { "date": "02-10", "name": "National Umbrella Day", "category": ["Arts & Entertainment"], "countries": ["usa"] },
+  { "date": "02-10", "name": "Plimsoll Day", "category": ["Cause"], "countries": ["world"] },
+  { "date": "02-10", "name": "Qatar Sports Day", "category": ["Special Interest"], "countries": ["qatar"] },
+  { "date": "02-10", "name": "Teddy Day", "category": ["Special Interest"], "countries": ["india"] },
+  { "date": "02-10", "name": "Valentismas", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "02-10", "name": "World AG Expo", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-10", "name": "World Pulses Day", "category": ["Food & Beverage"], "countries": ["world"] },
+
+
+  { "date": "02-11", "name": "Armed Forces Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "02-11", "name": "Be Electrific Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "02-11", "name": "Canada's Agriculture Day", "category": ["Special Interest"], "countries": ["canada"] },
+  { "date": "02-11", "name": "Don't Cry Over Spilled Milk Day", "category": ["Fun"], "countries": ["world"] },
+  { "date": "02-11", "name": "Get Out Your Guitar Day", "category": ["Arts & Entertainment"], "countries": ["usa"] },
+  { "date": "02-11", "name": "Grandmother Achievement Day", "category": ["Appreciation"], "countries": ["world"] },
+  { "date": "02-11", "name": "International Day of Women and Girls in Science", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "02-11", "name": "Islamic Revolution Day", "category": ["Religious"], "countries": ["iran"] },
+  { "date": "02-11", "name": "National Emergency Number Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-11", "name": "National Foundation Day", "category": ["Federal"], "countries": ["japan"] },
+  { "date": "02-11", "name": "National Guitar Day", "category": ["Arts & Entertainment"], "countries": ["usa"] },
+  { "date": "02-11", "name": "National Inventors' Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-11", "name": "National Latte Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-11", "name": "National Make a Friend Day", "category": ["Relationship"], "countries": ["usa"] },
+  { "date": "02-11", "name": "National Peppermint Patty Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-11", "name": "National Shut-in Visitation Day", "category": ["Health"], "countries": ["usa"] },
+  { "date": "02-11", "name": "National Van Day", "category": ["Fun"], "countries": ["usa"] },
+  { "date": "02-11", "name": "Pro Sports Wives Day", "category": ["Arts & Entertainment"], "countries": ["usa"] },
+  { "date": "02-11", "name": "Promise Day", "category": ["Relationship"], "countries": ["india"] },
+  { "date": "02-11", "name": "Safer Internet Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "02-11", "name": "Satisfied Staying Single Day", "category": ["Relationship"], "countries": ["world"] },
+  { "date": "02-11", "name": "White Shirt Day", "category": ["Cause"], "countries": ["world"] },
+  { "date": "02-11", "name": "World Day of the Sick", "category": ["Religious"], "countries": ["world"] },
+  { "date": "02-11", "name": "Youth Day in Cameroon", "category": ["Federal"], "countries": ["cameroon"] },
+
+
+  { "date": "02-12", "name": "Darwin Day", "category": ["Appreciation"], "countries": ["world"] },
+  { "date": "02-12", "name": "Georgia Day", "category": ["Federal"], "countries": ["usa"] },
+  { "date": "02-12", "name": "Hug Day", "category": ["Fun"], "countries": ["india"] },
+  { "date": "02-12", "name": "International Day Against the Use of Child Soldiers", "category": ["Cause"], "countries": ["world"] },
+  { "date": "02-12", "name": "Red Hand Day", "category": ["Cause"], "countries": ["world"] },
+  { "date": "02-12", "name": "Union Day", "category": ["Federal"], "countries": ["myanmar"] },
+  { "date": "02-12", "name": "NAACP Day", "category": ["Cause"], "countries": ["usa"] },
+  { "date": "02-12", "name": "National Lost Penny Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-12", "name": "National Plum Pudding Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-12", "name": "Oglethorpe Day", "category": ["Cause"], "countries": ["usa"] },
+
+
+  { "date": "02-13", "name": "Black Love Day", "category": ["Relationship"], "countries": ["usa"] },
+  { "date": "02-13", "name": "Galentine's Day", "category": ["Relationship"], "countries": ["usa","world"] },
+  { "date": "02-13", "name": "Kiss Day", "category": ["Relationship"], "countries": ["india"] },
+  { "date": "02-13", "name": "International Condom Day", "category": ["Health"], "countries": ["world"] },
+  { "date": "02-13", "name": "World Radio Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "02-13", "name": "National Cheddar Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-13", "name": "National Tortellini Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-13", "name": "National Crab Rangoon Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-13", "name": "National Wingman Day", "category": ["Special Interest"], "countries": ["usa"] },
+
+
+  { "date": "02-14", "name": "Valentine's Day", "category": ["Relationship"], "countries": ["world"] },
+  { "date": "02-14", "name": "International Book Giving Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "02-14", "name": "Library Lovers’ Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
+  { "date": "02-14", "name": "Frederick Douglass Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-14", "name": "League of Women Voters Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-14", "name": "National Donor Day", "category": ["Health"], "countries": ["usa"] },
+  { "date": "02-14", "name": "Quirkyalone Day", "category": ["Fun"], "countries": ["world"] },
+  { "date": "02-14", "name": "World Bonobo Day", "category": ["Animal"], "countries": ["world"] },
+  { "date": "02-14", "name": "Rafik Hariri Memorial Day", "category": ["Federal"], "countries": ["lebanon"] },
+  { "date": "02-14", "name": "National Cream-Filled Chocolate Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+
+
+  { "date": "02-15", "name": "International Childhood Cancer Day", "category": ["Health"], "countries": ["world"] },
+  { "date": "02-15", "name": "National Flag of Canada Day", "category": ["Federal"], "countries": ["canada"] },
+  { "date": "02-15", "name": "Susan B Anthony Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-15", "name": "Remember the Maine Day", "category": ["Federal"], "countries": ["usa"] },
+  { "date": "02-15", "name": "Singles Awareness Day", "category": ["Relationship"], "countries": ["world"] },
+  { "date": "02-15", "name": "Parinirvana Day (Nirvana Day)", "category": ["Religious"], "countries": ["world"] },
+
+  {"date":"02-16","name":"Elizabeth Peratrovich Day","category":["Special Interest"],"countries":["usa"]},
+  {"date":"02-16","name":"Day of Restoration of the State of Lithuania","category":["Cause"],"countries":["lithuania"]},
+  {"date":"02-16","name":"National Almond Day","category":["Food & Beverage"],"countries":["usa"]},
+  {"date":"02-16","name":"Kyoto Protocol Day","category":["Federal"],"countries":["world"]},
+  {"date":"02-16","name":"Janan Luwum Day","category":["Cultural"],"countries":["uganda"]},
+
+
+  { "date": "02-17", "name": "Kosovo Independence Day", "category": ["Special Interest"], "countries": ["kosovo"] },
+  { "date": "02-17", "name": "Libyan Revolution Day", "category": ["Special Interest"], "countries": ["libya"] },
+  { "date": "02-17", "name": "National Random Acts of Kindness Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-17", "name": "National Cabbage Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-17", "name": "National Cafe au Lait Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+
+
+  { "date": "02-18", "name": "Gambia Independence Day", "category": ["Federal"], "countries": ["gambia"] },
+  { "date": "02-18", "name": "National Battery Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-18", "name": "National Crab Stuffed Flounder Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-18", "name": "National Drink Wine Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-18", "name": "Pluto Day", "category": ["Special Interest"], "countries": ["world"] },
+
+
+  { "date": "02-19", "name": "Constantin Brâncuși Day", "category": ["Arts & Entertainment"], "countries": ["romania"] },
+  { "date": "02-19", "name": "Iwo Jima Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-19", "name": "National Airboat Day", "category": ["Fun"], "countries": ["usa"] },
+  { "date": "02-19", "name": "National Arabian Horse Day", "category": ["Animal"], "countries": ["usa"] },
+  { "date": "02-19", "name": "National Chocolate Mint Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-19", "name": "Prevent Plagiarism Day", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "02-19", "name": "Shivaji Jayanti", "category": ["Cultural"], "countries": ["india"] },
+  { "date": "02-19", "name": "U.S. Coast Guard Reserve Birthday", "category": ["Fun"], "countries": ["usa"] },
+  { "date": "02-19", "name": "World Cholangiocarcinoma Day", "category": ["Health"], "countries": ["world"] },
+
+
+  { "date": "02-20", "name": "Hoodie Hoo Day", "category": ["Fun"], "countries": ["usa"] },
+  { "date": "02-20", "name": "Clean Out Your Bookcase Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-20", "name": "Mizoram State Day", "category": ["Special Interest"], "countries": ["india"] },
+  { "date": "02-20", "name": "Statehood Day of Arunachal Pradesh", "category": ["Special Interest"], "countries": ["india"] },
+  { "date": "02-20", "name": "National Cherry Pie Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-20", "name": "National Love Your Pet Day", "category": ["Animal"], "countries": ["usa"] },
+  { "date": "02-20", "name": "National Muffin Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-20", "name": "National Tartar Sauce Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-20", "name": "World Day of Social Justice", "category": ["Cause"], "countries": ["world"] },
+
+
+  { "date": "02-21", "name": "Father Lini Day", "category": ["Federal"], "countries": ["vanuatu"] },
+  { "date": "02-21", "name": "International Mother Language Day", "category": ["Cause"], "countries": ["world"] },
+  { "date": "02-21", "name": "National Sticky Bun Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+
+
+  { "date": "02-22", "name": "European Day for Victims of Crime", "category": ["Cause"], "countries": ["eu"] },
+  { "date": "02-22", "name": "St. Lucia Independence Day", "category": ["Federal"], "countries": ["saint_lucia"] },
+  { "date": "02-22", "name": "National Margarita Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-22", "name": "National Walk Your Dog Day", "category": ["Animal"], "countries": ["usa"] },
+  { "date": "02-22", "name": "World Thinking Day", "category": ["Special Interest"], "countries": ["world"] },
+
+
+  { "date": "02-23", "name": "Defender of the Fatherland Day", "category": ["Federal"], "countries": ["russia"] },
+  { "date": "02-23", "name": "Emperor's Birthday (Japan)", "category": ["Federal"], "countries": ["japan"] },
+  { "date": "02-23", "name": "Guyana Republic Day", "category": ["Cultural"], "countries": ["guyana"] },
+  { "date": "02-23", "name": "National Day (Brunei)", "category": ["Federal"], "countries": ["brunei"] },
+  { "date": "02-23", "name": "National Banana Bread Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-23", "name": "National Dog Biscuit Day", "category": ["Animal"], "countries": ["usa"] },
+  { "date": "02-23", "name": "National Tootsie Roll Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-23", "name": "World Peace and Understanding Day", "category": ["Special Interest"], "countries": ["world"] },
+
+
+  { "date": "02-24", "name": "Estonia Independence Day", "category": ["Federal"], "countries": ["estonia"] },
+  { "date": "02-24", "name": "Flag Day (Mexico)", "category": ["Cultural"], "countries": ["mexico"] },
+  { "date": "02-24", "name": "Dragobete", "category": ["Cultural"], "countries": ["romania"] },
+  { "date": "02-24", "name": "Twin Peaks Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
+  { "date": "02-24", "name": "National Tortilla Chip Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+
+
+  { "date": "02-25", "name": "Kuwait National Day", "category": ["Federal"], "countries": ["kuwait"] },
+  { "date": "02-25", "name": "EDSA Revolution Holiday", "category": ["Cause"], "countries": ["philippines"] },
+  { "date": "02-25", "name": "People Power Revolution", "category": ["Federal"], "countries": ["philippines"] },
+  { "date": "02-25", "name": "Day of Liberation and Innovation", "category": ["Special Interest"], "countries": ["world"] },
+  { "date": "02-25", "name": "National Chocolate Covered Nut Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+
+
+  { "date": "02-26", "name": "Kuwait Liberation Day", "category": ["Federal"], "countries": ["kuwait"] },
+  { "date": "02-26", "name": "National Pistachio Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-26", "name": "Tell a Fairy Tale Day", "category": ["Arts & Entertainment"], "countries": ["usa"] },
+
+
+  { "date": "02-27", "name": "Dominican Republic Independence Day", "category": ["Federal"], "countries": ["dominican_republic"] },
+  { "date": "02-27", "name": "International Polar Bear Day", "category": ["Cause"], "countries": ["world"] },
+  { "date": "02-27", "name": "National Pokémon Day", "category": ["Arts & Entertainment"], "countries": ["world"] },
+  { "date": "02-27", "name": "National Kahlúa Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-27", "name": "World NGO Day", "category": ["Special Interest"], "countries": ["world"] },
+
+
+  { "date": "02-28", "name": "228 Memorial Day", "category": ["Cause"], "countries": ["taiwan"] },
+  { "date": "02-28", "name": "Andalusia Day", "category": ["Federal"], "countries": ["spain"] },
+  { "date": "02-28", "name": "Linus Pauling Day", "category": ["Special Interest"], "countries": ["usa"] },
+  { "date": "02-28", "name": "National Science Day", "category": ["Special Interest"], "countries": ["india"] },
+  { "date": "02-28", "name": "National Chocolate Souffle Day", "category": ["Food & Beverage"], "countries": ["usa"] },
+  { "date": "02-28", "name": "Rare Disease Day", "category": ["Health"], "countries": ["world"] }
 
 ]
 
