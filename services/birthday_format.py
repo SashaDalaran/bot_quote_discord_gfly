@@ -623,17 +623,17 @@ def build_guild_events_embed(
     embed.add_field(name="🏆 Guild Challenge", value=challenge_value, inline=False)
 
     # ---- Heroes field ----
-if heroes:
-    hero_lines: List[str] = []
-    for h in heroes:
-        hero_lines.extend(_render_hero(h, today))
-        hero_lines.append("")  # spacing between heroes (if multiple)
-    hero_value = "
-".join(hero_lines).strip() or "↳ no heroes found"
-else:
-    hero_value = "↳ no heroes found"
+    if heroes:
+        hero_lines: List[str] = []
+        for h in heroes:
+            hero_lines.extend(_render_hero(h, today))
+            hero_lines.append("")  # spacing between heroes (if multiple)
+        hero_value = "\n".join(hero_lines).strip() or "↳ no heroes found"
+    else:
+        hero_value = "↳ no heroes found"
 
     embed.add_field(name="🦸 Heroes", value=hero_value, inline=False)
+
 
     # ---- Birthdays field ----
     if birthdays:
