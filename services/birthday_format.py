@@ -550,11 +550,28 @@ def _render_challenge(ev: dict, today: date) -> list[str]:
 
 
 
-def _render_hero(ev: dict) -> str:
-    name = (ev.get("name") or "").strip()
+def _render_hero(ev: dict, today: date) -> list[str]:
+    """Render one hero event as embed-friendly lines (Telegram-like block)."""
+    name = str(ev.get("name", "")).strip()
     if not name:
-        return "↳ (unnamed hero)"
-    return f"↳ {name}"
+        return ["🤡 (unnamed hero)"]
+
+    hero, _desc = _split_owner_desc(name)
+
+    lines: list[str] = []
+    lines.append(f"🤡 {hero}".strip() if hero else "🤡 (unnamed hero)")
+    # Keep the same phrase as the Telegram formatter
+    lines.append("↳ 💩 Challenge accepted, but not completed")
+
+    prog = _range_progress(str(ev.get("date", "")), today)
+    if prog:
+        lines.append(f"↳ period 🗓️ {_format_range(prog.start, prog.end)}")
+        lines.append(
+            f"↳ {prog.remaining_days} {_days_word(prog.remaining_days)} "
+            f"(day {prog.day_index} of {prog.total_days})"
+        )
+
+    return lines
 
 
 def _render_birthday(ev: dict) -> str:
@@ -606,13 +623,15 @@ def build_guild_events_embed(
     embed.add_field(name="🏆 Guild Challenge", value=challenge_value, inline=False)
 
     # ---- Heroes field ----
-    if heroes:
-        hero_lines: List[str] = []
-        for h in heroes:
-            hero_lines.append(_render_hero(h))
-        hero_value = "\n".join([l for l in hero_lines if l != ""]).strip() or "↳ no heroes found"
-    else:
-        hero_value = "↳ no heroes found"
+if heroes:
+    hero_lines: List[str] = []
+    for h in heroes:
+        hero_lines.extend(_render_hero(h, today))
+        hero_lines.append("")  # spacing between heroes (if multiple)
+    hero_value = "
+".join(hero_lines).strip() or "↳ no heroes found"
+else:
+    hero_value = "↳ no heroes found"
 
     embed.add_field(name="🦸 Heroes", value=hero_value, inline=False)
 
