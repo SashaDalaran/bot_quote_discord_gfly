@@ -618,7 +618,7 @@ def build_guild_events_embed(
                 challenge_lines.extend(_render_challenge(ch, today))
         challenge_value = "\n".join([l for l in challenge_lines if l != ""]).strip() or "↳ no active challenges"
     else:
-        challenge_value = "↳ no no active challenges"
+        challenge_value = "↳ no active challenges"
 
     embed.add_field(name="🏆 Guild Challenge", value=challenge_value, inline=False)
 
