@@ -21,7 +21,5 @@ primary_region = 'ams'
   PYTHONUNBUFFERED = '1'
 
 [[vm]]
-  memory = '512mb'
-  cpu_kind = 'shared'
-  cpus = 1
-  memory_mb = 512
+  size = "shared-cpu-1x"
+  memory = "256mb"

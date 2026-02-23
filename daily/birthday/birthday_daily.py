@@ -16,6 +16,14 @@
 #
 # ==================================================
 
+# ==================================================
+# daily/birthday/birthday_daily.py — Daily Guild Events Sender
+# ==================================================
+
+# ==================================================
+# daily/birthday/birthday_daily.py — Daily Guild Events Sender
+# ==================================================
+
 import logging
 import os
 from datetime import datetime, timedelta, timezone, time, date
@@ -62,11 +70,14 @@ async def _send_to_channels(bot: discord.Client, *, embed: discord.Embed) -> Non
             logger.exception("Failed to send guild events message to channel %s.", channel_id)
 
 
-def _build_today_embed(today: date) -> Optional[discord.Embed]:
+def _build_today_embed(today: date) -> discord.Embed:
     events = load_birthday_events()
-    payload = get_today_birthday_payload(events=events, today=today)
-    if not payload:
-        return None
+    payload = get_today_birthday_payload(events=events, today=today) or {
+        "title": "Guild events",
+        "challenges": [],
+        "heroes": [],
+        "birthdays": [],
+    }
     return build_guild_events_embed(payload=payload, today=today)
 
 
@@ -83,8 +94,6 @@ async def send_birthday_daily():
         return
 
     embed = _build_today_embed(today)
-    if not embed:
-        return
 
     await _send_to_channels(bot, embed=embed)
     _last_sent = today
@@ -110,8 +119,6 @@ async def send_once_if_missed_birthday():
         return
 
     embed = _build_today_embed(today)
-    if not embed:
-        return
 
     logger.info("Bot restarted after schedule → sending missed guild events.")
     await _send_to_channels(bot, embed=embed)
