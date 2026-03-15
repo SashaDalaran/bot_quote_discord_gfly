@@ -8,15 +8,20 @@
 
 
 { "date": "02-02", "name": "Subbok (Максим)", "category": ["birthday"], "countries": ["murloc"] },
+{ "date": "02-05", "name": "Вайсбойм (Ляля)", "category": ["birthday"], "countries": ["murloc"] },
 { "date": "02-06", "name": "Соломод (Вяч)", "category": ["birthday"], "countries": ["murloc"] },
+{ "date": "02-16", "name": "Нимье (Илья)", "category": ["birthday"], "countries": ["murloc"] },
+{ "date": "02-23", "name": "Фанвалентайн Денис)", "category": ["birthday"], "countries": ["murloc"] },
+{ "date": "02-24", "name": "Бобруйск (Юра)", "category": ["birthday"], "countries": ["murloc"] },
 { "date": "02-26", "name": "Aeldream (Антон)", "category": ["birthday"], "countries": ["murloc"] },
-
+{ "date": "02-28", "name": "Вася RL", "category": ["birthday"], "countries": ["murloc"] },
 
 { "date": "03-15", "name": "Нефоркиса (Алёна)", "category": ["birthday"], "countries": ["murloc"] },
 
-
-{ "date": "05-23", "name": "Киндретка (Настя)", "category": ["birthday"], "countries": ["murloc"] },
 { "date": "05-16", "name": "Гусемикс (Сашка)", "category": ["birthday"], "countries": ["murloc"] },
+{ "date": "05-16", "name": "Пузляш (Полина)", "category": ["birthday"], "countries": ["murloc"] },
+{ "date": "05-23", "name": "Киндретка (Настя)", "category": ["birthday"], "countries": ["murloc"] },
+
 
 { "date": "06-03", "name": "Костя RL", "category": ["birthday"], "countries": ["murloc"] },
 { "date": "06-03", "name": "Юрал (Юра)", "category": ["birthday"], "countries": ["murloc"] },
@@ -35,10 +40,10 @@
 
 
 { "date": "09-12", "name": "Буйвалёнок (Костя)", "category": ["birthday"], "countries": ["murloc"] },
-
+{ "date": "09-15", "name": "Nyrion (Никита)", "category": ["birthday"], "countries": ["murloc"] },
 
 { "date": "10-05", "name": "Тиктейл (Жаба)", "category": ["birthday"], "countries": ["murloc"] },
-{ "date": "10-16", "name": "Ädc (Carry)", "category": ["birthday"], "countries": ["murloc"] },
+{ "date": "10-16", "name": "Конгфудикей (Никита)", "category": ["birthday"], "countries": ["murloc"] },
 { "date": "10-23", "name": "Роньё", "category": ["birthday"], "countries": ["murloc"] },
 { "date": "10-28", "name": "Антрагор (Никита)", "category": ["birthday"], "countries": ["murloc"] },
 
@@ -48,7 +53,7 @@
 { "date": "11-24", "name": "Шаналот (Жора)", "category": ["birthday"], "countries": ["murloc"] },
 { "date": "11-25", "name": "Мамкоед (Ваня)", "category": ["birthday"], "countries": ["murloc"] },
 
-
+{ "date": "12-01", "name": "Кастуту (Василий)", "category": ["birthday"], "countries": ["murloc"] },
 { "date": "12-10", "name": "Герлари (Даня)", "category": ["birthday"], "countries": ["murloc"] },
 { "date": "12-10", "name": "Капшняк (Данчитос)", "category": ["birthday"], "countries": ["murloc"] },
 { "date": "12-23", "name": "Yöre (Даниил)", "category": ["birthday"], "countries": ["murloc"] },
